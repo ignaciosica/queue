@@ -1,6 +1,6 @@
-# Collaborative Priority Queue for Spotify
+# Queue (Collaborative Priority Queue for Spotify)
 
-Welcome to the Collaborative Priority Queue for Spotify! This app allows multiple users to queue up and play songs from their own Spotify accounts, in a priority order determined by the users.
+Welcome to Queue! This app allows multiple users to queue up and play songs from their own Spotify accounts, in a priority order determined by the users.
 
 
 <p align="center">
