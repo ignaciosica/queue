@@ -25,8 +25,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+dependencies {
+    implementation 'com.android.support:multidex:2.0.1' //enter the latest multidex version
+}
+
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    //compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
+
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -44,13 +50,18 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.queue"
+        applicationId "com.example.groupify"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+
+        //minSdkVersion flutter.minSdkVersion
+        minSdkVersion 19
+
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        multiDexEnabled true
     }
 
     buildTypes {
