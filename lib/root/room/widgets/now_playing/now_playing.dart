@@ -7,20 +7,45 @@ import 'package:spotify_sdk/models/connection_status.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
-class NowPlayingAlt2 extends StatelessWidget {
+class NowPlayingAlt2 extends StatefulWidget {
   const NowPlayingAlt2({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<ConnectionStatus>(
-      stream: SpotifySdk.subscribeConnectionStatus(),
-      builder: (context, ss) {
-        if (ss.connectionState == ConnectionState.none || ss.hasError || !ss.hasData || !ss.data!.connected) {
-          return const SizedBox(height: 160, width: double.infinity, child: NowPlayingAltReconnectDummy());
-        }
+  State<NowPlayingAlt2> createState() => _NowPlayingAlt2State();
+}
 
-        return const NowPlayingAltWid();
-      },
+class _NowPlayingAlt2State extends State<NowPlayingAlt2> {
+  late final Stream<ConnectionStatus> stream;
+
+  @override
+  void initState() {
+    super.initState();
+    stream = SpotifySdk.subscribeConnectionStatus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 160,
+      width: double.infinity,
+      child: StreamBuilder<ConnectionStatus>(
+        stream: stream,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.done:
+              return const NowPlayingAltReconnectDummy();
+            case ConnectionState.waiting:
+              return const NowPlayingAltDummy();
+            case ConnectionState.active:
+              if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.connected) {
+                return const NowPlayingAltReconnectDummy();
+              }
+
+              return const NowPlayingAltWid();
+          }
+        },
+      ),
     );
   }
 }
