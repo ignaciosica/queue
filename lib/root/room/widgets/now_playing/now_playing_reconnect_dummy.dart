@@ -1,7 +1,7 @@
 part of 'now_playing.dart';
 
-class NowPlayingAltReconnectDummy extends StatelessWidget {
-  const NowPlayingAltReconnectDummy({Key? key}) : super(key: key);
+class NowPlayingReconnectDummy extends StatelessWidget {
+  const NowPlayingReconnectDummy({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/auth/auth.dart';
@@ -38,12 +40,12 @@ class _NowPlayingState extends State<NowPlaying> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.done:
-              return const NowPlayingAltReconnectDummy();
+              return const NowPlayingReconnectDummy();
             case ConnectionState.waiting:
-              return const NowPlayingAltDummy();
+              return const NowPlayingDummy();
             case ConnectionState.active:
               if (snapshot.hasError || !snapshot.hasData || !snapshot.data!.connected) {
-                return const NowPlayingAltReconnectDummy();
+                return const NowPlayingReconnectDummy();
               }
 
               return const NowPlayingWid();

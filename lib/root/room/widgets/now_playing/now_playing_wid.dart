@@ -8,17 +8,12 @@ class NowPlayingWid extends StatefulWidget {
 }
 
 class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateMixin {
-  late Animation<double> _myAnimation;
   late AnimationController _controller;
-  late double _millisecondsElapsed;
 
   @override
   void initState() {
     super.initState();
-
-    _millisecondsElapsed = 0;
     _controller = AnimationController(vsync: this, duration: Cte.defaultAnimationDuration);
-    _myAnimation = CurvedAnimation(curve: Curves.linear, parent: _controller);
   }
 
   @override
@@ -35,7 +30,6 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
         final textTheme = Theme.of(context).textTheme;
         final playerState = ss.data!;
         playerState.isPaused ? _controller.reverse() : _controller.forward();
-        _millisecondsElapsed = playerState.playbackPosition.toDouble();
 
         return SizedBox(
           height: 160,
@@ -77,30 +71,9 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
                     children: [
                       const Spacer(),
                       Row(
-                        //crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           const SizedBox(width: 22),
                           const Expanded(child: SongProgressIndicator(color: Colors.white, showLabel: false)),
-                          // Expanded(
-                          //   child: StreamBuilder<int>(
-                          //     stream: Stream<int>.periodic(const Duration(milliseconds: 150), (x) => 150),
-                          //     builder: (context, periodicSnapshot) {
-                          //       if (periodicSnapshot.hasData) {
-                          //         if (!playerState.isPaused) {
-                          //           _millisecondsElapsed += periodicSnapshot.data!.toDouble();
-                          //         }
-                          //       }
-                          //       return ClipRRect(
-                          //         borderRadius: BorderRadius.circular(9),
-                          //         child: LinearProgressIndicator(
-                          //           color: Colors.white,
-                          //           minHeight: 4,
-                          //           value: _millisecondsElapsed / (playerState.track!.duration),
-                          //         ),
-                          //       );
-                          //     },
-                          //   ),
-                          // ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Row(
@@ -154,12 +127,5 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
         );
       },
     );
-  }
-
-  String durationToString(int milliseconds) {
-    final elapsedDuration = Duration(milliseconds: milliseconds.toInt());
-    return '${elapsedDuration.inMinutes.remainder(60)}:'
-        '${elapsedDuration.inSeconds.remainder(60) < 10 ? 0 : ''}'
-        '${elapsedDuration.inSeconds.remainder(60)}';
   }
 }

@@ -1,7 +1,32 @@
 part of 'now_playing.dart';
 
-class NowPlayingAltDummy extends StatelessWidget {
-  const NowPlayingAltDummy({Key? key}) : super(key: key);
+class NowPlayingDummy extends StatefulWidget {
+  const NowPlayingDummy({Key? key}) : super(key: key);
+
+  @override
+  State<NowPlayingDummy> createState() => _NowPlayingDummyState();
+}
+
+class _NowPlayingDummyState extends State<NowPlayingDummy> {
+  late final Timer timer;
+
+  @override
+  void initState() {
+    startTimer();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cancelTimer();
+    super.dispose();
+  }
+
+  void startTimer() => timer = Timer(const Duration(seconds: 6), () {
+        RepositoryProvider.of<AuthRepository>(context).connectToSpotify();
+      });
+
+  void cancelTimer() => timer.cancel();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +50,7 @@ class NowPlayingAltDummy extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Loading...', style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-                        Text('p4ssenger', style: textTheme.bodySmall),
+                        Text('P4ssenger', style: textTheme.bodySmall),
                       ],
                     ),
                   ),
@@ -33,18 +58,7 @@ class NowPlayingAltDummy extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Column(
-                children: [
-                  ClipRRect(borderRadius: BorderRadius.circular(9), child: const LinearProgressIndicator(minHeight: 6)),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      Text('0:00', style: textTheme.labelSmall!.copyWith(color: textTheme.bodySmall!.color)),
-                    ],
-                  ),
-                ],
-              ),
+              const SongProgressIndicatorDummy(),
             ],
           ),
         ),
