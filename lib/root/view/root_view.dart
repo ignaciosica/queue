@@ -55,7 +55,7 @@ class _RootViewState extends State<RootView> {
               BaseTile(
                 margin: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
                 padding: EdgeInsets.zero,
-                child: NowPlayingAlt2(),
+                child: NowPlaying(),
               ),
               BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
