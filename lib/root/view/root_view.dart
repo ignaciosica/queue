@@ -51,18 +51,18 @@ class _RootViewState extends State<RootView> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               BaseTile(
-                margin: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                margin: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
                 padding: EdgeInsets.zero,
-                child: NowPlayingAlt(),
+                child: NowPlaying(),
               ),
-              BaseTile(
+              const BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
                 margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
                 child: NextUpTile(),
               ),
-              BaseTile(
+              const BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
                 margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
                 child: QueueTile(),
