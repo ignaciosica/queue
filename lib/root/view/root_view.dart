@@ -32,11 +32,19 @@ class _RootViewState extends State<RootView> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        //title: Text(widget.title),
         title: const RoomTitle(),
         elevation: 1,
         centerTitle: true,
-
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color.fromRGBO(42, 30, 81, 100), Color.fromRGBO(81, 58, 159, 100)],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -51,18 +59,18 @@ class _RootViewState extends State<RootView> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               BaseTile(
-                margin: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
+                margin: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
                 padding: EdgeInsets.zero,
                 child: NowPlaying(),
               ),
-              const BaseTile(
+              BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
                 margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
                 child: NextUpTile(),
               ),
-              const BaseTile(
+              BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
                 margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
                 child: QueueTile(),

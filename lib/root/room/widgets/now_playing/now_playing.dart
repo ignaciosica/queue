@@ -21,13 +21,7 @@ class NowPlaying extends StatefulWidget {
 }
 
 class _NowPlayingState extends State<NowPlaying> {
-  late final Stream<ConnectionStatus> stream;
-
-  @override
-  void initState() {
-    super.initState();
-    stream = SpotifySdk.subscribeConnectionStatus();
-  }
+  final Stream<ConnectionStatus> stream = SpotifySdk.subscribeConnectionStatus();
 
   @override
   Widget build(BuildContext context) {

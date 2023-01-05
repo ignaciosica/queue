@@ -29,7 +29,7 @@ class _SongProgressIndicatorState extends State<SongProgressIndicator> {
     return BlocBuilder<SpotifyPlayerCubit, SpotifyPlayerState>(
       builder: (context, state) {
         if (state.track == null) {
-          return const SongProgressIndicatorDummy();
+          return SongProgressIndicatorDummy(color: widget.color, showLabel: widget.showLabel);
         }
 
         _millisecondsElapsed = state.playbackPosition.toDouble();
@@ -46,6 +46,7 @@ class _SongProgressIndicatorState extends State<SongProgressIndicator> {
             }
 
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(9),
@@ -87,21 +88,29 @@ class _SongProgressIndicatorState extends State<SongProgressIndicator> {
 }
 
 class SongProgressIndicatorDummy extends StatelessWidget {
-  const SongProgressIndicatorDummy({Key? key}) : super(key: key);
+  const SongProgressIndicatorDummy({Key? key, this.color, required this.showLabel}) : super(key: key);
+
+  final Color? color;
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(9),
-          child: const LinearProgressIndicator(minHeight: 6),
+          child: LinearProgressIndicator(minHeight: 6, color: color),
         ),
-        const SizedBox(height: 4),
-        Row(
-          children: [const Spacer(), Text('0:00', style: textTheme.labelSmall!.copyWith(color: textTheme.bodySmall!.color))],
-        ),
+        if (showLabel) const SizedBox(height: 4),
+        if (showLabel)
+          Row(
+            children: [
+              const Spacer(),
+              Text('0:00', style: textTheme.labelSmall!.copyWith(color: textTheme.bodySmall!.color))
+            ],
+          ),
       ],
     );
   }

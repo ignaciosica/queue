@@ -22,7 +22,7 @@ class _NowPlayingDummyState extends State<NowPlayingDummy> {
     super.dispose();
   }
 
-  void startTimer() => timer = Timer(const Duration(seconds: 6), () {
+  void startTimer() => timer = Timer(const Duration(seconds: 4), () {
         RepositoryProvider.of<AuthRepository>(context).connectToSpotify();
       });
 
@@ -32,34 +32,36 @@ class _NowPlayingDummyState extends State<NowPlayingDummy> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Row(
+    return Stack(
       children: [
-        ClipRRect(borderRadius: BorderRadius.circular(9), child: SizedBox(width: 100, child: Container())),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Loading...', style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-                        Text('P4ssenger', style: textTheme.bodySmall),
-                      ],
-                    ),
-                  ),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.play_arrow_rounded), iconSize: 32),
-                ],
-              ),
-              const Spacer(),
-              const SongProgressIndicatorDummy(),
-            ],
+        Positioned.fill(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Loading...',
+                  style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  'P4ssenger',
+                  style: textTheme.bodySmall!.copyWith(fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SongProgressIndicatorDummy(showLabel: false),
           ),
         ),
       ],
