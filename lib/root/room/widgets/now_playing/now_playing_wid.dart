@@ -37,22 +37,29 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
             Positioned.fill(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      playerState.track!.name,
-                      style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            playerState.track!.name,
+                            style: textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            playerState.track!.artists.map((e) => e.name).join(', '),
+                            style: textTheme.bodySmall!.copyWith(fontSize: 14),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      playerState.track!.artists.map((e) => e.name).join(', '),
-                      style: textTheme.bodySmall!.copyWith(fontSize: 14),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    const SkipButton(),
                   ],
                 ),
               ),

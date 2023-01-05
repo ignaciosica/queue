@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/auth/auth.dart';
@@ -12,6 +13,7 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 part 'now_playing_dummy.dart';
 part 'now_playing_reconnect_dummy.dart';
 part 'now_playing_wid.dart';
+part 'skip_button.dart';
 
 class NowPlaying extends StatefulWidget {
   const NowPlaying({Key? key}) : super(key: key);
