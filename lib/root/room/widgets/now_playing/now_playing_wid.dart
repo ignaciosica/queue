@@ -33,7 +33,7 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
 
         return Stack(
           children: [
-            Positioned.fill(child: SpotifyImageBuilderAlt(imageUri: playerState.track!.imageUri)),
+            Positioned.fill(child: SpotifyImageBuilder(imageUri: playerState.track!.imageUri)),
             Positioned.fill(
               child: Padding(
                 padding: const EdgeInsets.all(16),

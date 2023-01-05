@@ -52,6 +52,7 @@ class _SongProgressIndicatorState extends State<SongProgressIndicator> {
                   borderRadius: BorderRadius.circular(9),
                   child: LinearProgressIndicator(
                     color: widget.color,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.40),
                     minHeight: 6,
                     value: _millisecondsElapsed / (state.track!.duration),
                   ),
@@ -101,7 +102,7 @@ class SongProgressIndicatorDummy extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(9),
-          child: LinearProgressIndicator(minHeight: 6, color: color),
+          child: LinearProgressIndicator(minHeight: 6, color: color ?? Colors.white),
         ),
         if (showLabel) const SizedBox(height: 4),
         if (showLabel)
