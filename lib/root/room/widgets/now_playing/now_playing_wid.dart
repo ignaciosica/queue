@@ -41,7 +41,7 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
               ),
               Positioned.fill(
                 child: Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(22),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
