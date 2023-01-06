@@ -22,7 +22,7 @@ class _NowPlayingDummyState extends State<NowPlayingDummy> {
     super.dispose();
   }
 
-  void startTimer() => timer = Timer(const Duration(seconds: 4), () {
+  void startTimer() => timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
         RepositoryProvider.of<AuthRepository>(context).connectToSpotify();
       });
 

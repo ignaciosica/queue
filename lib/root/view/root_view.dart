@@ -45,14 +45,12 @@ class _RootViewState extends State<RootView> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              BlocProvider.of<AppBloc>(context).add(AppLogoutRequested());
-            },
-            icon: const Icon(Icons.logout_rounded),
-          )
-        ],
+        // leading: IconButton(
+        //   onPressed: () async {
+        //     BlocProvider.of<AppBloc>(context).add(AppLogoutRequested());
+        //   },
+        //   icon: Transform.scale(scaleX: -1, child: const Icon(Icons.logout_rounded)),
+        // ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
