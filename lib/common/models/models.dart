@@ -3,4 +3,5 @@ export 'dtos/dtos.dart';
 export 'enums.dart';
 export 'firestore_track.dart';
 export 'mixins.dart';
+export 'room.dart';
 export 'spotify/spotify_models.dart';
