@@ -56,4 +56,23 @@ class SpotifyApiClient extends BaseApiClient {
 
     return track;
   }
+
+  Future<List<SpotifyTrack>> searchTracks(String query) async {
+    final cachedTrackFromQuery = cache.read<List<SpotifyTrack>>(key: '${query}_track_query');
+    if (cachedTrackFromQuery != null) return cachedTrackFromQuery;
+
+    var path = '/v1/search';
+    final uri = Uri(scheme: baseScheme, host: baseHost, path: path, query: 'q=$query&type=track');
+
+    final response = await httpClient.get(uri, headers: await getAuthHeaders());
+
+    assessQueryResponse(response);
+
+    final json = jsonDecode(response.body);
+    final List<dynamic> items = json['tracks']['items'];
+    final List<SpotifyTrack> tracks = items.map((e) => SpotifyTrack.fromJson(e)).toList();
+    cache.write<List<SpotifyTrack>>(key: '${query}_track_query', value: tracks);
+
+    return tracks;
+  }
 }

@@ -31,4 +31,10 @@ class SpotifyRepository extends BaseRepository {
 
     return track;
   }
+
+  Future<List<SpotifyTrack>> searchTracks(String query) async {
+    final tracks = await _spotifyApiClient.searchTracks(query);
+
+    return tracks;
+  }
 }
