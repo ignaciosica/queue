@@ -87,4 +87,24 @@ class FirestoreRepository {
         .limit(1)
         .snapshots();
   }
+
+  Future<void> addSkipVote() async {
+    _instance.collection("rooms").doc(await currentRoomAsync).update({
+      "skip": FieldValue.arrayUnion([_authRepository.currentUser.id])
+    });
+  }
+
+  Future<void> removeSkipVote() async {
+    _instance.collection("rooms").doc(await currentRoomAsync).update({
+      "skip": FieldValue.arrayRemove([_authRepository.currentUser.id])
+    });
+  }
+
+  Future<void> clearSkipVotes() async {
+    _instance.collection("rooms").doc(await currentRoomAsync).update({"skip": []});
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getRoom() {
+    return _instance.collection('rooms').doc(currentRoom).snapshots();
+  }
 }
