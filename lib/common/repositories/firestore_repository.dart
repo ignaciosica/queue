@@ -48,6 +48,16 @@ class FirestoreRepository {
     }
   }
 
+  Future<void> addTrackToQueue(String trackId) async {
+    final track = <String, dynamic>{
+      'created_at': DateTime.now().toUtc(),
+      'votes': [_authRepository.currentUser.id],
+      'votes_count': 1,
+    };
+
+    await _instance.collection("rooms").doc(await currentRoomAsync).collection('queue').doc(trackId).set(track);
+  }
+
   Future<void> addVote(String roomId, String spotifyUri) async {
     final track = _instance.collection("rooms").doc(roomId).collection('queue').doc(spotifyUri);
 
@@ -75,6 +85,15 @@ class FirestoreRepository {
   Query<Map<String, dynamic>> getQueueQuery() {
     return _instance.collection('rooms').doc(currentRoom).collection('queue').orderBy('created_at', descending: false);
     //return _instance.collection('rooms').doc(await currentRoom).collection('queue').orderBy('votes_count', descending: true);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getQueueSnapshots() {
+    return _instance
+        .collection('rooms')
+        .doc(currentRoom)
+        .collection('queue')
+        .orderBy('created_at', descending: false)
+        .snapshots();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> nextUp() {
@@ -106,5 +125,9 @@ class FirestoreRepository {
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getRoom() {
     return _instance.collection('rooms').doc(currentRoom).snapshots();
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getTrack(String trackId) {
+    return _instance.collection('rooms').doc(currentRoom).collection('queue').doc(trackId).snapshots();
   }
 }

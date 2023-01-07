@@ -18,19 +18,18 @@ class RoomTitle extends StatelessWidget {
             return const Text("Loading room");
           }
           var roomDocument = snapshot.data;
-          return Column(
+          return Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                '#${snapshot.data!.id.substring(0, 5)}',
-                style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, fontSize: 14),
+                roomDocument!["name"],
+                style: const TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
               ),
               Text(
-                roomDocument!["name"],
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+                '  #${snapshot.data!.id.substring(0, 5)}',
+                style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey, fontSize: 16),
               ),
             ],
           );

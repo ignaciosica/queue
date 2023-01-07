@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'models.dart';
+
 part 'room.freezed.dart';
 part 'room.g.dart';
 
