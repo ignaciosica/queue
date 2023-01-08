@@ -64,6 +64,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
   palette_generator: ^0.3.3+2
+  workmanager: ^0.5.1
 #  auth0_flutter: ^1.0.2
 
 dev_dependencies:

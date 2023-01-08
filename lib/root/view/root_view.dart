@@ -38,12 +38,29 @@ class _RootViewState extends State<RootView> {
             ),
           ),
         ),
-        // leading: IconButton(
-        //   onPressed: () async {
-        //     BlocProvider.of<AppBloc>(context).add(AppLogoutRequested());
-        //   },
-        //   icon: Transform.scale(scaleX: -1, child: const Icon(Icons.logout_rounded)),
-        // ),
+        actions: [
+          IconButton(
+            onPressed: () async => Workmanager().cancelAll(),
+            icon: const Icon(Icons.stop_rounded),
+          ),
+          IconButton(
+            onPressed: () async {
+              Workmanager().registerOneOffTask(
+                "task-identifier",
+                "simpleTask",
+                inputData: {"accessToken": await RepositoryProvider.of<AuthRepository>(context).getSpotifyAccessToken()},
+                constraints: Constraints(
+                  networkType: NetworkType.connected,
+                  requiresBatteryNotLow: false,
+                  requiresCharging: false,
+                  requiresDeviceIdle: false,
+                  requiresStorageNotLow: false,
+                ),
+              );
+            },
+            icon: const Icon(Icons.not_started_rounded),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
