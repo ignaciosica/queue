@@ -23,90 +23,60 @@ void callbackDispatcher() {
     }
 
     try {
-      if (kDebugMode) print("init spotifySdk: $task");
+      if (kDebugMode) print("init spotifySdk: $task without access token");
       await SpotifySdk.connectToSpotifyRemote(
         clientId: inputData!['clientId'],
         redirectUrl: inputData!['redirectUrl'],
-        accessToken: inputData!['accessToken'],
       );
       if (kDebugMode) print("init spotifySdk successfully: $task");
     } catch (e) {
       if (kDebugMode) print("init spotifySdk exception: $e");
     }
 
-    var state = await SpotifySdk.subscribePlayerState().first;
-    var playing = state.track!.uri;
-
     for (var i = 0; i < 1000; i++) {
-      await Future.delayed(const Duration(seconds: 1));
+      var state = await SpotifySdk.getPlayerState();
 
-      var state = await SpotifySdk.subscribePlayerState().first;
+      if (state == null || state.track == null || state.isPaused) {
+        await Future.delayed(const Duration(seconds: 10));
+        continue;
+      }
+
+      await Future.delayed(Duration(milliseconds: (state.track!.duration - state.playbackPosition - 10 * 1000)));
 
       if (kDebugMode) print("pp: ${state.playbackPosition}");
       if (kDebugMode) print("td: ${state.track!.duration}");
 
-      if (state.track!.duration - state.playbackPosition < 10 * 1000 && playing == state.track!.uri) {
-        var querySnapshot = await FirebaseFirestore.instance
-            .collection('rooms')
-            .doc(inputData!['room'])
-            .collection('queue')
-            .orderBy('votes_count', descending: true)
-            .orderBy('created_at', descending: false)
-            .limit(1)
-            .get();
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(inputData!['room'])
+          .collection('queue')
+          .orderBy('votes_count', descending: true)
+          .orderBy('created_at', descending: false)
+          .limit(1)
+          .get();
 
-        Map<String, dynamic> json = querySnapshot.docs[0].data();
-        json['spotify_uri'] = querySnapshot.docs[0].id;
-        final firestoreTrack = FirestoreTrack.fromJson(json);
-        playing = 'spotify:track:${firestoreTrack.spotifyUri}';
+      Map<String, dynamic> json = querySnapshot.docs[0].data();
+      json['spotify_uri'] = querySnapshot.docs[0].id;
+      final firestoreTrack = FirestoreTrack.fromJson(json);
 
-        await SpotifySdk.queue(spotifyUri: 'spotify:track:${firestoreTrack.spotifyUri}');
-        if (kDebugMode) print("added ${firestoreTrack.spotifyUri} to queue");
+      await SpotifySdk.queue(spotifyUri: 'spotify:track:${firestoreTrack.spotifyUri}');
 
-        FirebaseFirestore.instance
-            .collection('rooms')
-            .doc(inputData!['room'])
-            .collection('history')
-            .doc(firestoreTrack.spotifyUri)
-            .set(querySnapshot.docs[0].data());
+      await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(inputData!['room'])
+          .collection('history')
+          .doc(firestoreTrack.spotifyUri)
+          .set(querySnapshot.docs[0].data());
 
-        FirebaseFirestore.instance
-            .collection('rooms')
-            .doc(inputData!['room'])
-            .collection('queue')
-            .doc(firestoreTrack.spotifyUri)
-            .delete();
+      await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(inputData!['room'])
+          .collection('queue')
+          .doc(firestoreTrack.spotifyUri)
+          .delete();
 
-        if (kDebugMode) print("removed ${firestoreTrack.spotifyUri} from queue");
-      }
-
-      if (kDebugMode) print(i);
+      await Future.delayed(const Duration(seconds: 10));
     }
-
-    var snap = await FirebaseFirestore.instance
-        .collection('rooms')
-        .doc(inputData!['room'])
-        .collection('queue')
-        .orderBy('created_at', descending: false)
-        .get();
-
-    snap.docs.forEach((element) {
-      print(element.data());
-    });
-
-    SpotifySdk.subscribePlayerState().listen((event) {
-      print(event.isPaused);
-    });
-
-    try {
-      print('$task try-skip');
-      await SpotifySdk.skipNext();
-      print('$task skipped successfully');
-    } catch (e) {
-      print(e);
-    }
-
-    print("End native called background task: $task");
 
     return Future.value(true);
   });

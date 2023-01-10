@@ -41,7 +41,7 @@ class _RootViewState extends State<RootView> {
                 "task-identifier",
                 "simpleTask",
                 inputData: {
-                  "accessToken": await RepositoryProvider.of<AuthRepository>(context).getSpotifyAccessToken(),
+                  //"accessToken": await RepositoryProvider.of<AuthRepository>(context).getSpotifyAccessToken(),
                   "room": '23yvA5kACxSCtVJpfBGV',
                   "clientId": 'b9a4881e77f4488eb882788cb106a297',
                   "redirectUrl": 'https://com.example.groupify/callback/',
@@ -70,11 +70,7 @@ class _RootViewState extends State<RootView> {
                 padding: EdgeInsets.zero,
                 child: NowPlaying(),
               ),
-              BaseTile(
-                padding: EdgeInsets.only(top: 0, left: 8, right: 8),
-                margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
-                child: NextUpTile(),
-              ),
+              NextUpTile(),
               BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
                 margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),

@@ -14,35 +14,40 @@ class _NextUpTileState extends State<NextUpTile> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        Text('Next up', style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold, color: Colors.white)),
-        const SizedBox(height: 8),
-        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: RepositoryProvider.of<FirestoreRepository>(context).nextUp(),
-          builder: (context, snapshot) {
-            if (snapshot.data!.docs.isEmpty) {
-              return const Text('No songs in queue');
-            }
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: RepositoryProvider.of<FirestoreRepository>(context).nextUp(),
+      builder: (context, snapshot) {
+        if (snapshot.data!.docs.isEmpty) {
+          return Container();
+        }
 
-            Map<String, dynamic> json = snapshot.data!.docs[0].data();
-            json['spotify_uri'] = snapshot.data!.docs[0].id;
+        Map<String, dynamic> json = snapshot.data!.docs[0].data();
+        json['spotify_uri'] = snapshot.data!.docs[0].id;
 
-            final firestoreTrack = FirestoreTrack.fromJson(json);
+        final firestoreTrack = FirestoreTrack.fromJson(json);
 
-            return AnimatedSwitcher(
+        return BaseTile(
+          padding: const EdgeInsets.only(top: 0, left: 8, right: 8),
+          margin: const EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              Text('Next up', style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold, color: Colors.white)),
+              const SizedBox(height: 8),
+              AnimatedSwitcher(
                 duration: Cte.defaultAnimationDuration,
                 child: TrackRow(
                   track: firestoreTrack,
                   key: ValueKey('${firestoreTrack.spotifyUri}row'),
                   showActions: false,
-                ));
-          },
-        ),
-      ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
