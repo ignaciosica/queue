@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:groupify/app/app.dart';
 import 'package:groupify/auth/auth.dart';
@@ -13,19 +14,78 @@ import 'package:workmanager/workmanager.dart';
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    print("Native called background task: $task");
-
-    for (var i = 0; i < 10; i++) {
-      print("Native called background task: $i");
-      await Future.delayed(Duration(seconds: 1));
-      print(i);
+    try {
+      if (kDebugMode) print("init firebase: $task");
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      if (kDebugMode) print("init firebase successfully: $task");
+    } catch (e) {
+      if (kDebugMode) print("init firebase exception: $e");
     }
 
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    try {
+      if (kDebugMode) print("init spotifySdk: $task");
+      await SpotifySdk.connectToSpotifyRemote(
+        clientId: inputData!['clientId'],
+        redirectUrl: inputData!['redirectUrl'],
+        accessToken: inputData!['accessToken'],
+      );
+      if (kDebugMode) print("init spotifySdk successfully: $task");
+    } catch (e) {
+      if (kDebugMode) print("init spotifySdk exception: $e");
+    }
+
+    var state = await SpotifySdk.subscribePlayerState().first;
+    var playing = state.track!.uri;
+
+    for (var i = 0; i < 1000; i++) {
+      await Future.delayed(const Duration(seconds: 1));
+
+      var state = await SpotifySdk.subscribePlayerState().first;
+
+      if (kDebugMode) print("pp: ${state.playbackPosition}");
+      if (kDebugMode) print("td: ${state.track!.duration}");
+
+      if (state.track!.duration - state.playbackPosition < 10 * 1000 && playing == state.track!.uri) {
+        var querySnapshot = await FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(inputData!['room'])
+            .collection('queue')
+            .orderBy('votes_count', descending: true)
+            .orderBy('created_at', descending: false)
+            .limit(1)
+            .get();
+
+        Map<String, dynamic> json = querySnapshot.docs[0].data();
+        json['spotify_uri'] = querySnapshot.docs[0].id;
+        final firestoreTrack = FirestoreTrack.fromJson(json);
+        playing = 'spotify:track:${firestoreTrack.spotifyUri}';
+
+        await SpotifySdk.queue(spotifyUri: 'spotify:track:${firestoreTrack.spotifyUri}');
+        if (kDebugMode) print("added ${firestoreTrack.spotifyUri} to queue");
+
+        FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(inputData!['room'])
+            .collection('history')
+            .doc(firestoreTrack.spotifyUri)
+            .set(querySnapshot.docs[0].data());
+
+        FirebaseFirestore.instance
+            .collection('rooms')
+            .doc(inputData!['room'])
+            .collection('queue')
+            .doc(firestoreTrack.spotifyUri)
+            .delete();
+
+        if (kDebugMode) print("removed ${firestoreTrack.spotifyUri} from queue");
+      }
+
+      if (kDebugMode) print(i);
+    }
 
     var snap = await FirebaseFirestore.instance
         .collection('rooms')
-        .doc('23yvA5kACxSCtVJpfBGV')
+        .doc(inputData!['room'])
         .collection('queue')
         .orderBy('created_at', descending: false)
         .get();
@@ -34,11 +94,9 @@ void callbackDispatcher() {
       print(element.data());
     });
 
-    await SpotifySdk.connectToSpotifyRemote(
-      clientId: 'b9a4881e77f4488eb882788cb106a297',
-      redirectUrl: 'https://com.example.groupify/callback/',
-      accessToken: inputData!['accessToken'],
-    );
+    SpotifySdk.subscribePlayerState().listen((event) {
+      print(event.isPaused);
+    });
 
     try {
       print('$task try-skip');
@@ -47,14 +105,6 @@ void callbackDispatcher() {
     } catch (e) {
       print(e);
     }
-
-    // Stream.periodic(const Duration(seconds: 10)).listen((_) {
-    //   try {
-    //     SpotifySdk.skipNext();
-    //   } catch (e) {
-    //     print(e);
-    //   }
-    // });
 
     print("End native called background task: $task");
 

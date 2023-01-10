@@ -12,14 +12,6 @@ class RootView extends StatefulWidget {
 class _RootViewState extends State<RootView> {
   bool enhance = false;
 
-  static Future<void> _connectToSpotifyRemote(String accessToken) async {
-    await SpotifySdk.connectToSpotifyRemote(
-      clientId: 'b9a4881e77f4488eb882788cb106a297',
-      redirectUrl: "http://mysite.com/callback",
-      accessToken: accessToken,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +40,12 @@ class _RootViewState extends State<RootView> {
               Workmanager().registerOneOffTask(
                 "task-identifier",
                 "simpleTask",
-                inputData: {"accessToken": await RepositoryProvider.of<AuthRepository>(context).getSpotifyAccessToken()},
+                inputData: {
+                  "accessToken": await RepositoryProvider.of<AuthRepository>(context).getSpotifyAccessToken(),
+                  "room": '23yvA5kACxSCtVJpfBGV',
+                  "clientId": 'b9a4881e77f4488eb882788cb106a297',
+                  "redirectUrl": 'https://com.example.groupify/callback/',
+                },
                 constraints: Constraints(
                   networkType: NetworkType.connected,
                   requiresBatteryNotLow: false,

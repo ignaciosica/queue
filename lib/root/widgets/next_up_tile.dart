@@ -24,8 +24,13 @@ class _NextUpTileState extends State<NextUpTile> {
         StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: RepositoryProvider.of<FirestoreRepository>(context).nextUp(),
           builder: (context, snapshot) {
+            if (snapshot.data!.docs.isEmpty) {
+              return const Text('No songs in queue');
+            }
+
             Map<String, dynamic> json = snapshot.data!.docs[0].data();
             json['spotify_uri'] = snapshot.data!.docs[0].id;
+
             final firestoreTrack = FirestoreTrack.fromJson(json);
 
             return AnimatedSwitcher(
