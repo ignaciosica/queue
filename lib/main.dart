@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,7 +43,17 @@ void callbackDispatcher() {
         continue;
       }
 
-      await Future.delayed(Duration(milliseconds: (state.track!.duration - state.playbackPosition - 10 * 1000)));
+      if (state.track!.duration - state.playbackPosition > 10 * 1000) {
+        await Future.delayed(
+          Duration(
+            milliseconds: min(
+              state.track!.duration - state.playbackPosition - 10 * 1000,
+              state.track!.duration ~/ 2,
+            ),
+          ),
+        );
+        continue;
+      }
 
       if (kDebugMode) print("pp: ${state.playbackPosition}");
       if (kDebugMode) print("td: ${state.track!.duration}");

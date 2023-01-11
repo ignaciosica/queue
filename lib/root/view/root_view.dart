@@ -33,7 +33,7 @@ class _RootViewState extends State<RootView> {
         actions: [
           IconButton(
             onPressed: () async => Workmanager().cancelAll(),
-            icon: const Icon(Icons.stop_rounded),
+            icon: const Icon(Icons.speaker_group_rounded),
           ),
           IconButton(
             onPressed: () async {
