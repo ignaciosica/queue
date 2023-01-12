@@ -1,91 +1,59 @@
 part of 'root_page.dart';
 
-class RootView extends StatefulWidget {
-  const RootView({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<RootView> createState() => _RootViewState();
-}
-
-class _RootViewState extends State<RootView> {
-  bool enhance = false;
+class RootView extends StatelessWidget {
+  const RootView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: const RoomTitle(),
-        elevation: 1,
-        centerTitle: true,
-        //backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color.fromRGBO(42, 30, 81, 100), Color.fromRGBO(81, 58, 159, 100)],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-            ),
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () async => Workmanager().cancelAll(),
-            icon: const Icon(Icons.speaker_group_rounded),
-          ),
-          IconButton(
-            onPressed: () async {
-              Workmanager().registerOneOffTask(
-                "task-identifier",
-                "simpleTask",
-                inputData: {
-                  //"accessToken": await RepositoryProvider.of<AuthRepository>(context).getSpotifyAccessToken(),
-                  "room": '23yvA5kACxSCtVJpfBGV',
-                  "clientId": 'b9a4881e77f4488eb882788cb106a297',
-                  "redirectUrl": 'https://com.example.groupify/callback/',
-                },
-                constraints: Constraints(
-                  networkType: NetworkType.connected,
-                  requiresBatteryNotLow: false,
-                  requiresCharging: false,
-                  requiresDeviceIdle: false,
-                  requiresStorageNotLow: false,
-                ),
-              );
-            },
-            icon: const Icon(Icons.not_started_rounded),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+      appBar: const RootAppBar(),
+      body: Center(
+        child: BaseTile(
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          margin: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              BaseTile(
-                margin: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
-                padding: EdgeInsets.zero,
-                child: NowPlaying(),
+            children: [
+              const SizedBox(height: 8, width: double.infinity),
+              Text('Rooms', style: textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold, color: Colors.white)),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Room name',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomPage())),
+                      child: const SizedBox(width: 60, child: Center(child: Text('Create')))),
+                ],
               ),
-              NextUpTile(),
-              BaseTile(
-                padding: EdgeInsets.only(top: 0, left: 8, right: 8),
-                margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
-                child: QueueTile(),
-              ),
-              SizedBox(height: 64),
-              //SuggestionsTile(),
+              const Divider(thickness: 1.5),
+              Row(
+                children: [
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration.collapsed(
+                        border: InputBorder.none,
+                        hintText: 'Room code',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomPage())),
+                      child: const SizedBox(width: 60, child: Center(child: Text('Join')))),
+                ],
+              )
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchPage())),
-        tooltip: 'Search',
-        child: const Icon(Icons.search_rounded),
       ),
     );
   }
