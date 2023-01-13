@@ -21,10 +21,12 @@ class AppState extends Equatable {
 
   final AppStatus status;
   final User user;
+
   //final SpotifyAccessToken spotifyAccessToken;
   final SpotifyUserStatus spotifyUserStatus;
 
   bool get googleAuthenticated => user != User.empty;
+
   bool get spotifyAuthenticated => spotifyUserStatus != SpotifyUserStatus.empty;
 
   @override

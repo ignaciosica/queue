@@ -21,32 +21,35 @@ SpotifyArtist _$SpotifyArtistFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SpotifyArtist {
   String get name => throw _privateConstructorUsedError;
+
   String get uri => throw _privateConstructorUsedError;
+
   String get id => throw _privateConstructorUsedError;
+
   String get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
-  $SpotifyArtistCopyWith<SpotifyArtist> get copyWith =>
-      throw _privateConstructorUsedError;
+  $SpotifyArtistCopyWith<SpotifyArtist> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SpotifyArtistCopyWith<$Res> {
-  factory $SpotifyArtistCopyWith(
-          SpotifyArtist value, $Res Function(SpotifyArtist) then) =
+  factory $SpotifyArtistCopyWith(SpotifyArtist value, $Res Function(SpotifyArtist) then) =
       _$SpotifyArtistCopyWithImpl<$Res, SpotifyArtist>;
+
   @useResult
   $Res call({String name, String uri, String id, String type});
 }
 
 /// @nodoc
-class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist>
-    implements $SpotifyArtistCopyWith<$Res> {
+class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist> implements $SpotifyArtistCopyWith<$Res> {
   _$SpotifyArtistCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -80,23 +83,19 @@ class _$SpotifyArtistCopyWithImpl<$Res, $Val extends SpotifyArtist>
 }
 
 /// @nodoc
-abstract class _$$_SpotifyArtistCopyWith<$Res>
-    implements $SpotifyArtistCopyWith<$Res> {
-  factory _$$_SpotifyArtistCopyWith(
-          _$_SpotifyArtist value, $Res Function(_$_SpotifyArtist) then) =
+abstract class _$$_SpotifyArtistCopyWith<$Res> implements $SpotifyArtistCopyWith<$Res> {
+  factory _$$_SpotifyArtistCopyWith(_$_SpotifyArtist value, $Res Function(_$_SpotifyArtist) then) =
       __$$_SpotifyArtistCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({String name, String uri, String id, String type});
 }
 
 /// @nodoc
-class __$$_SpotifyArtistCopyWithImpl<$Res>
-    extends _$SpotifyArtistCopyWithImpl<$Res, _$_SpotifyArtist>
+class __$$_SpotifyArtistCopyWithImpl<$Res> extends _$SpotifyArtistCopyWithImpl<$Res, _$_SpotifyArtist>
     implements _$$_SpotifyArtistCopyWith<$Res> {
-  __$$_SpotifyArtistCopyWithImpl(
-      _$_SpotifyArtist _value, $Res Function(_$_SpotifyArtist) _then)
-      : super(_value, _then);
+  __$$_SpotifyArtistCopyWithImpl(_$_SpotifyArtist _value, $Res Function(_$_SpotifyArtist) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -131,14 +130,9 @@ class __$$_SpotifyArtistCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class _$_SpotifyArtist implements _SpotifyArtist {
-  const _$_SpotifyArtist(
-      {required this.name,
-      required this.uri,
-      required this.id,
-      required this.type});
+  const _$_SpotifyArtist({required this.name, required this.uri, required this.id, required this.type});
 
-  factory _$_SpotifyArtist.fromJson(Map<String, dynamic> json) =>
-      _$$_SpotifyArtistFromJson(json);
+  factory _$_SpotifyArtist.fromJson(Map<String, dynamic> json) => _$$_SpotifyArtistFromJson(json);
 
   @override
   final String name;
@@ -190,19 +184,21 @@ abstract class _SpotifyArtist implements SpotifyArtist {
       required final String id,
       required final String type}) = _$_SpotifyArtist;
 
-  factory _SpotifyArtist.fromJson(Map<String, dynamic> json) =
-      _$_SpotifyArtist.fromJson;
+  factory _SpotifyArtist.fromJson(Map<String, dynamic> json) = _$_SpotifyArtist.fromJson;
 
   @override
   String get name;
+
   @override
   String get uri;
+
   @override
   String get id;
+
   @override
   String get type;
+
   @override
   @JsonKey(ignore: true)
-  _$$_SpotifyArtistCopyWith<_$_SpotifyArtist> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_SpotifyArtistCopyWith<_$_SpotifyArtist> get copyWith => throw _privateConstructorUsedError;
 }

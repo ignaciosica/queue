@@ -13,6 +13,7 @@ abstract class FormzBaseCubitState extends Equatable with ValidateMixin {
   late final Map<String, dynamic> propsMap;
 
   dynamic propertyChanged(String key, dynamic value);
+
   dynamic copyWithStatus(FormzStatus status);
 
   Map<String, dynamic> propertyChangedAux(String key, dynamic value) {

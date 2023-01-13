@@ -49,7 +49,9 @@ class FormzNumber<T extends num> extends FormzBase<T?, String> {
   }
 
   bool _isEmptyInvalid(T? value) => !empty && value == null;
+
   bool _isMinInvalid(T? value) => value != null && min != null && value! < min!;
+
   bool _isMaxInvalid(T? value) => value != null && max != null && value! > max!;
 
   @override

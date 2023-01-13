@@ -11,6 +11,7 @@ class RoomView extends StatefulWidget {
 
 class _RoomViewState extends State<RoomView> {
   bool enhance = false;
+  String playerId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -34,31 +35,23 @@ class _RoomViewState extends State<RoomView> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         actions: [
-          IconButton(
-            onPressed: () async {
-              if (enhance) {
-                Workmanager().cancelAll();
+          StreamBuilder<DocumentSnapshot>(
+            stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                final room = Room.fromJson(snapshot.data!.data()!);
+                if (playerId == room.player) {
+                  return IconButton(
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ParticipantsPage())),
+                    icon: const Icon(Icons.speaker_group_rounded),
+                  );
+                }
               } else {
-                Workmanager().registerOneOffTask(
-                  "task-identifier",
-                  "simpleTask",
-                  inputData: {
-                    "room": '23yvA5kACxSCtVJpfBGV',
-                    "clientId": 'b9a4881e77f4488eb882788cb106a297',
-                    "redirectUrl": 'https://com.example.groupify/callback/',
-                  },
-                  constraints: Constraints(
-                    networkType: NetworkType.connected,
-                    requiresBatteryNotLow: false,
-                    requiresCharging: false,
-                    requiresDeviceIdle: false,
-                    requiresStorageNotLow: false,
-                  ),
-                );
+                Workmanager().cancelAll();
               }
-              enhance = !enhance;
+              return Container();
             },
-            icon: const Icon(Icons.speaker_group_rounded),
           ),
         ],
       ),

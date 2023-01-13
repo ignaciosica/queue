@@ -31,6 +31,31 @@ class FirestoreRepository {
     return currentRoom;
   }
 
+  Future<String> createRoom(String name) async {
+    final room = await _instance.collection('rooms').add({
+      'name': name,
+      'player': _authRepository.currentUser!.id,
+      'skip': [],
+      'users': [_authRepository.currentUser!.id],
+      'player_state': {
+        'duration': 0,
+        'playback_position': 0,
+        'is_paused': false,
+        'uri': '',
+      },
+    });
+
+    await _instance.collection('rooms').doc(room.id).update({
+      'id': room.id.substring(0, 5),
+    });
+
+    await _instance.collection('users').doc(_authRepository.currentUser!.id).update({'active_room': room.id});
+
+    _cache.write(key: currentRoomCacheKey, value: room.id);
+
+    return room.id;
+  }
+
   Future<String> _currentRoom() async {
     final user = await _instance.collection("users").doc(_authRepository.currentUser.id).get();
     final activeRoom = user.data()!['active_room'];
@@ -46,6 +71,10 @@ class FirestoreRepository {
     } else {
       await addVote(await currentRoomAsync, track.spotifyUri);
     }
+  }
+
+  Future<void> setPlayer(String playerId) {
+    return _instance.collection("rooms").doc(currentRoom).update({"player": playerId});
   }
 
   Future<void> addTrackToQueue(String trackId) async {

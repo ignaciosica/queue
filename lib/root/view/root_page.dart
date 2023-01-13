@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/common/common.dart';
 import 'package:groupify/root/root.dart';
+import 'package:workmanager/workmanager.dart';
 
 part 'root_view.dart';
 
@@ -14,6 +16,8 @@ class RootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Workmanager().cancelAll();
+
     return const RootView();
   }
 }

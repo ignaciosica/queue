@@ -21,44 +21,44 @@ SpotifyTrack _$SpotifyTrackFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SpotifyTrack {
   String get name => throw _privateConstructorUsedError;
+
   int get durationMs => throw _privateConstructorUsedError;
+
   SpotifyAlbum get album => throw _privateConstructorUsedError;
+
   List<SpotifyArtist> get artists => throw _privateConstructorUsedError;
+
   String get id => throw _privateConstructorUsedError;
+
   String get uri => throw _privateConstructorUsedError;
+
   String get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
-  $SpotifyTrackCopyWith<SpotifyTrack> get copyWith =>
-      throw _privateConstructorUsedError;
+  $SpotifyTrackCopyWith<SpotifyTrack> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SpotifyTrackCopyWith<$Res> {
-  factory $SpotifyTrackCopyWith(
-          SpotifyTrack value, $Res Function(SpotifyTrack) then) =
+  factory $SpotifyTrackCopyWith(SpotifyTrack value, $Res Function(SpotifyTrack) then) =
       _$SpotifyTrackCopyWithImpl<$Res, SpotifyTrack>;
+
   @useResult
   $Res call(
-      {String name,
-      int durationMs,
-      SpotifyAlbum album,
-      List<SpotifyArtist> artists,
-      String id,
-      String uri,
-      String type});
+      {String name, int durationMs, SpotifyAlbum album, List<SpotifyArtist> artists, String id, String uri, String type});
 
   $SpotifyAlbumCopyWith<$Res> get album;
 }
 
 /// @nodoc
-class _$SpotifyTrackCopyWithImpl<$Res, $Val extends SpotifyTrack>
-    implements $SpotifyTrackCopyWith<$Res> {
+class _$SpotifyTrackCopyWithImpl<$Res, $Val extends SpotifyTrack> implements $SpotifyTrackCopyWith<$Res> {
   _$SpotifyTrackCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -115,33 +115,23 @@ class _$SpotifyTrackCopyWithImpl<$Res, $Val extends SpotifyTrack>
 }
 
 /// @nodoc
-abstract class _$$_SpotifyTrackCopyWith<$Res>
-    implements $SpotifyTrackCopyWith<$Res> {
-  factory _$$_SpotifyTrackCopyWith(
-          _$_SpotifyTrack value, $Res Function(_$_SpotifyTrack) then) =
+abstract class _$$_SpotifyTrackCopyWith<$Res> implements $SpotifyTrackCopyWith<$Res> {
+  factory _$$_SpotifyTrackCopyWith(_$_SpotifyTrack value, $Res Function(_$_SpotifyTrack) then) =
       __$$_SpotifyTrackCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call(
-      {String name,
-      int durationMs,
-      SpotifyAlbum album,
-      List<SpotifyArtist> artists,
-      String id,
-      String uri,
-      String type});
+      {String name, int durationMs, SpotifyAlbum album, List<SpotifyArtist> artists, String id, String uri, String type});
 
   @override
   $SpotifyAlbumCopyWith<$Res> get album;
 }
 
 /// @nodoc
-class __$$_SpotifyTrackCopyWithImpl<$Res>
-    extends _$SpotifyTrackCopyWithImpl<$Res, _$_SpotifyTrack>
+class __$$_SpotifyTrackCopyWithImpl<$Res> extends _$SpotifyTrackCopyWithImpl<$Res, _$_SpotifyTrack>
     implements _$$_SpotifyTrackCopyWith<$Res> {
-  __$$_SpotifyTrackCopyWithImpl(
-      _$_SpotifyTrack _value, $Res Function(_$_SpotifyTrack) _then)
-      : super(_value, _then);
+  __$$_SpotifyTrackCopyWithImpl(_$_SpotifyTrack _value, $Res Function(_$_SpotifyTrack) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -201,8 +191,7 @@ class _$_SpotifyTrack implements _SpotifyTrack {
       required this.type})
       : _artists = artists;
 
-  factory _$_SpotifyTrack.fromJson(Map<String, dynamic> json) =>
-      _$$_SpotifyTrackFromJson(json);
+  factory _$_SpotifyTrack.fromJson(Map<String, dynamic> json) => _$$_SpotifyTrackFromJson(json);
 
   @override
   final String name;
@@ -211,6 +200,7 @@ class _$_SpotifyTrack implements _SpotifyTrack {
   @override
   final SpotifyAlbum album;
   final List<SpotifyArtist> _artists;
+
   @override
   List<SpotifyArtist> get artists {
     // ignore: implicit_dynamic_type
@@ -235,8 +225,7 @@ class _$_SpotifyTrack implements _SpotifyTrack {
         (other.runtimeType == runtimeType &&
             other is _$_SpotifyTrack &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.durationMs, durationMs) ||
-                other.durationMs == durationMs) &&
+            (identical(other.durationMs, durationMs) || other.durationMs == durationMs) &&
             (identical(other.album, album) || other.album == album) &&
             const DeepCollectionEquality().equals(other._artists, _artists) &&
             (identical(other.id, id) || other.id == id) &&
@@ -246,14 +235,13 @@ class _$_SpotifyTrack implements _SpotifyTrack {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, durationMs, album,
-      const DeepCollectionEquality().hash(_artists), id, uri, type);
+  int get hashCode =>
+      Object.hash(runtimeType, name, durationMs, album, const DeepCollectionEquality().hash(_artists), id, uri, type);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SpotifyTrackCopyWith<_$_SpotifyTrack> get copyWith =>
-      __$$_SpotifyTrackCopyWithImpl<_$_SpotifyTrack>(this, _$identity);
+  _$$_SpotifyTrackCopyWith<_$_SpotifyTrack> get copyWith => __$$_SpotifyTrackCopyWithImpl<_$_SpotifyTrack>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -273,25 +261,30 @@ abstract class _SpotifyTrack implements SpotifyTrack {
       required final String uri,
       required final String type}) = _$_SpotifyTrack;
 
-  factory _SpotifyTrack.fromJson(Map<String, dynamic> json) =
-      _$_SpotifyTrack.fromJson;
+  factory _SpotifyTrack.fromJson(Map<String, dynamic> json) = _$_SpotifyTrack.fromJson;
 
   @override
   String get name;
+
   @override
   int get durationMs;
+
   @override
   SpotifyAlbum get album;
+
   @override
   List<SpotifyArtist> get artists;
+
   @override
   String get id;
+
   @override
   String get uri;
+
   @override
   String get type;
+
   @override
   @JsonKey(ignore: true)
-  _$$_SpotifyTrackCopyWith<_$_SpotifyTrack> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_SpotifyTrackCopyWith<_$_SpotifyTrack> get copyWith => throw _privateConstructorUsedError;
 }

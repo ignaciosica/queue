@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:groupify/app/app.dart';
@@ -35,6 +36,11 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await _authenticationRepository.logInWithGoogle();
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      await FirebaseFirestore.instance.collection('users').doc(_authenticationRepository.currentUser!.id).set({
+        'name': _authenticationRepository.currentUser!.name,
+        'profile_url': _authenticationRepository.currentUser!.photo,
+        'active_room': '',
+      });
       _appBloc.add(AppUpdate());
     } on LogInWithGoogleFailure catch (e) {
       emit(

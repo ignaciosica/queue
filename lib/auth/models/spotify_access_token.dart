@@ -10,7 +10,9 @@ class SpotifyAccessToken extends Equatable {
   static final empty = SpotifyAccessToken(accessToken: '', issuedAt: DateTime(0));
 
   bool get isEmpty => accessToken.isEmpty;
+
   bool get isNotEmpty => accessToken.isNotEmpty;
+
   bool get isExpired => issuedAt.add(Duration(seconds: expiresIn)).isAfter(DateTime.now());
 
   @override
