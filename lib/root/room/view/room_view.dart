@@ -1,24 +1,16 @@
-part of 'root_page.dart';
+part of 'room_page.dart';
 
-class RootView extends StatefulWidget {
-  const RootView({super.key, required this.title});
+class RoomView extends StatefulWidget {
+  const RoomView({super.key, required this.title});
 
   final String title;
 
   @override
-  State<RootView> createState() => _RootViewState();
+  State<RoomView> createState() => _RoomViewState();
 }
 
-class _RootViewState extends State<RootView> {
+class _RoomViewState extends State<RoomView> {
   bool enhance = false;
-
-  static Future<void> _connectToSpotifyRemote(String accessToken) async {
-    await SpotifySdk.connectToSpotifyRemote(
-      clientId: 'b9a4881e77f4488eb882788cb106a297',
-      redirectUrl: "http://mysite.com/callback",
-      accessToken: accessToken,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +20,6 @@ class _RootViewState extends State<RootView> {
         title: const RoomTitle(),
         elevation: 1,
         centerTitle: true,
-        //backgroundColor: Colors.transparent,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -38,12 +29,30 @@ class _RootViewState extends State<RootView> {
             ),
           ),
         ),
-        // leading: IconButton(
-        //   onPressed: () async {
-        //     BlocProvider.of<AppBloc>(context).add(AppLogoutRequested());
-        //   },
-        //   icon: Transform.scale(scaleX: -1, child: const Icon(Icons.logout_rounded)),
-        // ),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
+        actions: [
+          StreamBuilder<DocumentSnapshot>(
+            stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                final room = Room.fromJson(snapshot.data!.data()!);
+                if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
+                  return IconButton(
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ParticipantsPage())),
+                    icon: const Icon(Icons.speaker_group_rounded),
+                  );
+                }
+              } else {
+                Workmanager().cancelAll();
+              }
+              return Container();
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -56,11 +65,7 @@ class _RootViewState extends State<RootView> {
                 padding: EdgeInsets.zero,
                 child: NowPlaying(),
               ),
-              BaseTile(
-                padding: EdgeInsets.only(top: 0, left: 8, right: 8),
-                margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),
-                child: NextUpTile(),
-              ),
+              NextUpTile(),
               BaseTile(
                 padding: EdgeInsets.only(top: 0, left: 8, right: 8),
                 margin: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 16),

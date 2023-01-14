@@ -21,7 +21,25 @@ class QueueTile extends StatelessWidget {
           pageSize: 10,
           query: RepositoryProvider.of<FirestoreRepository>(context).getQueueQuery(),
           shrinkWrap: true,
-          emptyBuilder: (context) => const Text('empty'),
+          emptyBuilder: (context) => Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                height: 55,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('No songs in queue', style: TextStyle(color: Theme.of(context).colorScheme.primary))),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
           errorBuilder: (context, obj, st) => const Text('error'),
           itemBuilder: (context, snapshot) {
             Map<String, dynamic> json = snapshot.data();

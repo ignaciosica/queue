@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:groupify/root/cubit/spotify_player_cubit.dart';
+import 'package:groupify/root/room/room.dart';
 
 class SongProgressIndicator extends StatefulWidget {
   const SongProgressIndicator({Key? key, this.color, this.showLabel = true}) : super(key: key);

@@ -6,3 +6,4 @@ export 'song_progress_indicator.dart';
 export 'spotify_image_builder.dart';
 export 'track_row.dart';
 export 'vote_counter.dart';
+export 'base_app_bar.dart';

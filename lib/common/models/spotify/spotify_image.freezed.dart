@@ -21,31 +21,33 @@ SpotifyImage _$SpotifyImageFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SpotifyImage {
   int get width => throw _privateConstructorUsedError;
+
   int get height => throw _privateConstructorUsedError;
+
   String get url => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
-  $SpotifyImageCopyWith<SpotifyImage> get copyWith =>
-      throw _privateConstructorUsedError;
+  $SpotifyImageCopyWith<SpotifyImage> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SpotifyImageCopyWith<$Res> {
-  factory $SpotifyImageCopyWith(
-          SpotifyImage value, $Res Function(SpotifyImage) then) =
+  factory $SpotifyImageCopyWith(SpotifyImage value, $Res Function(SpotifyImage) then) =
       _$SpotifyImageCopyWithImpl<$Res, SpotifyImage>;
+
   @useResult
   $Res call({int width, int height, String url});
 }
 
 /// @nodoc
-class _$SpotifyImageCopyWithImpl<$Res, $Val extends SpotifyImage>
-    implements $SpotifyImageCopyWith<$Res> {
+class _$SpotifyImageCopyWithImpl<$Res, $Val extends SpotifyImage> implements $SpotifyImageCopyWith<$Res> {
   _$SpotifyImageCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -74,23 +76,19 @@ class _$SpotifyImageCopyWithImpl<$Res, $Val extends SpotifyImage>
 }
 
 /// @nodoc
-abstract class _$$_SpotifyImageCopyWith<$Res>
-    implements $SpotifyImageCopyWith<$Res> {
-  factory _$$_SpotifyImageCopyWith(
-          _$_SpotifyImage value, $Res Function(_$_SpotifyImage) then) =
+abstract class _$$_SpotifyImageCopyWith<$Res> implements $SpotifyImageCopyWith<$Res> {
+  factory _$$_SpotifyImageCopyWith(_$_SpotifyImage value, $Res Function(_$_SpotifyImage) then) =
       __$$_SpotifyImageCopyWithImpl<$Res>;
+
   @override
   @useResult
   $Res call({int width, int height, String url});
 }
 
 /// @nodoc
-class __$$_SpotifyImageCopyWithImpl<$Res>
-    extends _$SpotifyImageCopyWithImpl<$Res, _$_SpotifyImage>
+class __$$_SpotifyImageCopyWithImpl<$Res> extends _$SpotifyImageCopyWithImpl<$Res, _$_SpotifyImage>
     implements _$$_SpotifyImageCopyWith<$Res> {
-  __$$_SpotifyImageCopyWithImpl(
-      _$_SpotifyImage _value, $Res Function(_$_SpotifyImage) _then)
-      : super(_value, _then);
+  __$$_SpotifyImageCopyWithImpl(_$_SpotifyImage _value, $Res Function(_$_SpotifyImage) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -120,11 +118,9 @@ class __$$_SpotifyImageCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class _$_SpotifyImage implements _SpotifyImage {
-  const _$_SpotifyImage(
-      {required this.width, required this.height, required this.url});
+  const _$_SpotifyImage({required this.width, required this.height, required this.url});
 
-  factory _$_SpotifyImage.fromJson(Map<String, dynamic> json) =>
-      _$$_SpotifyImageFromJson(json);
+  factory _$_SpotifyImage.fromJson(Map<String, dynamic> json) => _$$_SpotifyImageFromJson(json);
 
   @override
   final int width;
@@ -155,8 +151,7 @@ class _$_SpotifyImage implements _SpotifyImage {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SpotifyImageCopyWith<_$_SpotifyImage> get copyWith =>
-      __$$_SpotifyImageCopyWithImpl<_$_SpotifyImage>(this, _$identity);
+  _$$_SpotifyImageCopyWith<_$_SpotifyImage> get copyWith => __$$_SpotifyImageCopyWithImpl<_$_SpotifyImage>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -167,22 +162,21 @@ class _$_SpotifyImage implements _SpotifyImage {
 }
 
 abstract class _SpotifyImage implements SpotifyImage {
-  const factory _SpotifyImage(
-      {required final int width,
-      required final int height,
-      required final String url}) = _$_SpotifyImage;
+  const factory _SpotifyImage({required final int width, required final int height, required final String url}) =
+      _$_SpotifyImage;
 
-  factory _SpotifyImage.fromJson(Map<String, dynamic> json) =
-      _$_SpotifyImage.fromJson;
+  factory _SpotifyImage.fromJson(Map<String, dynamic> json) = _$_SpotifyImage.fromJson;
 
   @override
   int get width;
+
   @override
   int get height;
+
   @override
   String get url;
+
   @override
   @JsonKey(ignore: true)
-  _$$_SpotifyImageCopyWith<_$_SpotifyImage> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$_SpotifyImageCopyWith<_$_SpotifyImage> get copyWith => throw _privateConstructorUsedError;
 }

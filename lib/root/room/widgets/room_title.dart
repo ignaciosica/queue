@@ -1,18 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:groupify/root/cubit/root_cubit.dart';
+import 'package:groupify/common/common.dart';
 
 class RoomTitle extends StatelessWidget {
   const RoomTitle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final rootCubit = BlocProvider.of<RootCubit>(context);
-
     return StreamBuilder(
-        stream:
-            FirebaseFirestore.instance.collection('rooms').doc(rootCubit.state.readProperty<String>('room_id')).snapshots(),
+        stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Text("Loading room");
