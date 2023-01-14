@@ -11,7 +11,6 @@ class RoomView extends StatefulWidget {
 
 class _RoomViewState extends State<RoomView> {
   bool enhance = false;
-  String playerId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _RoomViewState extends State<RoomView> {
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 final room = Room.fromJson(snapshot.data!.data()!);
-                if (playerId == room.player) {
+                if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                   return IconButton(
                     onPressed: () =>
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const ParticipantsPage())),
