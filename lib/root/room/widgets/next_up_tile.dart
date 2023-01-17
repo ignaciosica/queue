@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/common/common.dart';
+import 'package:groupify/root/room/room.dart';
 
 class NextUpTile extends StatefulWidget {
   const NextUpTile({Key? key}) : super(key: key);
@@ -15,9 +16,9 @@ class _NextUpTileState extends State<NextUpTile> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: RepositoryProvider.of<FirestoreRepository>(context).nextUp(),
+      stream: RepositoryProvider.of<FirestoreRepository>(context).nextUp(BlocProvider.of<RoomCubit>(context).state.roomId),
       builder: (context, snapshot) {
-        if (snapshot.data!.docs.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return Container();
         }
 

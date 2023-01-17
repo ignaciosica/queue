@@ -2,6 +2,7 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/common/common.dart';
+import 'package:groupify/root/room/room.dart';
 
 class QueueTile extends StatelessWidget {
   const QueueTile({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class QueueTile extends StatelessWidget {
         FirestoreListView<Map<String, dynamic>>(
           physics: const NeverScrollableScrollPhysics(),
           pageSize: 10,
-          query: RepositoryProvider.of<FirestoreRepository>(context).getQueueQuery(),
+          query: RepositoryProvider.of<FirestoreRepository>(context).getQueueQuery(BlocProvider.of<RoomCubit>(context).state.roomId),
           shrinkWrap: true,
           emptyBuilder: (context) => Column(
             children: [

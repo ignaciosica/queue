@@ -11,17 +11,20 @@ import 'package:workmanager/workmanager.dart';
 part 'room_view.dart';
 
 class RoomPage extends StatelessWidget {
-  const RoomPage({Key? key}) : super(key: key);
+  const RoomPage({Key? key, required this.roomId}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(builder: (_) => const RoomPage());
+  static Route route(String roomId) => MaterialPageRoute<void>(builder: (_) => RoomPage(roomId: roomId));
 
-  static Page page() => const MaterialPage<void>(child: RoomPage());
+  static Page page(String roomId) => MaterialPage<void>(child: RoomPage(roomId: roomId));
+
+  final String roomId;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (BuildContext context) => SpotifyPlayerCubit()),
+        BlocProvider(create: (BuildContext context) => RoomCubit(roomId)),
       ],
       child: const RoomView(title: 'Groupify'),
     );

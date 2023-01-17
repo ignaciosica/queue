@@ -8,28 +8,12 @@ import 'package:groupify/common/common.dart';
 class FirestoreRepository {
   FirestoreRepository(this._authRepository)
       : _instance = FirebaseFirestore.instance,
-        _cache = CacheClient() {
-    unawaited(currentRoomAsync);
-  }
+        _cache = CacheClient();
 
   final CacheClient _cache;
   final AuthRepository _authRepository;
   final FirebaseFirestore _instance;
 
-  static const currentRoomCacheKey = '__current_token_cache_key__';
-
-  String get currentRoom {
-    return _cache.read<String>(key: currentRoomCacheKey) ?? '';
-  }
-
-  Future<String> get currentRoomAsync async {
-    var currentRoom = this.currentRoom;
-    if (currentRoom.isEmpty) {
-      currentRoom = await _currentRoom();
-    }
-
-    return currentRoom;
-  }
 
   Future<String> createRoom(String name) async {
     final room = await _instance.collection('rooms').add({
@@ -46,45 +30,35 @@ class FirestoreRepository {
     });
 
     await _instance.collection('rooms').doc(room.id).update({
-      'id': room.id.substring(0, 5),
+      'room_id': room.id.substring(0, 5),
     });
 
     await _instance.collection('users').doc(_authRepository.currentUser!.id).update({'active_room': room.id});
 
-    _cache.write(key: currentRoomCacheKey, value: room.id);
-
     return room.id;
   }
 
-  Future<String> _currentRoom() async {
-    final user = await _instance.collection("users").doc(_authRepository.currentUser.id).get();
-    final activeRoom = user.data()!['active_room'];
-    _cache.write<String>(key: currentRoomCacheKey, value: activeRoom);
-
-    return activeRoom;
-  }
-
-  Future<void> changeVote(FirestoreTrack track) async {
+  Future<void> changeVote(String roomId, FirestoreTrack track) async {
     final voted = track.votes.contains(_authRepository.currentUser.id);
     if (voted) {
-      await removeVote(await currentRoomAsync, track.spotifyUri);
+      await removeVote(roomId, track.spotifyUri);
     } else {
-      await addVote(await currentRoomAsync, track.spotifyUri);
+      await addVote(roomId, track.spotifyUri);
     }
   }
 
-  Future<void> setPlayer(String playerId) {
-    return _instance.collection("rooms").doc(currentRoom).update({"player": playerId});
+  Future<void> setPlayer(String roomId, String playerId) {
+    return _instance.collection("rooms").doc(roomId).update({"player": playerId});
   }
 
-  Future<void> addTrackToQueue(String trackId) async {
+  Future<void> addTrackToQueue(String roomId, String trackId) async {
     final track = <String, dynamic>{
       'created_at': DateTime.now().toUtc(),
       'votes': [_authRepository.currentUser.id],
       'votes_count': 1,
     };
 
-    await _instance.collection("rooms").doc(await currentRoomAsync).collection('queue').doc(trackId).set(track);
+    await _instance.collection("rooms").doc(roomId).collection('queue').doc(trackId).set(track);
   }
 
   Future<void> addVote(String roomId, String spotifyUri) async {
@@ -105,30 +79,30 @@ class FirestoreRepository {
     });
   }
 
-  Future<void> removeTrack(String spotifyUri) async {
-    final track = _instance.collection("rooms").doc(await currentRoomAsync).collection('queue').doc(spotifyUri);
+  Future<void> removeTrack(String roomId, String spotifyUri) async {
+    final track = _instance.collection("rooms").doc(roomId).collection('queue').doc(spotifyUri);
 
     await track.delete();
   }
 
-  Query<Map<String, dynamic>> getQueueQuery() {
-    return _instance.collection('rooms').doc(currentRoom).collection('queue').orderBy('created_at', descending: false);
+  Query<Map<String, dynamic>> getQueueQuery(String roomId) {
+    return _instance.collection('rooms').doc(roomId).collection('queue').orderBy('created_at', descending: false);
     //return _instance.collection('rooms').doc(await currentRoom).collection('queue').orderBy('votes_count', descending: true);
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getQueueSnapshots() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getQueueSnapshots(String roomId) {
     return _instance
         .collection('rooms')
-        .doc(currentRoom)
+        .doc(roomId)
         .collection('queue')
         .orderBy('created_at', descending: false)
         .snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> nextUp() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> nextUp(String roomId) {
     return _instance
         .collection('rooms')
-        .doc(currentRoom)
+        .doc(roomId)
         .collection('queue')
         .orderBy('votes_count', descending: true)
         .orderBy('created_at', descending: false)
@@ -136,27 +110,27 @@ class FirestoreRepository {
         .snapshots();
   }
 
-  Future<void> addSkipVote() async {
-    _instance.collection("rooms").doc(await currentRoomAsync).update({
+  Future<void> addSkipVote(String roomId) async {
+    _instance.collection("rooms").doc(roomId).update({
       "skip": FieldValue.arrayUnion([_authRepository.currentUser.id])
     });
   }
 
-  Future<void> removeSkipVote() async {
-    _instance.collection("rooms").doc(await currentRoomAsync).update({
+  Future<void> removeSkipVote(String roomId) async {
+    _instance.collection("rooms").doc(roomId).update({
       "skip": FieldValue.arrayRemove([_authRepository.currentUser.id])
     });
   }
 
-  Future<void> clearSkipVotes() async {
-    _instance.collection("rooms").doc(await currentRoomAsync).update({"skip": []});
+  Future<void> clearSkipVotes(String roomId) async {
+    _instance.collection("rooms").doc(roomId).update({"skip": []});
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getRoom() {
-    return _instance.collection('rooms').doc(currentRoom).snapshots();
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getRoom(String roomId) {
+    return _instance.collection('rooms').doc(roomId).snapshots();
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getTrack(String trackId) {
-    return _instance.collection('rooms').doc(currentRoom).collection('queue').doc(trackId).snapshots();
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getTrack(String roomId, String trackId) {
+    return _instance.collection('rooms').doc(roomId).collection('queue').doc(trackId).snapshots();
   }
 }

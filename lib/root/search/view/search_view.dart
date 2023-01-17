@@ -50,7 +50,7 @@ class _TrackRowWidState2 extends State<TrackRowWid2> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      stream: RepositoryProvider.of<FirestoreRepository>(context).getTrack(widget.spotifyTrack.id),
+      stream: RepositoryProvider.of<FirestoreRepository>(context).getTrack(widget.spotifyTrack.id, BlocProvider.of<RoomCubit>(context).state.roomId),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!.exists) {
           Map<String, dynamic> json = snapshot.data!.data()!;
@@ -65,8 +65,8 @@ class _TrackRowWidState2 extends State<TrackRowWid2> {
               borderRadius: BorderRadius.circular(9),
               onTap: () async {
                 final fireRepo = RepositoryProvider.of<FirestoreRepository>(context);
-                if (firestoreTrack != null) await fireRepo.changeVote(firestoreTrack!);
-                if (firestoreTrack == null) await fireRepo.addTrackToQueue(widget.spotifyTrack.id);
+                if (firestoreTrack != null) await fireRepo.changeVote(BlocProvider.of<RoomCubit>(context).state.roomId, firestoreTrack!);
+                if (firestoreTrack == null) await fireRepo.addTrackToQueue(BlocProvider.of<RoomCubit>(context).state.roomId, widget.spotifyTrack.id);
               },
               child: Ink(
                 height: 55,

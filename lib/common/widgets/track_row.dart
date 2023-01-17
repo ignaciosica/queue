@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/common/common.dart';
+import 'package:groupify/root/room/room.dart';
 
 class TrackRow extends StatelessWidget {
   const TrackRow({Key? key, required this.track, this.position = 4, this.showActions = true}) : super(key: key);
@@ -68,7 +69,7 @@ class _TrackRowWidState extends State<TrackRowWid> {
           borderRadius: BorderRadius.circular(9),
           onTap: () async {
             final fireRepo = RepositoryProvider.of<FirestoreRepository>(context);
-            await fireRepo.changeVote(widget.firestoreTrack);
+            await fireRepo.changeVote(BlocProvider.of<RoomCubit>(context).state.roomId, widget.firestoreTrack);
           },
           child: Ink(
             height: 55,
@@ -111,7 +112,7 @@ class _TrackRowWidState extends State<TrackRowWid> {
                       iconB: IconButton(
                         onPressed: () async {
                           final fireRepo = RepositoryProvider.of<FirestoreRepository>(context);
-                          await fireRepo.removeTrack(widget.firestoreTrack.spotifyUri);
+                          await fireRepo.removeTrack(BlocProvider.of<RoomCubit>(context).state.roomId, widget.firestoreTrack.spotifyUri);
                         },
                         visualDensity: VisualDensity.compact,
                         icon: const Icon(
