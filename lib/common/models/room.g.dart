@@ -11,8 +11,7 @@ _$_Room _$$_RoomFromJson(Map<String, dynamic> json) => _$_Room(
       users: (json['users'] as List<dynamic>).map((e) => e as String).toList(),
       skip: (json['skip'] as List<dynamic>).map((e) => e as String).toList(),
       player: json['player'] as String,
-      playerState: FirestorePlayerState.fromJson(
-          json['player_state'] as Map<String, dynamic>),
+      playerState: FirestorePlayerState.fromJson(json['player_state'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_RoomToJson(_$_Room instance) => <String, dynamic>{

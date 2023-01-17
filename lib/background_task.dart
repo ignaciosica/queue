@@ -42,7 +42,7 @@ void callbackDispatcher() {
         'player_state.artists': state!.track?.artists.map((e) => e.name).toList() ?? [],
         'player_state.duration': state!.track?.duration ?? 0,
         'player_state.image_uri': state!.track?.imageUri.raw ?? '',
-        'player_state.name': state!.track?.name ??   '',
+        'player_state.name': state!.track?.name ?? '',
         'player_state.is_paused': state!.isPaused,
         'player_state.playback_position': state!.playbackPosition,
         'player_state.uri': state!.track?.uri ?? '',

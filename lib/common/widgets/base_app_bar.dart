@@ -21,14 +21,15 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      leading: showBackButton ? IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-      ) : null,
+      leading: showBackButton
+          ? IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            )
+          : null,
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
-

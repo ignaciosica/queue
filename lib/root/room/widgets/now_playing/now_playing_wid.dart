@@ -44,7 +44,7 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
           'player_state.artists': ss.data!.track?.artists.map((e) => e.name).toList() ?? [],
           'player_state.duration': ss.data!.track?.duration ?? 0,
           'player_state.image_uri': ss.data!.track?.imageUri.raw ?? '',
-          'player_state.name': ss.data!.track?.name ??   '',
+          'player_state.name': ss.data!.track?.name ?? '',
           'player_state.is_paused': ss.data!.isPaused,
           'player_state.playback_position': ss.data!.playbackPosition,
           'player_state.uri': ss.data!.track?.uri ?? '',

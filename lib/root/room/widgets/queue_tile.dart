@@ -20,7 +20,8 @@ class QueueTile extends StatelessWidget {
         FirestoreListView<Map<String, dynamic>>(
           physics: const NeverScrollableScrollPhysics(),
           pageSize: 10,
-          query: RepositoryProvider.of<FirestoreRepository>(context).getQueueQuery(BlocProvider.of<RoomCubit>(context).state.roomId),
+          query: RepositoryProvider.of<FirestoreRepository>(context)
+              .getQueueQuery(BlocProvider.of<RoomCubit>(context).state.roomId),
           shrinkWrap: true,
           emptyBuilder: (context) => Column(
             children: [

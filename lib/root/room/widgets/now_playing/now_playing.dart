@@ -13,13 +13,9 @@ import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 part 'now_playing_dummy.dart';
-
-part 'now_playing_reconnect_dummy.dart';
-
-part 'now_playing_wid.dart';
-
 part 'now_playing_firestore.dart';
-
+part 'now_playing_reconnect_dummy.dart';
+part 'now_playing_wid.dart';
 part 'skip_button.dart';
 
 class NowPlaying extends StatefulWidget {

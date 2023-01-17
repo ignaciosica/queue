@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/common/common.dart';
-import 'package:flutter/services.dart';
 import 'package:groupify/root/room/room.dart';
-
 
 class RoomTitle extends StatelessWidget {
   const RoomTitle({Key? key}) : super(key: key);
@@ -11,7 +10,8 @@ class RoomTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
+        stream:
+            RepositoryProvider.of<FirestoreRepository>(context).getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Text("Loading room");
@@ -19,7 +19,7 @@ class RoomTitle extends StatelessWidget {
           var roomDocument = snapshot.data;
           return GestureDetector(
             onTap: () {
-              Clipboard.setData(ClipboardData(text: snapshot.data!.id.substring(0, 5))).then((_){
+              Clipboard.setData(ClipboardData(text: snapshot.data!.id.substring(0, 5))).then((_) {
                 //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Room code copied to clipboard")));
               });
             },

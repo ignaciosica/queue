@@ -35,14 +35,15 @@ class _RoomViewState extends State<RoomView> {
         ),
         actions: [
           StreamBuilder<DocumentSnapshot>(
-            stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
+            stream: RepositoryProvider.of<FirestoreRepository>(context)
+                .getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 final room = Room.fromJson(snapshot.data!.data()!);
                 if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                   return IconButton(
-                    onPressed: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => ParticipantsPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),
+                    onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => ParticipantsPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),
                     icon: const Icon(Icons.speaker_group_rounded),
                   );
                 }
@@ -78,7 +79,8 @@ class _RoomViewState extends State<RoomView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (_) => SearchPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),
         tooltip: 'Search',
         child: const Icon(Icons.search_rounded),
       ),

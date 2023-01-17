@@ -21,38 +21,38 @@ Room _$RoomFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Room {
   String get name => throw _privateConstructorUsedError;
+
   List<String> get users => throw _privateConstructorUsedError;
+
   List<String> get skip => throw _privateConstructorUsedError;
+
   String get player => throw _privateConstructorUsedError;
+
   FirestorePlayerState get playerState => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $RoomCopyWith<Room> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $RoomCopyWith<$Res> {
-  factory $RoomCopyWith(Room value, $Res Function(Room) then) =
-      _$RoomCopyWithImpl<$Res, Room>;
+  factory $RoomCopyWith(Room value, $Res Function(Room) then) = _$RoomCopyWithImpl<$Res, Room>;
+
   @useResult
-  $Res call(
-      {String name,
-      List<String> users,
-      List<String> skip,
-      String player,
-      FirestorePlayerState playerState});
+  $Res call({String name, List<String> users, List<String> skip, String player, FirestorePlayerState playerState});
 
   $FirestorePlayerStateCopyWith<$Res> get playerState;
 }
 
 /// @nodoc
-class _$RoomCopyWithImpl<$Res, $Val extends Room>
-    implements $RoomCopyWith<$Res> {
+class _$RoomCopyWithImpl<$Res, $Val extends Room> implements $RoomCopyWith<$Res> {
   _$RoomCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -100,26 +100,19 @@ class _$RoomCopyWithImpl<$Res, $Val extends Room>
 
 /// @nodoc
 abstract class _$$_RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
-  factory _$$_RoomCopyWith(_$_Room value, $Res Function(_$_Room) then) =
-      __$$_RoomCopyWithImpl<$Res>;
+  factory _$$_RoomCopyWith(_$_Room value, $Res Function(_$_Room) then) = __$$_RoomCopyWithImpl<$Res>;
+
   @override
   @useResult
-  $Res call(
-      {String name,
-      List<String> users,
-      List<String> skip,
-      String player,
-      FirestorePlayerState playerState});
+  $Res call({String name, List<String> users, List<String> skip, String player, FirestorePlayerState playerState});
 
   @override
   $FirestorePlayerStateCopyWith<$Res> get playerState;
 }
 
 /// @nodoc
-class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room>
-    implements _$$_RoomCopyWith<$Res> {
-  __$$_RoomCopyWithImpl(_$_Room _value, $Res Function(_$_Room) _then)
-      : super(_value, _then);
+class __$$_RoomCopyWithImpl<$Res> extends _$RoomCopyWithImpl<$Res, _$_Room> implements _$$_RoomCopyWith<$Res> {
+  __$$_RoomCopyWithImpl(_$_Room _value, $Res Function(_$_Room) _then) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -173,6 +166,7 @@ class _$_Room with DiagnosticableTreeMixin implements _Room {
   @override
   final String name;
   final List<String> _users;
+
   @override
   List<String> get users {
     // ignore: implicit_dynamic_type
@@ -180,6 +174,7 @@ class _$_Room with DiagnosticableTreeMixin implements _Room {
   }
 
   final List<String> _skip;
+
   @override
   List<String> get skip {
     // ignore: implicit_dynamic_type
@@ -217,25 +212,18 @@ class _$_Room with DiagnosticableTreeMixin implements _Room {
             const DeepCollectionEquality().equals(other._users, _users) &&
             const DeepCollectionEquality().equals(other._skip, _skip) &&
             (identical(other.player, player) || other.player == player) &&
-            (identical(other.playerState, playerState) ||
-                other.playerState == playerState));
+            (identical(other.playerState, playerState) || other.playerState == playerState));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      name,
-      const DeepCollectionEquality().hash(_users),
-      const DeepCollectionEquality().hash(_skip),
-      player,
-      playerState);
+  int get hashCode => Object.hash(runtimeType, name, const DeepCollectionEquality().hash(_users),
+      const DeepCollectionEquality().hash(_skip), player, playerState);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RoomCopyWith<_$_Room> get copyWith =>
-      __$$_RoomCopyWithImpl<_$_Room>(this, _$identity);
+  _$$_RoomCopyWith<_$_Room> get copyWith => __$$_RoomCopyWithImpl<_$_Room>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -257,14 +245,19 @@ abstract class _Room implements Room {
 
   @override
   String get name;
+
   @override
   List<String> get users;
+
   @override
   List<String> get skip;
+
   @override
   String get player;
+
   @override
   FirestorePlayerState get playerState;
+
   @override
   @JsonKey(ignore: true)
   _$$_RoomCopyWith<_$_Room> get copyWith => throw _privateConstructorUsedError;

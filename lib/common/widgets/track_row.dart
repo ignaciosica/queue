@@ -112,7 +112,8 @@ class _TrackRowWidState extends State<TrackRowWid> {
                       iconB: IconButton(
                         onPressed: () async {
                           final fireRepo = RepositoryProvider.of<FirestoreRepository>(context);
-                          await fireRepo.removeTrack(BlocProvider.of<RoomCubit>(context).state.roomId, widget.firestoreTrack.spotifyUri);
+                          await fireRepo.removeTrack(
+                              BlocProvider.of<RoomCubit>(context).state.roomId, widget.firestoreTrack.spotifyUri);
                         },
                         visualDensity: VisualDensity.compact,
                         icon: const Icon(

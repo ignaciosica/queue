@@ -8,7 +8,8 @@ class ParticipantsView extends StatelessWidget {
     return Scaffold(
       appBar: const BaseAppBar(title: 'Participants'),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
+        stream:
+            RepositoryProvider.of<FirestoreRepository>(context).getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             final room = Room.fromJson(snapshot.data!.data()!);
@@ -28,7 +29,8 @@ class ParticipantsView extends StatelessWidget {
 
                         return InkWell(
                           borderRadius: BorderRadius.circular(9),
-                          onTap: () => RepositoryProvider.of<FirestoreRepository>(context).setPlayer(BlocProvider.of<RoomCubit>(context).state.roomId, room.users[index]),
+                          onTap: () => RepositoryProvider.of<FirestoreRepository>(context)
+                              .setPlayer(BlocProvider.of<RoomCubit>(context).state.roomId, room.users[index]),
                           child: ListTile(
                             leading: user.profileUrl != null
                                 ? SizedBox(

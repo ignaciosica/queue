@@ -14,7 +14,6 @@ class FirestoreRepository {
   final AuthRepository _authRepository;
   final FirebaseFirestore _instance;
 
-
   Future<String> createRoom(String name) async {
     final room = await _instance.collection('rooms').add({
       'name': name,
