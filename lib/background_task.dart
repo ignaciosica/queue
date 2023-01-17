@@ -38,6 +38,16 @@ void callbackDispatcher() {
         continue;
       }
 
+      await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).update({
+        'player_state.artists': state!.track?.artists.map((e) => e.name).toList() ?? [],
+        'player_state.duration': state!.track?.duration ?? 0,
+        'player_state.image_uri': state!.track?.imageUri.raw ?? '',
+        'player_state.name': state!.track?.name ??   '',
+        'player_state.is_paused': state!.isPaused,
+        'player_state.playback_position': state!.playbackPosition,
+        'player_state.uri': state!.track?.uri ?? '',
+      });
+
       if (state.track!.duration - state.playbackPosition > 10 * 1000) {
         await Future.delayed(
           Duration(

@@ -28,7 +28,7 @@ class _SkipButtonState extends State<SkipButton> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final room = Room.fromJson(snapshot.data!.data()!);
-          if (room.skip.length >= (room.users.length / 2).floor()) {
+          if (room.skip.length >= max(1, (room.users.length / 2).floor())) {
             _skipSong(BlocProvider.of<RoomCubit>(context).state.roomId);
           }
           return Column(
@@ -46,7 +46,7 @@ class _SkipButtonState extends State<SkipButton> {
                   children: [
                     const Icon(Icons.people_alt_rounded, size: 16),
                     Text(
-                      '${room.skip.length}/${(room.users.length / 2).floor()}',
+                      '${room.skip.length}/${(max(1, (room.users.length / 2).floor())).floor()}',
                       style: const TextStyle(fontSize: 12),
                     ),
                   ],

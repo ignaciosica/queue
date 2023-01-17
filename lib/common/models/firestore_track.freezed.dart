@@ -22,27 +22,24 @@ FirestoreTrack _$FirestoreTrackFromJson(Map<String, dynamic> json) {
 mixin _$FirestoreTrack {
   @JsonKey(name: 'spotify_uri')
   String get spotifyUri => throw _privateConstructorUsedError;
-
   @JsonKey(name: 'created_at')
   @TimestampConverter()
   Timestamp get createdAt => throw _privateConstructorUsedError;
-
   List<String> get votes => throw _privateConstructorUsedError;
-
   @JsonKey(name: 'votes_count')
   int get votesCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
-  $FirestoreTrackCopyWith<FirestoreTrack> get copyWith => throw _privateConstructorUsedError;
+  $FirestoreTrackCopyWith<FirestoreTrack> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirestoreTrackCopyWith<$Res> {
-  factory $FirestoreTrackCopyWith(FirestoreTrack value, $Res Function(FirestoreTrack) then) =
+  factory $FirestoreTrackCopyWith(
+          FirestoreTrack value, $Res Function(FirestoreTrack) then) =
       _$FirestoreTrackCopyWithImpl<$Res, FirestoreTrack>;
-
   @useResult
   $Res call(
       {@JsonKey(name: 'spotify_uri') String spotifyUri,
@@ -52,12 +49,12 @@ abstract class $FirestoreTrackCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$FirestoreTrackCopyWithImpl<$Res, $Val extends FirestoreTrack> implements $FirestoreTrackCopyWith<$Res> {
+class _$FirestoreTrackCopyWithImpl<$Res, $Val extends FirestoreTrack>
+    implements $FirestoreTrackCopyWith<$Res> {
   _$FirestoreTrackCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -91,10 +88,11 @@ class _$FirestoreTrackCopyWithImpl<$Res, $Val extends FirestoreTrack> implements
 }
 
 /// @nodoc
-abstract class _$$_FirestoreTrackCopyWith<$Res> implements $FirestoreTrackCopyWith<$Res> {
-  factory _$$_FirestoreTrackCopyWith(_$_FirestoreTrack value, $Res Function(_$_FirestoreTrack) then) =
+abstract class _$$_FirestoreTrackCopyWith<$Res>
+    implements $FirestoreTrackCopyWith<$Res> {
+  factory _$$_FirestoreTrackCopyWith(
+          _$_FirestoreTrack value, $Res Function(_$_FirestoreTrack) then) =
       __$$_FirestoreTrackCopyWithImpl<$Res>;
-
   @override
   @useResult
   $Res call(
@@ -105,9 +103,12 @@ abstract class _$$_FirestoreTrackCopyWith<$Res> implements $FirestoreTrackCopyWi
 }
 
 /// @nodoc
-class __$$_FirestoreTrackCopyWithImpl<$Res> extends _$FirestoreTrackCopyWithImpl<$Res, _$_FirestoreTrack>
+class __$$_FirestoreTrackCopyWithImpl<$Res>
+    extends _$FirestoreTrackCopyWithImpl<$Res, _$_FirestoreTrack>
     implements _$$_FirestoreTrackCopyWith<$Res> {
-  __$$_FirestoreTrackCopyWithImpl(_$_FirestoreTrack _value, $Res Function(_$_FirestoreTrack) _then) : super(_value, _then);
+  __$$_FirestoreTrackCopyWithImpl(
+      _$_FirestoreTrack _value, $Res Function(_$_FirestoreTrack) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -142,13 +143,18 @@ class __$$_FirestoreTrackCopyWithImpl<$Res> extends _$FirestoreTrackCopyWithImpl
 @JsonSerializable()
 class _$_FirestoreTrack implements _FirestoreTrack {
   const _$_FirestoreTrack(
-      {@JsonKey(name: 'spotify_uri') required this.spotifyUri,
-      @JsonKey(name: 'created_at') @TimestampConverter() required this.createdAt,
+      {@JsonKey(name: 'spotify_uri')
+          required this.spotifyUri,
+      @JsonKey(name: 'created_at')
+      @TimestampConverter()
+          required this.createdAt,
       required final List<String> votes,
-      @JsonKey(name: 'votes_count') required this.votesCount})
+      @JsonKey(name: 'votes_count')
+          required this.votesCount})
       : _votes = votes;
 
-  factory _$_FirestoreTrack.fromJson(Map<String, dynamic> json) => _$$_FirestoreTrackFromJson(json);
+  factory _$_FirestoreTrack.fromJson(Map<String, dynamic> json) =>
+      _$$_FirestoreTrackFromJson(json);
 
   @override
   @JsonKey(name: 'spotify_uri')
@@ -158,7 +164,6 @@ class _$_FirestoreTrack implements _FirestoreTrack {
   @TimestampConverter()
   final Timestamp createdAt;
   final List<String> _votes;
-
   @override
   List<String> get votes {
     // ignore: implicit_dynamic_type
@@ -179,16 +184,19 @@ class _$_FirestoreTrack implements _FirestoreTrack {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_FirestoreTrack &&
-            (identical(other.spotifyUri, spotifyUri) || other.spotifyUri == spotifyUri) &&
-            (identical(other.createdAt, createdAt) || other.createdAt == createdAt) &&
+            (identical(other.spotifyUri, spotifyUri) ||
+                other.spotifyUri == spotifyUri) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             const DeepCollectionEquality().equals(other._votes, _votes) &&
-            (identical(other.votesCount, votesCount) || other.votesCount == votesCount));
+            (identical(other.votesCount, votesCount) ||
+                other.votesCount == votesCount));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, spotifyUri, createdAt, const DeepCollectionEquality().hash(_votes), votesCount);
+  int get hashCode => Object.hash(runtimeType, spotifyUri, createdAt,
+      const DeepCollectionEquality().hash(_votes), votesCount);
 
   @JsonKey(ignore: true)
   @override
@@ -206,30 +214,32 @@ class _$_FirestoreTrack implements _FirestoreTrack {
 
 abstract class _FirestoreTrack implements FirestoreTrack {
   const factory _FirestoreTrack(
-      {@JsonKey(name: 'spotify_uri') required final String spotifyUri,
-      @JsonKey(name: 'created_at') @TimestampConverter() required final Timestamp createdAt,
+      {@JsonKey(name: 'spotify_uri')
+          required final String spotifyUri,
+      @JsonKey(name: 'created_at')
+      @TimestampConverter()
+          required final Timestamp createdAt,
       required final List<String> votes,
-      @JsonKey(name: 'votes_count') required final int votesCount}) = _$_FirestoreTrack;
+      @JsonKey(name: 'votes_count')
+          required final int votesCount}) = _$_FirestoreTrack;
 
-  factory _FirestoreTrack.fromJson(Map<String, dynamic> json) = _$_FirestoreTrack.fromJson;
+  factory _FirestoreTrack.fromJson(Map<String, dynamic> json) =
+      _$_FirestoreTrack.fromJson;
 
   @override
   @JsonKey(name: 'spotify_uri')
   String get spotifyUri;
-
   @override
   @JsonKey(name: 'created_at')
   @TimestampConverter()
   Timestamp get createdAt;
-
   @override
   List<String> get votes;
-
   @override
   @JsonKey(name: 'votes_count')
   int get votesCount;
-
   @override
   @JsonKey(ignore: true)
-  _$$_FirestoreTrackCopyWith<_$_FirestoreTrack> get copyWith => throw _privateConstructorUsedError;
+  _$$_FirestoreTrackCopyWith<_$_FirestoreTrack> get copyWith =>
+      throw _privateConstructorUsedError;
 }

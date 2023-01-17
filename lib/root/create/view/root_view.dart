@@ -90,7 +90,10 @@ class _RootViewState extends State<RootView> {
                   ),
                   ElevatedButton(
                       onPressed: joinEnabled
-                          ? () => Navigator.push(context, MaterialPageRoute(builder: (context) => RoomPage(roomId: roomId)))
+                          ? () async {
+                        await FirebaseFirestore.instance.collection('rooms').doc(roomId).update({'users': FieldValue.arrayUnion([RepositoryProvider.of<AuthRepository>(context).currentUser!.id])});
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => RoomPage(roomId: roomId)));
+                      }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Join')))),
                 ],

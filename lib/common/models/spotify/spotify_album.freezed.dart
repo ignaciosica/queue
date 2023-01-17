@@ -21,39 +21,40 @@ SpotifyAlbum _$SpotifyAlbumFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SpotifyAlbum {
   List<SpotifyArtist> get artists => throw _privateConstructorUsedError;
-
   List<SpotifyImage> get images => throw _privateConstructorUsedError;
-
   String get type => throw _privateConstructorUsedError;
-
   String get name => throw _privateConstructorUsedError;
-
   String get uri => throw _privateConstructorUsedError;
-
   String get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
-  $SpotifyAlbumCopyWith<SpotifyAlbum> get copyWith => throw _privateConstructorUsedError;
+  $SpotifyAlbumCopyWith<SpotifyAlbum> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $SpotifyAlbumCopyWith<$Res> {
-  factory $SpotifyAlbumCopyWith(SpotifyAlbum value, $Res Function(SpotifyAlbum) then) =
+  factory $SpotifyAlbumCopyWith(
+          SpotifyAlbum value, $Res Function(SpotifyAlbum) then) =
       _$SpotifyAlbumCopyWithImpl<$Res, SpotifyAlbum>;
-
   @useResult
-  $Res call({List<SpotifyArtist> artists, List<SpotifyImage> images, String type, String name, String uri, String id});
+  $Res call(
+      {List<SpotifyArtist> artists,
+      List<SpotifyImage> images,
+      String type,
+      String name,
+      String uri,
+      String id});
 }
 
 /// @nodoc
-class _$SpotifyAlbumCopyWithImpl<$Res, $Val extends SpotifyAlbum> implements $SpotifyAlbumCopyWith<$Res> {
+class _$SpotifyAlbumCopyWithImpl<$Res, $Val extends SpotifyAlbum>
+    implements $SpotifyAlbumCopyWith<$Res> {
   _$SpotifyAlbumCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -97,19 +98,29 @@ class _$SpotifyAlbumCopyWithImpl<$Res, $Val extends SpotifyAlbum> implements $Sp
 }
 
 /// @nodoc
-abstract class _$$_SpotifyAlbumCopyWith<$Res> implements $SpotifyAlbumCopyWith<$Res> {
-  factory _$$_SpotifyAlbumCopyWith(_$_SpotifyAlbum value, $Res Function(_$_SpotifyAlbum) then) =
+abstract class _$$_SpotifyAlbumCopyWith<$Res>
+    implements $SpotifyAlbumCopyWith<$Res> {
+  factory _$$_SpotifyAlbumCopyWith(
+          _$_SpotifyAlbum value, $Res Function(_$_SpotifyAlbum) then) =
       __$$_SpotifyAlbumCopyWithImpl<$Res>;
-
   @override
   @useResult
-  $Res call({List<SpotifyArtist> artists, List<SpotifyImage> images, String type, String name, String uri, String id});
+  $Res call(
+      {List<SpotifyArtist> artists,
+      List<SpotifyImage> images,
+      String type,
+      String name,
+      String uri,
+      String id});
 }
 
 /// @nodoc
-class __$$_SpotifyAlbumCopyWithImpl<$Res> extends _$SpotifyAlbumCopyWithImpl<$Res, _$_SpotifyAlbum>
+class __$$_SpotifyAlbumCopyWithImpl<$Res>
+    extends _$SpotifyAlbumCopyWithImpl<$Res, _$_SpotifyAlbum>
     implements _$$_SpotifyAlbumCopyWith<$Res> {
-  __$$_SpotifyAlbumCopyWithImpl(_$_SpotifyAlbum _value, $Res Function(_$_SpotifyAlbum) _then) : super(_value, _then);
+  __$$_SpotifyAlbumCopyWithImpl(
+      _$_SpotifyAlbum _value, $Res Function(_$_SpotifyAlbum) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -164,10 +175,10 @@ class _$_SpotifyAlbum implements _SpotifyAlbum {
       : _artists = artists,
         _images = images;
 
-  factory _$_SpotifyAlbum.fromJson(Map<String, dynamic> json) => _$$_SpotifyAlbumFromJson(json);
+  factory _$_SpotifyAlbum.fromJson(Map<String, dynamic> json) =>
+      _$$_SpotifyAlbumFromJson(json);
 
   final List<SpotifyArtist> _artists;
-
   @override
   List<SpotifyArtist> get artists {
     // ignore: implicit_dynamic_type
@@ -175,7 +186,6 @@ class _$_SpotifyAlbum implements _SpotifyAlbum {
   }
 
   final List<SpotifyImage> _images;
-
   @override
   List<SpotifyImage> get images {
     // ignore: implicit_dynamic_type
@@ -211,13 +221,20 @@ class _$_SpotifyAlbum implements _SpotifyAlbum {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(_artists),
-      const DeepCollectionEquality().hash(_images), type, name, uri, id);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_artists),
+      const DeepCollectionEquality().hash(_images),
+      type,
+      name,
+      uri,
+      id);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SpotifyAlbumCopyWith<_$_SpotifyAlbum> get copyWith => __$$_SpotifyAlbumCopyWithImpl<_$_SpotifyAlbum>(this, _$identity);
+  _$$_SpotifyAlbumCopyWith<_$_SpotifyAlbum> get copyWith =>
+      __$$_SpotifyAlbumCopyWithImpl<_$_SpotifyAlbum>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -236,27 +253,23 @@ abstract class _SpotifyAlbum implements SpotifyAlbum {
       required final String uri,
       required final String id}) = _$_SpotifyAlbum;
 
-  factory _SpotifyAlbum.fromJson(Map<String, dynamic> json) = _$_SpotifyAlbum.fromJson;
+  factory _SpotifyAlbum.fromJson(Map<String, dynamic> json) =
+      _$_SpotifyAlbum.fromJson;
 
   @override
   List<SpotifyArtist> get artists;
-
   @override
   List<SpotifyImage> get images;
-
   @override
   String get type;
-
   @override
   String get name;
-
   @override
   String get uri;
-
   @override
   String get id;
-
   @override
   @JsonKey(ignore: true)
-  _$$_SpotifyAlbumCopyWith<_$_SpotifyAlbum> get copyWith => throw _privateConstructorUsedError;
+  _$$_SpotifyAlbumCopyWith<_$_SpotifyAlbum> get copyWith =>
+      throw _privateConstructorUsedError;
 }

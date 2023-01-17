@@ -50,7 +50,7 @@ class _TrackRowWidState2 extends State<TrackRowWid2> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      stream: RepositoryProvider.of<FirestoreRepository>(context).getTrack(widget.spotifyTrack.id, BlocProvider.of<RoomCubit>(context).state.roomId),
+      stream: RepositoryProvider.of<FirestoreRepository>(context).getTrack(BlocProvider.of<RoomCubit>(context).state.roomId, widget.spotifyTrack.id),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!.exists) {
           Map<String, dynamic> json = snapshot.data!.data()!;

@@ -47,7 +47,7 @@ class _RoomViewState extends State<RoomView> {
                   );
                 }
               } else {
-                Workmanager().cancelAll();
+                //Workmanager().cancelAll();
               }
               return Container();
             },

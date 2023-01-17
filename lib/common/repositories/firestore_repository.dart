@@ -18,9 +18,9 @@ class FirestoreRepository {
   Future<String> createRoom(String name) async {
     final room = await _instance.collection('rooms').add({
       'name': name,
-      'player': _authRepository.currentUser!.id,
+      'player': _authRepository.currentUser.id,
       'skip': [],
-      'users': [_authRepository.currentUser!.id],
+      'users': [_authRepository.currentUser.id],
       'player_state': {
         'duration': 0,
         'playback_position': 0,
@@ -33,7 +33,7 @@ class FirestoreRepository {
       'room_id': room.id.substring(0, 5),
     });
 
-    await _instance.collection('users').doc(_authRepository.currentUser!.id).update({'active_room': room.id});
+    await _instance.collection('users').doc(_authRepository.currentUser.id).update({'active_room': room.id});
 
     return room.id;
   }

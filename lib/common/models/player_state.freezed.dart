@@ -21,36 +21,43 @@ FirestorePlayerState _$FirestorePlayerStateFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$FirestorePlayerState {
   bool get isPaused => throw _privateConstructorUsedError;
-
   String get uri => throw _privateConstructorUsedError;
-
   int get duration => throw _privateConstructorUsedError;
-
   int get playbackPosition => throw _privateConstructorUsedError;
+  List<String> get artists => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get imageUri => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   @JsonKey(ignore: true)
-  $FirestorePlayerStateCopyWith<FirestorePlayerState> get copyWith => throw _privateConstructorUsedError;
+  $FirestorePlayerStateCopyWith<FirestorePlayerState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $FirestorePlayerStateCopyWith<$Res> {
-  factory $FirestorePlayerStateCopyWith(FirestorePlayerState value, $Res Function(FirestorePlayerState) then) =
+  factory $FirestorePlayerStateCopyWith(FirestorePlayerState value,
+          $Res Function(FirestorePlayerState) then) =
       _$FirestorePlayerStateCopyWithImpl<$Res, FirestorePlayerState>;
-
   @useResult
-  $Res call({bool isPaused, String uri, int duration, int playbackPosition});
+  $Res call(
+      {bool isPaused,
+      String uri,
+      int duration,
+      int playbackPosition,
+      List<String> artists,
+      String name,
+      String imageUri});
 }
 
 /// @nodoc
-class _$FirestorePlayerStateCopyWithImpl<$Res, $Val extends FirestorePlayerState>
+class _$FirestorePlayerStateCopyWithImpl<$Res,
+        $Val extends FirestorePlayerState>
     implements $FirestorePlayerStateCopyWith<$Res> {
   _$FirestorePlayerStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 
@@ -61,6 +68,9 @@ class _$FirestorePlayerStateCopyWithImpl<$Res, $Val extends FirestorePlayerState
     Object? uri = null,
     Object? duration = null,
     Object? playbackPosition = null,
+    Object? artists = null,
+    Object? name = null,
+    Object? imageUri = null,
   }) {
     return _then(_value.copyWith(
       isPaused: null == isPaused
@@ -79,24 +89,47 @@ class _$FirestorePlayerStateCopyWithImpl<$Res, $Val extends FirestorePlayerState
           ? _value.playbackPosition
           : playbackPosition // ignore: cast_nullable_to_non_nullable
               as int,
+      artists: null == artists
+          ? _value.artists
+          : artists // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUri: null == imageUri
+          ? _value.imageUri
+          : imageUri // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_PlayerStateCopyWith<$Res> implements $FirestorePlayerStateCopyWith<$Res> {
-  factory _$$_PlayerStateCopyWith(_$_PlayerState value, $Res Function(_$_PlayerState) then) =
+abstract class _$$_PlayerStateCopyWith<$Res>
+    implements $FirestorePlayerStateCopyWith<$Res> {
+  factory _$$_PlayerStateCopyWith(
+          _$_PlayerState value, $Res Function(_$_PlayerState) then) =
       __$$_PlayerStateCopyWithImpl<$Res>;
-
   @override
   @useResult
-  $Res call({bool isPaused, String uri, int duration, int playbackPosition});
+  $Res call(
+      {bool isPaused,
+      String uri,
+      int duration,
+      int playbackPosition,
+      List<String> artists,
+      String name,
+      String imageUri});
 }
 
 /// @nodoc
-class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithImpl<$Res, _$_PlayerState>
+class __$$_PlayerStateCopyWithImpl<$Res>
+    extends _$FirestorePlayerStateCopyWithImpl<$Res, _$_PlayerState>
     implements _$$_PlayerStateCopyWith<$Res> {
-  __$$_PlayerStateCopyWithImpl(_$_PlayerState _value, $Res Function(_$_PlayerState) _then) : super(_value, _then);
+  __$$_PlayerStateCopyWithImpl(
+      _$_PlayerState _value, $Res Function(_$_PlayerState) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -105,6 +138,9 @@ class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithI
     Object? uri = null,
     Object? duration = null,
     Object? playbackPosition = null,
+    Object? artists = null,
+    Object? name = null,
+    Object? imageUri = null,
   }) {
     return _then(_$_PlayerState(
       isPaused: null == isPaused
@@ -123,6 +159,18 @@ class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithI
           ? _value.playbackPosition
           : playbackPosition // ignore: cast_nullable_to_non_nullable
               as int,
+      artists: null == artists
+          ? _value._artists
+          : artists // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUri: null == imageUri
+          ? _value.imageUri
+          : imageUri // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -131,9 +179,18 @@ class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithI
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class _$_PlayerState implements _PlayerState {
-  const _$_PlayerState({required this.isPaused, required this.uri, required this.duration, required this.playbackPosition});
+  const _$_PlayerState(
+      {required this.isPaused,
+      required this.uri,
+      required this.duration,
+      required this.playbackPosition,
+      required final List<String> artists,
+      required this.name,
+      required this.imageUri})
+      : _artists = artists;
 
-  factory _$_PlayerState.fromJson(Map<String, dynamic> json) => _$$_PlayerStateFromJson(json);
+  factory _$_PlayerState.fromJson(Map<String, dynamic> json) =>
+      _$$_PlayerStateFromJson(json);
 
   @override
   final bool isPaused;
@@ -143,10 +200,21 @@ class _$_PlayerState implements _PlayerState {
   final int duration;
   @override
   final int playbackPosition;
+  final List<String> _artists;
+  @override
+  List<String> get artists {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_artists);
+  }
+
+  @override
+  final String name;
+  @override
+  final String imageUri;
 
   @override
   String toString() {
-    return 'FirestorePlayerState(isPaused: $isPaused, uri: $uri, duration: $duration, playbackPosition: $playbackPosition)';
+    return 'FirestorePlayerState(isPaused: $isPaused, uri: $uri, duration: $duration, playbackPosition: $playbackPosition, artists: $artists, name: $name, imageUri: $imageUri)';
   }
 
   @override
@@ -154,20 +222,36 @@ class _$_PlayerState implements _PlayerState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PlayerState &&
-            (identical(other.isPaused, isPaused) || other.isPaused == isPaused) &&
+            (identical(other.isPaused, isPaused) ||
+                other.isPaused == isPaused) &&
             (identical(other.uri, uri) || other.uri == uri) &&
-            (identical(other.duration, duration) || other.duration == duration) &&
-            (identical(other.playbackPosition, playbackPosition) || other.playbackPosition == playbackPosition));
+            (identical(other.duration, duration) ||
+                other.duration == duration) &&
+            (identical(other.playbackPosition, playbackPosition) ||
+                other.playbackPosition == playbackPosition) &&
+            const DeepCollectionEquality().equals(other._artists, _artists) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.imageUri, imageUri) ||
+                other.imageUri == imageUri));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, isPaused, uri, duration, playbackPosition);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isPaused,
+      uri,
+      duration,
+      playbackPosition,
+      const DeepCollectionEquality().hash(_artists),
+      name,
+      imageUri);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerStateCopyWith<_$_PlayerState> get copyWith => __$$_PlayerStateCopyWithImpl<_$_PlayerState>(this, _$identity);
+  _$$_PlayerStateCopyWith<_$_PlayerState> get copyWith =>
+      __$$_PlayerStateCopyWithImpl<_$_PlayerState>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -182,23 +266,30 @@ abstract class _PlayerState implements FirestorePlayerState {
       {required final bool isPaused,
       required final String uri,
       required final int duration,
-      required final int playbackPosition}) = _$_PlayerState;
+      required final int playbackPosition,
+      required final List<String> artists,
+      required final String name,
+      required final String imageUri}) = _$_PlayerState;
 
-  factory _PlayerState.fromJson(Map<String, dynamic> json) = _$_PlayerState.fromJson;
+  factory _PlayerState.fromJson(Map<String, dynamic> json) =
+      _$_PlayerState.fromJson;
 
   @override
   bool get isPaused;
-
   @override
   String get uri;
-
   @override
   int get duration;
-
   @override
   int get playbackPosition;
-
+  @override
+  List<String> get artists;
+  @override
+  String get name;
+  @override
+  String get imageUri;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerStateCopyWith<_$_PlayerState> get copyWith => throw _privateConstructorUsedError;
+  _$$_PlayerStateCopyWith<_$_PlayerState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
