@@ -7,17 +7,10 @@ import 'package:groupify/root/room/room.dart';
 part 'participants_view.dart';
 
 class ParticipantsPage extends StatelessWidget {
-  const ParticipantsPage({Key? key, required this.roomCubit}) : super(key: key);
-
-  final RoomCubit roomCubit;
+  const ParticipantsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (BuildContext context) => roomCubit),
-      ],
-      child: const ParticipantsView(),
-    );
+    return const ParticipantsView();
   }
 }

@@ -8,16 +8,14 @@ import 'package:groupify/root/search/search.dart';
 part 'search_view.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({Key? key, required this.roomCubit}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
-  final RoomCubit roomCubit;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (BuildContext context) => SearchCubit()),
-        BlocProvider<RoomCubit>(create: (BuildContext context) => roomCubit),
       ],
       child: const SearchView(),
     );

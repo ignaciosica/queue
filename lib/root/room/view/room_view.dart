@@ -38,7 +38,7 @@ class _RoomViewState extends State<RoomView> {
             });
 
             BlocProvider.of<RoomCubit>(context).setRoomId('');
-            Navigator.push(context, MaterialPageRoute(builder: (_) => RootPage()));
+            Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
@@ -52,7 +52,7 @@ class _RoomViewState extends State<RoomView> {
                 if (room.player.isEmpty || RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                   return IconButton(
                     onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => ParticipantsPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),
+                        MaterialPageRoute(builder: (_) => ParticipantsPage())),
                     icon: const Icon(Icons.speaker_group_rounded),
                   );
                 }
@@ -89,7 +89,7 @@ class _RoomViewState extends State<RoomView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => SearchPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),
+            context, MaterialPageRoute(builder: (_) => SearchPage())),
         tooltip: 'Search',
         child: const Icon(Icons.search_rounded),
       ),

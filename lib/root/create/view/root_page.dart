@@ -20,13 +20,11 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Workmanager().cancelAll();
 
-    final cubit = RoomCubit('');
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (BuildContext context) => cubit),
-      ],
-      child: cubit.state.roomId == '' ? const RootView() : RoomPage(roomCubit: cubit),
-    );
+    if(BlocProvider.of<RoomCubit>(context).state.roomId != '') {
+      Navigator.push( context, MaterialPageRoute(builder: (_) => const RoomPage()));
+    }
+
+    return const RootView();
   }
 }

@@ -77,7 +77,7 @@ class _RootViewState extends State<RootView> {
                                   .createRoom(_roomNameController.text);
                               BlocProvider.of<RoomCubit>(context).setRoomId(createdRoomId);
                               Navigator.push(
-                                  context, MaterialPageRoute(builder: (_) => RoomPage(roomCubit: BlocProvider.of<RoomCubit>(context))));
+                                  context, MaterialPageRoute(builder: (_) => const RoomPage()));
                             }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Create')))),
@@ -105,7 +105,7 @@ class _RootViewState extends State<RootView> {
 
                               BlocProvider.of<RoomCubit>(context).setRoomId(roomId);
 
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => RoomPage(roomCubit: BlocProvider.of<RoomCubit>(context))));
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => const RoomPage()));
                             }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Join')))),
