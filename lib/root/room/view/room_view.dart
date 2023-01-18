@@ -30,7 +30,9 @@ class _RoomViewState extends State<RoomView> {
           ),
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            BlocProvider.of<RoomCubit>(context).setRoomId('');
+            Navigator.pop(context);},
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         actions: [

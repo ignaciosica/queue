@@ -75,8 +75,9 @@ class _RootViewState extends State<RootView> {
                           ? () async {
                               final createdRoomId = await RepositoryProvider.of<FirestoreRepository>(context)
                                   .createRoom(_roomNameController.text);
+                              BlocProvider.of<RoomCubit>(context).setRoomId(createdRoomId);
                               Navigator.push(
-                                  context, MaterialPageRoute(builder: (context) => RoomPage(roomId: createdRoomId)));
+                                  context, MaterialPageRoute(builder: (_) => RoomPage(roomCubit: BlocProvider.of<RoomCubit>(context))));
                             }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Create')))),
@@ -101,7 +102,10 @@ class _RootViewState extends State<RootView> {
                                 'users':
                                     FieldValue.arrayUnion([RepositoryProvider.of<AuthRepository>(context).currentUser!.id])
                               });
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => RoomPage(roomId: roomId)));
+
+                              BlocProvider.of<RoomCubit>(context).setRoomId(roomId);
+
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => RoomPage(roomCubit: BlocProvider.of<RoomCubit>(context))));
                             }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Join')))),

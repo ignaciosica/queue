@@ -10,20 +10,20 @@ import 'package:groupify/root/search/search.dart';
 part 'room_view.dart';
 
 class RoomPage extends StatelessWidget {
-  const RoomPage({Key? key, required this.roomId}) : super(key: key);
+  const RoomPage({Key? key, required this.roomCubit}) : super(key: key);
 
-  static Route route(String roomId) => MaterialPageRoute<void>(builder: (_) => RoomPage(roomId: roomId));
+  static Route route(RoomCubit roomCubit) => MaterialPageRoute<void>(builder: (_) => RoomPage(roomCubit: roomCubit));
 
-  static Page page(String roomId) => MaterialPage<void>(child: RoomPage(roomId: roomId));
+  static Page page(RoomCubit roomCubit) => MaterialPage<void>(child: RoomPage(roomCubit: roomCubit));
 
-  final String roomId;
+  final RoomCubit roomCubit;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (BuildContext context) => SpotifyPlayerCubit()),
-        BlocProvider(create: (BuildContext context) => RoomCubit(roomId)),
+        BlocProvider<RoomCubit>(create: (BuildContext context) => roomCubit),
       ],
       child: const RoomView(title: 'Groupify'),
     );

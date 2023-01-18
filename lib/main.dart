@@ -7,6 +7,8 @@ import 'package:groupify/auth/auth.dart';
 import 'package:groupify/background_task.dart';
 import 'package:groupify/common/common.dart';
 import 'package:groupify/firebase_options.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:workmanager/workmanager.dart';
 
 void main() {
@@ -15,6 +17,7 @@ void main() {
   return BlocOverrides.runZoned(
     () async {
       await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getApplicationDocumentsDirectory());
       final authenticationRepository = AuthRepository();
       await authenticationRepository.user.first;
       await authenticationRepository.connectToSpotify();
