@@ -30,9 +30,15 @@ class _RoomViewState extends State<RoomView> {
           ),
         ),
         leading: IconButton(
-          onPressed: () {
+          onPressed: () async {
+
+            await FirebaseFirestore.instance.collection('rooms').doc(BlocProvider.of<RoomCubit>(context).state.roomId).update({
+              'users': FieldValue.arrayRemove([RepositoryProvider.of<AuthRepository>(context).currentUser!.id])
+            });
+
             BlocProvider.of<RoomCubit>(context).setRoomId('');
-            Navigator.pop(context);},
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         actions: [

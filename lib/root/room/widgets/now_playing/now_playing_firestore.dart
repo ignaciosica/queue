@@ -9,6 +9,10 @@ class NowPlayingFirestore extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    if(room.playerState.uri.isEmpty){
+      return const NowPlayingDummy();
+    }
+
     return Stack(
       children: [
         Positioned.fill(child: SpotifyImageBuilder(imageUri: ImageUri(room.playerState.imageUri))),

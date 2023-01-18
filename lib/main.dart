@@ -22,7 +22,6 @@ void main() {
       await authenticationRepository.user.first;
       await authenticationRepository.connectToSpotify();
       final firestoreRepository = FirestoreRepository(authenticationRepository);
-      // await firestoreRepository.currentRoomAsync;
       Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
       runApp(App(authenticationRepository: authenticationRepository, firestoreRepository: firestoreRepository));
