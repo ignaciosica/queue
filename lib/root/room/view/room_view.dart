@@ -33,11 +33,12 @@ class _RoomViewState extends State<RoomView> {
           onPressed: () async {
 
             await FirebaseFirestore.instance.collection('rooms').doc(BlocProvider.of<RoomCubit>(context).state.roomId).update({
-              'users': FieldValue.arrayRemove([RepositoryProvider.of<AuthRepository>(context).currentUser!.id])
+              'users': FieldValue.arrayRemove([RepositoryProvider.of<AuthRepository>(context).currentUser!.id]),
+              'player' : '',
             });
 
             BlocProvider.of<RoomCubit>(context).setRoomId('');
-            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (_) => RootPage()));
           },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
@@ -48,7 +49,7 @@ class _RoomViewState extends State<RoomView> {
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 final room = Room.fromJson(snapshot.data!.data()!);
-                if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
+                if (room.player.isEmpty || RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                   return IconButton(
                     onPressed: () => Navigator.push(context,
                         MaterialPageRoute(builder: (_) => ParticipantsPage(roomCubit: BlocProvider.of<RoomCubit>(context)))),

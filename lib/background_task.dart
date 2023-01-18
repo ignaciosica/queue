@@ -30,6 +30,18 @@ void callbackDispatcher() {
       if (kDebugMode) print("init spotifySdk exception: $e");
     }
 
+    /*
+    if (room.skip.length >= max(1, (room.users.length / 2).floor())) {
+      _skipSong(BlocProvider.of<RoomCubit>(context).state.roomId);
+    }
+
+    void _skipSong(String roomId) async {
+      await RepositoryProvider.of<FirestoreRepository>(context).clearSkipVotes(roomId);
+      SpotifySdk.skipNext();
+    }
+
+     */
+
     for (var i = 0; i < 1000; i++) {
       var state = await SpotifySdk.getPlayerState();
 

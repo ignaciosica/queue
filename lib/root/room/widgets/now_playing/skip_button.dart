@@ -16,11 +16,6 @@ class _SkipButtonState extends State<SkipButton> {
     }
   }
 
-  void _skipSong(String roomId) async {
-    await RepositoryProvider.of<FirestoreRepository>(context).clearSkipVotes(roomId);
-    SpotifySdk.skipNext();
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -28,9 +23,6 @@ class _SkipButtonState extends State<SkipButton> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final room = Room.fromJson(snapshot.data!.data()!);
-          if (room.skip.length >= max(1, (room.users.length / 2).floor())) {
-            _skipSong(BlocProvider.of<RoomCubit>(context).state.roomId);
-          }
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
