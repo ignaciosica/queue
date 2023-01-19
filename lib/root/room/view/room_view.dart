@@ -31,10 +31,12 @@ class _RoomViewState extends State<RoomView> {
         ),
         leading: IconButton(
           onPressed: () async {
-
-            await FirebaseFirestore.instance.collection('rooms').doc(BlocProvider.of<RoomCubit>(context).state.roomId).update({
+            await FirebaseFirestore.instance
+                .collection('rooms')
+                .doc(BlocProvider.of<RoomCubit>(context).state.roomId)
+                .update({
               'users': FieldValue.arrayRemove([RepositoryProvider.of<AuthRepository>(context).currentUser!.id]),
-              'player' : '',
+              'player': '',
             });
 
             BlocProvider.of<RoomCubit>(context).setRoomId('');
@@ -43,6 +45,20 @@ class _RoomViewState extends State<RoomView> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         actions: [
+          IconButton(onPressed: () => Workmanager().cancelAll(), icon: const Icon(Icons.stop_rounded)),
+          IconButton(
+              onPressed: () {
+                Workmanager().registerOneOffTask(
+                  '1',
+                  'background_task',
+                  inputData: {
+                    'room': BlocProvider.of<RoomCubit>(context).state.roomId,
+                    'clientId': "b9a4881e77f4488eb882788cb106a297",
+                    'redirectUrl': "https://com.example.groupify/callback/",
+                  },
+                );
+              },
+              icon: const Icon(Icons.play_arrow_rounded)),
           StreamBuilder<DocumentSnapshot>(
             stream: RepositoryProvider.of<FirestoreRepository>(context)
                 .getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
@@ -51,8 +67,7 @@ class _RoomViewState extends State<RoomView> {
                 final room = Room.fromJson(snapshot.data!.data()!);
                 if (room.player.isEmpty || RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                   return IconButton(
-                    onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => ParticipantsPage())),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ParticipantsPage())),
                     icon: const Icon(Icons.speaker_group_rounded),
                   );
                 }
@@ -88,8 +103,7 @@ class _RoomViewState extends State<RoomView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => SearchPage())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchPage())),
         tooltip: 'Search',
         child: const Icon(Icons.search_rounded),
       ),

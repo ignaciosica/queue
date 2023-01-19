@@ -6,6 +6,7 @@ import 'package:groupify/common/common.dart';
 import 'package:groupify/root/participants/participants.dart';
 import 'package:groupify/root/root.dart';
 import 'package:groupify/root/search/search.dart';
+import 'package:workmanager/workmanager.dart';
 
 part 'room_view.dart';
 
