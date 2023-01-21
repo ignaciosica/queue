@@ -82,7 +82,13 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
                         ],
                       ),
                     ),
-                    const SkipButton(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        PlayPauseButton(),
+                        SkipButton(),
+                      ],
+                    ),
                   ],
                 ),
               ),

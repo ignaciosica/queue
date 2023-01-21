@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groupify/auth/auth.dart';
 import 'package:groupify/common/common.dart';
 import 'package:groupify/root/room/room.dart';
+import 'package:groupify/root/room/widgets/now_playing/play_pause_button.dart';
 import 'package:spotify_sdk/models/connection_status.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/models/player_state.dart';
