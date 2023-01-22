@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:groupify/common/common.dart';
 import 'package:groupify/firebase_options.dart';
 import 'package:spotify_sdk/models/player_state.dart';
@@ -18,24 +17,57 @@ void callbackDispatcher() {
 
     var skipFlag = false;
 
-    Stream.periodic(const Duration(seconds: 5)).listen((event) {
-      skipFlag = true;
-    });
+    // Stream.periodic(const Duration(seconds: 5)).listen((event) {
+    //   skipFlag = true;
+    // });
 
     var queueFlag = false;
     var trackUri = '';
+    var wasPaused = false;
 
-    Stream.periodic(const Duration(seconds: 10)).listen((event) async {
-      var playerState = await SpotifySdk.getPlayerState();
-      if (playerState == null || playerState.track == null || playerState.isPaused) return;
+    SpotifySdk.subscribePlayerState().listen((playerState) async {
+      if (playerState.track == null) return;
 
       if (trackUri != playerState.track!.uri) {
         trackUri = playerState.track!.uri;
         await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).update(playerStateToJson(playerState));
+      } else {
+        if (playerState.isPaused) {
+          if (!wasPaused) {
+            wasPaused = true;
+            await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).update({
+              'player_state.playback_position': playerState!.playbackPosition,
+              'player_state.is_paused': playerState!.isPaused,
+            });
+          }
+        } else {
+          wasPaused = false;
+          await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).update({
+            'player_state.playback_position': playerState!.playbackPosition,
+            'player_state.is_paused': playerState!.isPaused,
+          });
+        }
       }
+    });
+
+    Stream.periodic(const Duration(seconds: 5)).listen((event) async {
+      var playerState = await SpotifySdk.getPlayerState();
+      if (playerState == null || playerState.track == null) return;
 
       if (playerState.track!.duration - playerState.playbackPosition < 10 * 1000) {
         queueFlag = true;
+        await Future.delayed(const Duration(seconds: 10));
+      }
+    });
+
+    var roomCacheJson = await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).get();
+    var roomCache = Room.fromJson(roomCacheJson.data()!);
+
+    FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).snapshots().listen((event) {
+      if (event.exists) {
+        var roomCacheJson = event;
+        roomCache = Room.fromJson(roomCacheJson.data()!);
+        skipFlag = true;
       }
     });
 
@@ -44,10 +76,8 @@ void callbackDispatcher() {
 
       if (skipFlag) {
         skipFlag = false;
-        var roomJson = await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).get();
-        var room = Room.fromJson(roomJson.data()!);
 
-        if (room.skip.length >= max(1, (room.users.length / 2).floor())) {
+        if (roomCache.skip.length >= max(1, (roomCache.users.length / 2).floor())) {
           await FirebaseFirestore.instance.collection("rooms").doc(inputData!['room']).update({"skip": []});
           await queueNextUp(inputData);
           SpotifySdk.skipNext();
@@ -65,12 +95,10 @@ void callbackDispatcher() {
 }
 
 Future<void> queueNextUp(inputData) async {
-  AggregateQuerySnapshot queueCount = await FirebaseFirestore.instance
-      .collection('rooms')
-      .doc(inputData!['room'])
-      .collection('queue').count().get();
+  AggregateQuerySnapshot queueCount =
+      await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).collection('queue').count().get();
 
-  if(queueCount.count == 0) return;
+  if (queueCount.count == 0) return;
 
   var querySnapshot = await FirebaseFirestore.instance
       .collection('rooms')
@@ -90,19 +118,12 @@ Future<void> queueNextUp(inputData) async {
   await FirebaseFirestore.instance
       .collection('rooms')
       .doc(inputData!['room'])
-      .collection('history')
-      .doc(firestoreTrack.spotifyUri)
-      .set(querySnapshot.docs[0].data());
-
-  await FirebaseFirestore.instance
-      .collection('rooms')
-      .doc(inputData!['room'])
       .collection('queue')
       .doc(firestoreTrack.spotifyUri)
       .delete();
 }
 
-Map<String, dynamic> playerStateToJson (PlayerState playerState) {
+Map<String, dynamic> playerStateToJson(PlayerState playerState) {
   return {
     'player_state.artists': playerState!.track?.artists.map((e) => e.name).toList() ?? [],
     'player_state.duration': playerState!.track?.duration ?? 0,

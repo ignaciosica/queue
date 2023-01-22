@@ -41,9 +41,22 @@ class NowPlayingFirestore extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SkipButton(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if(RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player)const PlayPauseButton(),
+                    const SkipButton(),
+                  ],
+                ),
               ],
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SongProgressIndicatorFirestore(color: Colors.white, showLabel: false, room: room),
           ),
         ),
       ],

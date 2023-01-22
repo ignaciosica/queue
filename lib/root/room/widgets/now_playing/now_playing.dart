@@ -40,6 +40,8 @@ class _NowPlayingState extends State<NowPlaying> {
           builder: (context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData) {
               final room = Room.fromJson(snapshot.data!.data()!);
+              return NowPlayingFirestore(room: room);
+
               if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                 return StreamBuilder<ConnectionStatus>(
                   stream: stream,

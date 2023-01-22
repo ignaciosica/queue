@@ -24,7 +24,6 @@ class RootPage extends StatelessWidget {
 
     if(BlocProvider.of<RoomCubit>(context).state.roomId != '') {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MyPage()));
         Navigator.push( context, MaterialPageRoute(builder: (_) => const RoomPage()));
       });
 
