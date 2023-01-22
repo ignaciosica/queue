@@ -18,13 +18,16 @@ class SearchView extends StatelessWidget {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return const Center(child: CircularProgressIndicator());
                 }
+                if(snapshot.hasError){
+                  return Center(child: Text(snapshot.error.toString()));
+                }
                 return ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     final track = snapshot.data![index];
-                    return TrackRowWid2(spotifyTrack: track);
+                    return SearchTrackRow(spotifyTrack: track);
                   },
                 );
               },
@@ -36,15 +39,15 @@ class SearchView extends StatelessWidget {
   }
 }
 
-class TrackRowWid2 extends StatefulWidget {
-  const TrackRowWid2({Key? key, required this.spotifyTrack}) : super(key: key);
+class SearchTrackRow extends StatefulWidget {
+  const SearchTrackRow({Key? key, required this.spotifyTrack}) : super(key: key);
   final SpotifyTrack spotifyTrack;
 
   @override
-  State<TrackRowWid2> createState() => _TrackRowWidState2();
+  State<SearchTrackRow> createState() => _TrackRowWidState2();
 }
 
-class _TrackRowWidState2 extends State<TrackRowWid2> {
+class _TrackRowWidState2 extends State<SearchTrackRow> {
   FirestoreTrack? firestoreTrack;
 
   @override

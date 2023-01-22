@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:groupify/app/app.dart';
 import 'package:groupify/auth/auth.dart';
 import 'package:groupify/background_task.dart';
@@ -16,6 +17,7 @@ void main() {
   return BlocOverrides.runZoned(
     () async {
       await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await dotenv.load(fileName: '.env');
       HydratedBloc.storage = await HydratedStorage.build(storageDirectory: await getApplicationDocumentsDirectory());
       final authenticationRepository = AuthRepository();
       await authenticationRepository.user.first;

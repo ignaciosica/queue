@@ -4,6 +4,7 @@ import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
@@ -106,8 +107,8 @@ class AuthRepository implements TokenRepository {
 
   Future<String> getSpotifyAccessToken() async {
     final accessToken = await SpotifySdk.getAccessToken(
-      clientId: "b9a4881e77f4488eb882788cb106a297",
-      redirectUrl: "https://com.example.groupify/callback/",
+      clientId: dotenv.env['client_id'] ?? '',
+      redirectUrl: dotenv.env['redirect_url'] ?? '',
       scope: [
         'app-remote-control',
         'user-library-modify',
@@ -129,7 +130,7 @@ class AuthRepository implements TokenRepository {
 
   Future<bool> connectToSpotify({String? accessToken}) async {
     return await SpotifySdk.connectToSpotifyRemote(
-      clientId: 'b9a4881e77f4488eb882788cb106a297',
+      clientId: dotenv.env['client_id'] ?? '',
       redirectUrl: 'https://com.example.groupify/callback/',
       accessToken: accessToken,
     );
