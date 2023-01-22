@@ -63,7 +63,8 @@ class _SpotifyImageBuilderState extends State<SpotifyImageBuilder> {
           return SizedBox(
             width: ImageDimension.large.value.toDouble(),
             height: ImageDimension.large.value.toDouble(),
-            child: const Center(child: Text('Error getting image')),
+            //child: const Center(child: Text('Error getting image')),
+            child: Container(),
           );
         } else {
           return SizedBox(

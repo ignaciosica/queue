@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:groupify/common/common.dart';
 import 'package:groupify/root/room/room.dart';
 
 class SongProgressIndicator extends StatefulWidget {
@@ -114,5 +115,86 @@ class SongProgressIndicatorDummy extends StatelessWidget {
           ),
       ],
     );
+  }
+}
+
+class SongProgressIndicatorFirestore extends StatefulWidget {
+  const SongProgressIndicatorFirestore({Key? key, this.color, this.showLabel = true, required this.room}) : super(key: key);
+  final Color? color;
+  final bool showLabel;
+  final Room room;
+
+  @override
+  State<SongProgressIndicatorFirestore> createState() => _SongProgressIndicatorFirestoreState();
+}
+
+class _SongProgressIndicatorFirestoreState extends State<SongProgressIndicatorFirestore> {
+  late double _millisecondsElapsed;
+
+  @override
+  void initState() {
+    _millisecondsElapsed = 0;
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    if (widget.room.playerState.uri.isEmpty) {
+      return SongProgressIndicatorDummy(color: widget.color, showLabel: widget.showLabel);
+    }
+    _millisecondsElapsed = widget.room.playerState.playbackPosition.toDouble();
+
+    return StreamBuilder<int>(
+      stream: Stream<int>.periodic(const Duration(milliseconds: 150), (x) => 150),
+      builder: (context, periodicSnapshot) {
+        if (periodicSnapshot.hasData) {
+          if (!widget.room.playerState.isPaused) {
+            _millisecondsElapsed += periodicSnapshot.data!.toDouble();
+          } else {
+            _millisecondsElapsed = widget.room.playerState.playbackPosition.toDouble();
+          }
+        }
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(9),
+              child: LinearProgressIndicator(
+                color: widget.color,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.40),
+                minHeight: 6,
+                value: _millisecondsElapsed / (widget.room.playerState.duration),
+              ),
+            ),
+            if (widget.showLabel) const SizedBox(height: 4),
+            if (widget.showLabel)
+              Row(
+                children: [
+                  Text(
+                    durationToString(_millisecondsElapsed.toInt()),
+                    style: textTheme.labelSmall!.copyWith(color: textTheme.bodySmall!.color),
+                  ),
+                  const Spacer(),
+                  Text(
+                    durationToString(widget.room.playerState.duration),
+                    style: textTheme.labelSmall!.copyWith(color: textTheme.bodySmall!.color),
+                  )
+                ],
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  String durationToString(int milliseconds) {
+    final elapsedDuration = Duration(milliseconds: milliseconds.toInt());
+    return '${elapsedDuration.inMinutes.remainder(60)}:'
+        '${elapsedDuration.inSeconds.remainder(60) < 10 ? 0 : ''}'
+        '${elapsedDuration.inSeconds.remainder(60)}';
   }
 }

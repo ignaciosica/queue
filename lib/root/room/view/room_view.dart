@@ -30,24 +30,49 @@ class _RoomViewState extends State<RoomView> {
           ),
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () async {
+            await FirebaseFirestore.instance
+                .collection('rooms')
+                .doc(BlocProvider.of<RoomCubit>(context).state.roomId)
+                .update({
+              'users': FieldValue.arrayRemove([RepositoryProvider.of<AuthRepository>(context).currentUser!.id]),
+              'player': '',
+            });
+
+            BlocProvider.of<RoomCubit>(context).setRoomId('');
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         actions: [
+          IconButton(onPressed: () => Workmanager().cancelAll(), icon: const Icon(Icons.stop_rounded)),
+          IconButton(
+              onPressed: () {
+                Workmanager().registerOneOffTask(
+                  '1',
+                  'background_task',
+                  inputData: {
+                    'room': BlocProvider.of<RoomCubit>(context).state.roomId,
+                    'clientId': "b9a4881e77f4488eb882788cb106a297",
+                    'redirectUrl': "https://com.example.groupify/callback/",
+                  },
+                );
+              },
+              icon: const Icon(Icons.play_arrow_rounded)),
           StreamBuilder<DocumentSnapshot>(
-            stream: RepositoryProvider.of<FirestoreRepository>(context).getRoom(),
+            stream: RepositoryProvider.of<FirestoreRepository>(context)
+                .getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData) {
                 final room = Room.fromJson(snapshot.data!.data()!);
-                if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
+                if (room.player.isEmpty || RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                   return IconButton(
-                    onPressed: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ParticipantsPage())),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ParticipantsPage())),
                     icon: const Icon(Icons.speaker_group_rounded),
                   );
                 }
               } else {
-                Workmanager().cancelAll();
+                //Workmanager().cancelAll();
               }
               return Container();
             },
@@ -78,7 +103,7 @@ class _RoomViewState extends State<RoomView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchPage())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchPage())),
         tooltip: 'Search',
         child: const Icon(Icons.search_rounded),
       ),

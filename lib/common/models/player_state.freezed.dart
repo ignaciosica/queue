@@ -28,6 +28,12 @@ mixin _$FirestorePlayerState {
 
   int get playbackPosition => throw _privateConstructorUsedError;
 
+  List<String> get artists => throw _privateConstructorUsedError;
+
+  String get name => throw _privateConstructorUsedError;
+
+  String get imageUri => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -40,7 +46,8 @@ abstract class $FirestorePlayerStateCopyWith<$Res> {
       _$FirestorePlayerStateCopyWithImpl<$Res, FirestorePlayerState>;
 
   @useResult
-  $Res call({bool isPaused, String uri, int duration, int playbackPosition});
+  $Res call(
+      {bool isPaused, String uri, int duration, int playbackPosition, List<String> artists, String name, String imageUri});
 }
 
 /// @nodoc
@@ -61,6 +68,9 @@ class _$FirestorePlayerStateCopyWithImpl<$Res, $Val extends FirestorePlayerState
     Object? uri = null,
     Object? duration = null,
     Object? playbackPosition = null,
+    Object? artists = null,
+    Object? name = null,
+    Object? imageUri = null,
   }) {
     return _then(_value.copyWith(
       isPaused: null == isPaused
@@ -79,6 +89,18 @@ class _$FirestorePlayerStateCopyWithImpl<$Res, $Val extends FirestorePlayerState
           ? _value.playbackPosition
           : playbackPosition // ignore: cast_nullable_to_non_nullable
               as int,
+      artists: null == artists
+          ? _value.artists
+          : artists // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUri: null == imageUri
+          ? _value.imageUri
+          : imageUri // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -90,7 +112,8 @@ abstract class _$$_PlayerStateCopyWith<$Res> implements $FirestorePlayerStateCop
 
   @override
   @useResult
-  $Res call({bool isPaused, String uri, int duration, int playbackPosition});
+  $Res call(
+      {bool isPaused, String uri, int duration, int playbackPosition, List<String> artists, String name, String imageUri});
 }
 
 /// @nodoc
@@ -105,6 +128,9 @@ class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithI
     Object? uri = null,
     Object? duration = null,
     Object? playbackPosition = null,
+    Object? artists = null,
+    Object? name = null,
+    Object? imageUri = null,
   }) {
     return _then(_$_PlayerState(
       isPaused: null == isPaused
@@ -123,6 +149,18 @@ class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithI
           ? _value.playbackPosition
           : playbackPosition // ignore: cast_nullable_to_non_nullable
               as int,
+      artists: null == artists
+          ? _value._artists
+          : artists // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUri: null == imageUri
+          ? _value.imageUri
+          : imageUri // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -131,7 +169,15 @@ class __$$_PlayerStateCopyWithImpl<$Res> extends _$FirestorePlayerStateCopyWithI
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class _$_PlayerState implements _PlayerState {
-  const _$_PlayerState({required this.isPaused, required this.uri, required this.duration, required this.playbackPosition});
+  const _$_PlayerState(
+      {required this.isPaused,
+      required this.uri,
+      required this.duration,
+      required this.playbackPosition,
+      required final List<String> artists,
+      required this.name,
+      required this.imageUri})
+      : _artists = artists;
 
   factory _$_PlayerState.fromJson(Map<String, dynamic> json) => _$$_PlayerStateFromJson(json);
 
@@ -143,10 +189,22 @@ class _$_PlayerState implements _PlayerState {
   final int duration;
   @override
   final int playbackPosition;
+  final List<String> _artists;
+
+  @override
+  List<String> get artists {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_artists);
+  }
+
+  @override
+  final String name;
+  @override
+  final String imageUri;
 
   @override
   String toString() {
-    return 'FirestorePlayerState(isPaused: $isPaused, uri: $uri, duration: $duration, playbackPosition: $playbackPosition)';
+    return 'FirestorePlayerState(isPaused: $isPaused, uri: $uri, duration: $duration, playbackPosition: $playbackPosition, artists: $artists, name: $name, imageUri: $imageUri)';
   }
 
   @override
@@ -157,12 +215,16 @@ class _$_PlayerState implements _PlayerState {
             (identical(other.isPaused, isPaused) || other.isPaused == isPaused) &&
             (identical(other.uri, uri) || other.uri == uri) &&
             (identical(other.duration, duration) || other.duration == duration) &&
-            (identical(other.playbackPosition, playbackPosition) || other.playbackPosition == playbackPosition));
+            (identical(other.playbackPosition, playbackPosition) || other.playbackPosition == playbackPosition) &&
+            const DeepCollectionEquality().equals(other._artists, _artists) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.imageUri, imageUri) || other.imageUri == imageUri));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, isPaused, uri, duration, playbackPosition);
+  int get hashCode => Object.hash(
+      runtimeType, isPaused, uri, duration, playbackPosition, const DeepCollectionEquality().hash(_artists), name, imageUri);
 
   @JsonKey(ignore: true)
   @override
@@ -182,7 +244,10 @@ abstract class _PlayerState implements FirestorePlayerState {
       {required final bool isPaused,
       required final String uri,
       required final int duration,
-      required final int playbackPosition}) = _$_PlayerState;
+      required final int playbackPosition,
+      required final List<String> artists,
+      required final String name,
+      required final String imageUri}) = _$_PlayerState;
 
   factory _PlayerState.fromJson(Map<String, dynamic> json) = _$_PlayerState.fromJson;
 
@@ -197,6 +262,15 @@ abstract class _PlayerState implements FirestorePlayerState {
 
   @override
   int get playbackPosition;
+
+  @override
+  List<String> get artists;
+
+  @override
+  String get name;
+
+  @override
+  String get imageUri;
 
   @override
   @JsonKey(ignore: true)

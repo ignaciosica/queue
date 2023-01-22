@@ -11,6 +11,9 @@ class FirestorePlayerState with _$FirestorePlayerState {
     required String uri,
     required int duration,
     required int playbackPosition,
+    required List<String> artists,
+    required String name,
+    required String imageUri,
   }) = _PlayerState;
 
   factory FirestorePlayerState.fromJson(Map<String, dynamic> json) => _$FirestorePlayerStateFromJson(json);

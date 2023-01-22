@@ -13,6 +13,8 @@ class _RootViewState extends State<RootView> {
   late final TextEditingController _roomCodeController;
   bool joinEnabled = false;
 
+  String roomId = '';
+
   @override
   void initState() {
     super.initState();
@@ -24,9 +26,18 @@ class _RootViewState extends State<RootView> {
     });
 
     _roomCodeController = TextEditingController();
-    _roomCodeController.addListener(() {
-      setState(() {
-        joinEnabled = _roomCodeController.text.isNotEmpty;
+    _roomCodeController.addListener(() async {
+      await FirebaseFirestore.instance
+          .collection('rooms')
+          .where('room_id', isEqualTo: _roomCodeController.text)
+          .get()
+          .then((value) {
+        setState(() {
+          joinEnabled = value.docs.isNotEmpty;
+          if (value.docs.isNotEmpty) {
+            roomId = value.docs.first.id;
+          }
+        });
       });
     });
   }
@@ -62,8 +73,11 @@ class _RootViewState extends State<RootView> {
                   ElevatedButton(
                       onPressed: createEnabled
                           ? () async {
-                              await RepositoryProvider.of<FirestoreRepository>(context).createRoom(_roomNameController.text);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomPage()));
+                              final createdRoomId = await RepositoryProvider.of<FirestoreRepository>(context)
+                                  .createRoom(_roomNameController.text);
+                              BlocProvider.of<RoomCubit>(context).setRoomId(createdRoomId);
+                              Navigator.push(
+                                  context, MaterialPageRoute(builder: (_) => const RoomPage()));
                             }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Create')))),
@@ -83,7 +97,16 @@ class _RootViewState extends State<RootView> {
                   ),
                   ElevatedButton(
                       onPressed: joinEnabled
-                          ? () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomPage()))
+                          ? () async {
+                              await FirebaseFirestore.instance.collection('rooms').doc(roomId).update({
+                                'users':
+                                    FieldValue.arrayUnion([RepositoryProvider.of<AuthRepository>(context).currentUser!.id])
+                              });
+
+                              BlocProvider.of<RoomCubit>(context).setRoomId(roomId);
+
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => const RoomPage()));
+                            }
                           : null,
                       child: const SizedBox(width: 60, child: Center(child: Text('Join')))),
                 ],

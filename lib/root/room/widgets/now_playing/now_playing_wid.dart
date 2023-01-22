@@ -27,6 +27,29 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
 
         BlocProvider.of<SpotifyPlayerCubit>(context).playerStateChanged(ss.data);
 
+        // final player_state = <String, dynamic>{
+        //   'artists': ss.data!.track?.artists.map((e) => e.name).toList() ?? [],
+        //   'duration': ss.data!.track?.duration ?? 0,
+        //   'image_uri': ss.data!.track?.imageUri ?? '',
+        //   'name': ss.data!.track?.name ??   '',
+        //   'is_paused': ss.data!.isPaused,
+        //   'playback_position': ss.data!.playbackPosition,
+        //   'uri': ss.data!.track?.uri ?? '',
+        // };
+        //
+        // FirebaseFirestore.instance.collection('rooms').doc(BlocProvider.of<RoomCubit>(context).state.roomId).update({'player_state': player_state});
+        // FirebaseFirestore.instance.collection('rooms').doc(BlocProvider.of<RoomCubit>(context).state.roomId).update({'test': 'player_state'});
+
+        FirebaseFirestore.instance.collection('rooms').doc(BlocProvider.of<RoomCubit>(context).state.roomId).update({
+          'player_state.artists': ss.data!.track?.artists.map((e) => e.name).toList() ?? [],
+          'player_state.duration': ss.data!.track?.duration ?? 0,
+          'player_state.image_uri': ss.data!.track?.imageUri.raw ?? '',
+          'player_state.name': ss.data!.track?.name ?? '',
+          'player_state.is_paused': ss.data!.isPaused,
+          'player_state.playback_position': ss.data!.playbackPosition,
+          'player_state.uri': ss.data!.track?.uri ?? '',
+        });
+
         final textTheme = Theme.of(context).textTheme;
         final playerState = ss.data!;
         playerState.isPaused ? _controller.reverse() : _controller.forward();
@@ -59,7 +82,13 @@ class _NowPlayingWidState extends State<NowPlayingWid> with TickerProviderStateM
                         ],
                       ),
                     ),
-                    const SkipButton(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        PlayPauseButton(),
+                        SkipButton(),
+                      ],
+                    ),
                   ],
                 ),
               ),

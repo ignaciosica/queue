@@ -13,9 +13,9 @@ part 'room_view.dart';
 class RoomPage extends StatelessWidget {
   const RoomPage({Key? key}) : super(key: key);
 
-  static Route route() => MaterialPageRoute<void>(builder: (_) => const RoomPage());
+  static Route route(RoomCubit roomCubit) => MaterialPageRoute<void>(builder: (_) => RoomPage());
 
-  static Page page() => const MaterialPage<void>(child: RoomPage());
+  static Page page(RoomCubit roomCubit) => MaterialPage<void>(child: RoomPage());
 
   @override
   Widget build(BuildContext context) {
