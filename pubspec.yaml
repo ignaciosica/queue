@@ -28,9 +28,13 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
+
+
 dependencies:
   flutter:
     sdk: flutter
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -67,6 +71,7 @@ dependencies:
   workmanager: ^0.5.1
   hydrated_bloc: ^9.0.0
   path_provider: ^2.0.11
+  flutter_dotenv: ^5.0.2
 #  auth0_flutter: ^1.0.2
 
 dev_dependencies:
@@ -88,6 +93,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - .env
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

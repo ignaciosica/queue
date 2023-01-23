@@ -6,6 +6,8 @@ import 'package:cache/cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:groupify/auth/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class BaseApiClientFailure implements Exception {
   BaseApiClientFailure(this.responseBody, this.responseStatus, {this.message, this.requestParams, this.response});
@@ -81,8 +83,16 @@ class BaseApiClient {
   }
 
   Future<SpotifyAccessToken> requestAccessToken() async {
+
+    final clientId = dotenv.env['client_id'];
+    final clientSecret = dotenv.env['client_secret'];
+
+    String credentials = "$clientId:$clientSecret";
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String encoded = stringToBase64.encode(credentials);
+
     var headers = {
-      'Authorization': 'Basic YjlhNDg4MWU3N2Y0NDg4ZWI4ODI3ODhjYjEwNmEyOTc6ODJkNmEzMTZjMTA4NDViZDgyZGYxMDU0NTgyMzM4OWU=',
+      'Authorization': 'Basic $encoded',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
     var request = http.Request('POST', Uri.parse('https://accounts.spotify.com/api/token'));

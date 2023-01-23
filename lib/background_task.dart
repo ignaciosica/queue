@@ -16,11 +16,6 @@ void callbackDispatcher() {
     await SpotifySdk.connectToSpotifyRemote(clientId: inputData!['clientId'], redirectUrl: inputData!['redirectUrl']);
 
     var skipFlag = false;
-
-    // Stream.periodic(const Duration(seconds: 5)).listen((event) {
-    //   skipFlag = true;
-    // });
-
     var queueFlag = false;
     var trackUri = '';
     var wasPaused = false;
@@ -50,11 +45,11 @@ void callbackDispatcher() {
       }
     });
 
-    Stream.periodic(const Duration(seconds: 5)).listen((event) async {
+    Stream.periodic(const Duration(seconds: 3)).listen((event) async {
       var playerState = await SpotifySdk.getPlayerState();
       if (playerState == null || playerState.track == null) return;
 
-      if (playerState.track!.duration - playerState.playbackPosition < 10 * 1000) {
+      if (playerState.track!.duration - playerState.playbackPosition < 7 * 1000) {
         queueFlag = true;
         await Future.delayed(const Duration(seconds: 10));
       }
@@ -79,8 +74,7 @@ void callbackDispatcher() {
 
         if (roomCache.skip.length >= max(1, (roomCache.users.length / 2).floor())) {
           await FirebaseFirestore.instance.collection("rooms").doc(inputData!['room']).update({"skip": []});
-          await queueNextUp(inputData);
-          SpotifySdk.skipNext();
+          if(!await queueNextUp(inputData)) SpotifySdk.skipNext();
         }
       }
 
@@ -94,11 +88,11 @@ void callbackDispatcher() {
   });
 }
 
-Future<void> queueNextUp(inputData) async {
+Future<bool> queueNextUp(inputData) async {
   AggregateQuerySnapshot queueCount =
       await FirebaseFirestore.instance.collection('rooms').doc(inputData!['room']).collection('queue').count().get();
 
-  if (queueCount.count == 0) return;
+  if (queueCount.count == 0) return false;
 
   var querySnapshot = await FirebaseFirestore.instance
       .collection('rooms')
@@ -113,7 +107,7 @@ Future<void> queueNextUp(inputData) async {
   json['spotify_uri'] = querySnapshot.docs[0].id;
   final firestoreTrack = FirestoreTrack.fromJson(json);
 
-  await SpotifySdk.queue(spotifyUri: 'spotify:track:${firestoreTrack.spotifyUri}');
+  await SpotifySdk.play(spotifyUri: 'spotify:track:${firestoreTrack.spotifyUri}');
 
   await FirebaseFirestore.instance
       .collection('rooms')
@@ -121,6 +115,8 @@ Future<void> queueNextUp(inputData) async {
       .collection('queue')
       .doc(firestoreTrack.spotifyUri)
       .delete();
+
+  return true;
 }
 
 Map<String, dynamic> playerStateToJson(PlayerState playerState) {

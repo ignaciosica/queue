@@ -28,9 +28,9 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
     return StreamBuilder<PlayerState>(
       stream: stream,
       builder: (context, snapshot) {
-        return GestureDetector(
+        isPaused = snapshot.data?.isPaused ?? true;
+        return InkWell(
           onTap: (){
-            isPaused = snapshot.data?.isPaused ?? false;
             if(snapshot.hasData && snapshot.data != null){
               snapshot.data?.isPaused ?? false ? SpotifySdk.resume() : SpotifySdk.pause();
             }
@@ -38,7 +38,7 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
           child: CustomAnimatedIcon(
             iconA: const Icon(Icons.play_arrow_rounded, key: ValueKey('play'), size: 36),
             iconB: const Icon(Icons.pause_rounded, key: ValueKey('pause'), size: 36),
-            showA: !isPaused,
+            showA: isPaused,
           ),
         );
       }

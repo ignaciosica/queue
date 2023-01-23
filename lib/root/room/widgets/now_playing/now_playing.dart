@@ -14,9 +14,13 @@ import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 part 'now_playing_dummy.dart';
+
 part 'now_playing_firestore.dart';
+
 part 'now_playing_reconnect_dummy.dart';
+
 part 'now_playing_wid.dart';
+
 part 'skip_button.dart';
 
 class NowPlaying extends StatefulWidget {
@@ -40,28 +44,19 @@ class _NowPlayingState extends State<NowPlaying> {
           builder: (context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData) {
               final room = Room.fromJson(snapshot.data!.data()!);
-              return NowPlayingFirestore(room: room);
 
-              if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
+              // if (RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
                 return StreamBuilder<ConnectionStatus>(
                   stream: stream,
                   builder: (context, snapshot2) {
-                    switch (snapshot2.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.done:
-                        return const NowPlayingReconnectDummy();
-                      case ConnectionState.waiting:
-                        return const NowPlayingDummy();
-                      case ConnectionState.active:
-                        if (snapshot2.hasError || !snapshot2.hasData || !snapshot2.data!.connected) {
-                          return const NowPlayingReconnectDummy();
-                        }
-                        return const NowPlayingWid();
+                    if (!snapshot2.hasError && snapshot2.hasData && snapshot2.data!.connected) {
+                      return NowPlayingFirestore(room: room);
                     }
+                    return const NowPlayingReconnectDummy();
                   },
                 );
-              }
-              return NowPlayingFirestore(room: room);
+              // }
+              // return NowPlayingFirestore(room: room);
             }
             return const NowPlayingDummy();
           }),
