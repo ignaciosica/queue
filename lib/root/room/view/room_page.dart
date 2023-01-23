@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:groupify/auth/auth.dart';
 import 'package:groupify/common/common.dart';
 import 'package:groupify/root/participants/participants.dart';
 import 'package:groupify/root/root.dart';
 import 'package:groupify/root/search/search.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:workmanager/workmanager.dart';
 
 part 'room_view.dart';

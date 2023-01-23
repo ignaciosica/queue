@@ -24,6 +24,7 @@ void main() {
       await authenticationRepository.connectToSpotify();
       final firestoreRepository = FirestoreRepository(authenticationRepository);
       Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+      Workmanager().cancelAll();
 
       runApp(App(authenticationRepository: authenticationRepository, firestoreRepository: firestoreRepository));
     },

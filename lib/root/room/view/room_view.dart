@@ -22,8 +22,8 @@ class _RoomViewState extends State<RoomView> {
                 title: const Text('Warning'),
                 content: const Text('Do you really want to exit the room?'),
                 actions: [
-                  TextButton(child: const Text('Yes'), onPressed: () => Navigator.pop(c, true)),
                   TextButton(child: const Text('No'), onPressed: () => Navigator.pop(c, false)),
+                  TextButton(child: const Text('Yes'), onPressed: () => Navigator.pop(c, true)),
                 ],
               ),
             )) ??
@@ -60,20 +60,20 @@ class _RoomViewState extends State<RoomView> {
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
           ),
           actions: [
-            IconButton(onPressed: () => Workmanager().cancelAll(), icon: const Icon(Icons.stop_rounded)),
-            IconButton(
-                onPressed: () {
-                  Workmanager().registerOneOffTask(
-                    '1',
-                    'background_task',
-                    inputData: {
-                      'room': BlocProvider.of<RoomCubit>(context).state.roomId,
-                      'clientId': "b9a4881e77f4488eb882788cb106a297",
-                      'redirectUrl': "https://com.example.groupify/callback/",
-                    },
-                  );
-                },
-                icon: const Icon(Icons.play_arrow_rounded)),
+            // IconButton(onPressed: () => Workmanager().cancelAll(), icon: const Icon(Icons.stop_rounded)),
+            // IconButton(
+            //     onPressed: () {
+            //       Workmanager().registerOneOffTask(
+            //         '1',
+            //         'background_task',
+            //         inputData: {
+            //           'room': BlocProvider.of<RoomCubit>(context).state.roomId,
+            //           'clientId': dotenv.env['client_id'],
+            //           'redirectUrl': dotenv.env['redirect_url'],
+            //         },
+            //       );
+            //     },
+            //     icon: const Icon(Icons.play_arrow_rounded)),
             StreamBuilder<DocumentSnapshot>(
               stream: RepositoryProvider.of<FirestoreRepository>(context)
                   .getRoom(BlocProvider.of<RoomCubit>(context).state.roomId),
@@ -81,13 +81,26 @@ class _RoomViewState extends State<RoomView> {
                 if (snapshot.hasData) {
                   final room = Room.fromJson(snapshot.data!.data()!);
                   if (room.player.isEmpty || RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
+                    Workmanager().registerPeriodicTask(
+                      '1',
+                      'background_task',
+                      inputData: {
+                        'room': BlocProvider.of<RoomCubit>(context).state.roomId,
+                        'clientId': dotenv.env['client_id'],
+                        'redirectUrl': dotenv.env['redirect_url'],
+                      },
+                    );
                     return IconButton(
                       onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ParticipantsPage())),
                       icon: const Icon(Icons.speaker_group_rounded),
                     );
+                  } else {
+                    Workmanager().cancelAll();
+                    SpotifySdk.pause();
                   }
                 } else {
-                  //Workmanager().cancelAll();
+                  Workmanager().cancelAll();
+                  SpotifySdk.pause();
                 }
                 return Container();
               },
