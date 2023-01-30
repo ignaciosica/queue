@@ -30,7 +30,7 @@ To use the Collaborative Priority Queue for Spotify, you will need to have a Spo
 
 ## Contribute
 
-We welcome contributions to the Collaborative Priority Queue for Spotify! If you have an idea for a new feature or have found a bug, please open an issue or submit a pull request.
+We welcome contributions to the Collaborative Priority Queue for Spotify! If you have an idea for a new feature or have found a bug, please don{t hestitate opening an issue or submiting a pull request.
 
 ## License
 
