@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "115607063090",
+    "project_id": "groupify-796f3",
+    "storage_bucket": "groupify-796f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115607063090:android:e3c8558fef9d3721644a2b",
+        "android_client_info": {
+          "package_name": "com.example.groupify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115607063090-vdatqmdsat1nbhmagf1hh8hk00ceenlv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBysQOOeTyPHEhBbIATrQOkZ4Rkd5EOwEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115607063090-vdatqmdsat1nbhmagf1hh8hk00ceenlv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "115607063090-cas2s5qg09fhcu3q728mtjot5smiopd5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.groupify"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
