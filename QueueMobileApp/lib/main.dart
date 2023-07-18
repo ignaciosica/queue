@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:queue/app/app_router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,13 +10,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routerConfig: appRouter(),
     );
   }
 }
