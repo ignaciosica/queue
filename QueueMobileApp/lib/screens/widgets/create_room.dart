@@ -7,7 +7,7 @@ class CreateRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const TextField(),
+        const TextField(key: Key('create_room_textfield_key')),
         ElevatedButton(
           onPressed: () {},
           child: const Text('Create Room'),

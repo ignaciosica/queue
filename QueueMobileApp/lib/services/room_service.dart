@@ -13,8 +13,16 @@ class RoomService implements IRoomService {
 
   @override
   Future createRoom(String roomName) {
-    // TODO: implement createRoom
     throw UnimplementedError();
+    // _firestore.collection(_collectionName).add(
+    //   {
+    //     'name': roomName,
+    //     'participants': [],
+    //     'player': '',
+    //     'player_state': null,
+    //     'skip':[],
+    //   },
+    // );
   }
 
   @override

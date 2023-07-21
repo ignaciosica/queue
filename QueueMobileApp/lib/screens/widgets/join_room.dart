@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:queue/app/service_locator.dart';
@@ -13,7 +14,7 @@ class JoinRoom extends StatefulWidget {
 class _JoinRoomState extends State<JoinRoom> {
   late final TextEditingController textEditingController;
 
-  final RoomService _roomService = getIt<RoomService>();
+  final IRoomService _roomService = getIt<IRoomService>();
 
   @override
   void initState() {
@@ -25,23 +26,22 @@ class _JoinRoomState extends State<JoinRoom> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(controller: textEditingController),
+        TextField(
+            key: const Key('join_room_textfield_key'),
+            controller: textEditingController),
         ElevatedButton(
+          key: const Key('join_room_button_key'),
           onPressed: () {
-            _roomService.joinRoom(textEditingController.text).then((value) => {
-                  if (value != null)
-                    {
-                      context.push('/room', extra: value),
-                    }
-                  else
-                    {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Invalid room id'),
-                        ),
-                      ),
-                    }
-                });
+            _roomService.joinRoom(textEditingController.text).then((value) {
+              if (value != null) {
+                if (kDebugMode) print('pushing to /room with extra: $value');
+                context.push('/room', extra: value);
+              } else {
+                if (kDebugMode) print('invalid room, no navigation');
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Invalid room id')));
+              }
+            });
           },
           child: const Text('Join Room'),
         ),

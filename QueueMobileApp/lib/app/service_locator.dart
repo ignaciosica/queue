@@ -4,6 +4,6 @@ import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
-setupServiceLocator(FirebaseFirestore firestore) {
-  getIt.registerLazySingleton<IRoomService>(() => RoomService(firestore));
+setupServiceLocator(FirebaseFirestore instance) {
+  getIt.registerLazySingleton<IRoomService>(() => RoomService(instance));
 }

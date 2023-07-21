@@ -2,10 +2,13 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:queue/app/service_locator.dart';
 import 'package:queue/main.dart';
-import 'package:queue/screens/lobby/lobby_screen.dart';
 import 'package:queue/screens/room/room_screen.dart';
 import 'package:queue/services/room_service.dart';
+
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() async {
   final instance = FakeFirebaseFirestore();
@@ -23,9 +26,11 @@ void main() async {
     print('dump: ${instance.dump()}');
   }
 
-  final RoomService roomService = RoomService(instance);
+  setupServiceLocator(instance);
 
   group('join room:', () {
+    final IRoomService roomService = getIt<IRoomService>();
+
     test('valid room id', () async {
       var room = await roomService.joinRoom('qwerty');
       expect(room['name'], 'VichiFest!');
@@ -39,10 +44,29 @@ void main() async {
 
   group('lobby screen join room:', () {
     testWidgets('valid room (navigation):', (tester) async {
-      await tester.pumpWidget(const MyApp());
-      await tester.enterText(find.byType(TextField), 'qwerty');
-      await tester.tap(find.text('Join Room'));
+      await tester.pumpWidget(const MaterialApp(home: MyApp()));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const Key('join_room_textfield_key')),
+        'qwerty',
+      );
+
+      await tester.tap(find.byKey(const Key('join_room_button_key')));
+      await tester.pumpAndSettle();
       expect(find.byType(RoomScreen), findsOneWidget);
+    });
+
+    testWidgets('invalid room (navigation):', (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: MyApp()));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const Key('join_room_textfield_key')),
+        'invalid',
+      );
+
+      await tester.tap(find.byKey(const Key('join_room_button_key')));
+      await tester.pumpAndSettle();
+      expect(find.byType(RoomScreen), findsNothing);
     });
   });
 }

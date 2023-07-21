@@ -2,19 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/app_router.dart';
 import 'package:queue/app/service_locator.dart';
-import 'package:workmanager/workmanager.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   setupServiceLocator(FirebaseFirestore.instance);
 
-  Workmanager().cancelAll();
   runApp(const MyApp());
 }
 
