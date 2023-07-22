@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class IRoomService {
   Future<dynamic> joinRoom(String roomName);
@@ -6,23 +8,39 @@ abstract class IRoomService {
 }
 
 class RoomService implements IRoomService {
-  RoomService(this._firestore);
+  RoomService(this._firestore, this._auth);
 
   final FirebaseFirestore _firestore;
+  final FirebaseAuth _auth;
   static const String _collectionName = 'rooms';
 
   @override
-  Future createRoom(String roomName) {
-    throw UnimplementedError();
-    // _firestore.collection(_collectionName).add(
-    //   {
-    //     'name': roomName,
-    //     'participants': [],
-    //     'player': '',
-    //     'player_state': null,
-    //     'skip':[],
-    //   },
-    // );
+  Future createRoom(String roomName) async {
+    try {
+      final String? authorId = _auth.currentUser?.uid;
+
+      assert(authorId != null, 'authorId must not be null');
+      if (authorId == null) throw Exception('authorId is null');
+
+      final reference = await _firestore.collection(_collectionName).add(
+        {
+          'name': roomName,
+          'participants': [authorId],
+          'player': authorId,
+          'player_state': null,
+          'skip': [],
+        },
+      );
+
+      await reference
+          .update({'id': reference.id.substring(0, 5).toLowerCase()});
+
+      final doc = await reference.get();
+
+      return doc.data();
+    } on Exception catch (e) {
+      if (kDebugMode) print(e.toString());
+    }
   }
 
   @override

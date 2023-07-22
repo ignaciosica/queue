@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/app_router.dart';
 import 'package:queue/app/service_locator.dart';
@@ -13,7 +14,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  setupServiceLocator(FirebaseFirestore.instance);
+  setupServiceLocator(FirebaseFirestore.instance, FirebaseAuth.instance);
 
   runApp(const MyApp());
 }

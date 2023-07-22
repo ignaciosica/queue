@@ -1,4 +1,5 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,26 +8,51 @@ import 'package:queue/app/service_locator.dart';
 import 'package:queue/main.dart';
 import 'package:queue/screens/room/room_screen.dart';
 import 'package:queue/services/room_service.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() async {
-  final instance = FakeFirebaseFirestore();
+  final googleSignIn = MockGoogleSignIn();
+  final signinAccount = await googleSignIn.signIn();
+  final googleAuth = await signinAccount?.authentication;
 
-  await instance.collection('rooms').doc('qwerty1234').set({
+  final AuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  final user = MockUser(
+    isAnonymous: false,
+    uid: 'someuid',
+    email: 'bob@somedomain.com',
+    displayName: 'Bob',
+  );
+  final auth = MockFirebaseAuth(mockUser: user);
+  final result = await auth.signInWithCredential(credential);
+  if (kDebugMode) print(result.user?.displayName);
+
+  final firestore = FakeFirebaseFirestore();
+
+  await firestore.collection('rooms').doc('qwerty1234').set({
     'id': 'qwerty',
     'name': 'VichiFest!',
   });
 
-  await instance.collection('rooms').doc('qwerty1234').collection('queue').add({
+  await firestore
+      .collection('rooms')
+      .doc('qwerty1234')
+      .collection('queue')
+      .add({
     'id': '1234',
   });
 
   if (kDebugMode) {
-    print('dump: ${instance.dump()}');
+    print('dump: ${firestore.dump()}');
   }
 
-  setupServiceLocator(instance);
+  setupServiceLocator(firestore, auth);
 
   group('join room:', () {
     final IRoomService roomService = getIt<IRoomService>();
@@ -67,6 +93,23 @@ void main() async {
       await tester.tap(find.byKey(const Key('join_room_button_key')));
       await tester.pumpAndSettle();
       expect(find.byType(RoomScreen), findsNothing);
+    });
+  });
+
+  group('lobby screen create room:', () {
+    testWidgets('create room auth:', (tester) async {
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const Key('create_room_textfield_key')),
+        'NachoFest!',
+      );
+
+      await tester.tap(find.byKey(const Key('create_room_button_key')));
+      await tester.pumpAndSettle();
+      if (kDebugMode) print(firestore.dump());
+      expect(find.byType(RoomScreen), findsOneWidget);
     });
   });
 }
