@@ -4,16 +4,6 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -70,7 +60,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1066433983088',
     projectId: 'queue-22747',
     storageBucket: 'queue-22747.appspot.com',
-    iosClientId: '1066433983088-69pk8kbnpgci0071ede97i5rs5qhk3lb.apps.googleusercontent.com',
+    iosClientId:
+        '1066433983088-69pk8kbnpgci0071ede97i5rs5qhk3lb.apps.googleusercontent.com',
     iosBundleId: 'com.example.queue',
   );
 }

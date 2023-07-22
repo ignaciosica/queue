@@ -123,9 +123,8 @@ void main() async {
                   .collection('rooms')
                   .where('name', isEqualTo: 'NachoFest!')
                   .get())
-              .docs[0]
-              .exists,
-          true);
+              .size,
+          1);
     });
   });
 }

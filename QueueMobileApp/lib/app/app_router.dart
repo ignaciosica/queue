@@ -1,3 +1,5 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:queue/screens/lobby/lobby_screen.dart';
 
@@ -19,4 +21,16 @@ appRouter() => GoRouter(
             path: '/lobby',
             builder: (context, state) => const LobbyScreen(),
           ),
+          GoRoute(
+            path: '/sign-in',
+            builder: (context, state) {
+              return SignInScreen(
+                actions: [
+                  AuthStateChangeAction<SignedIn>(
+                    (context, state) => Navigator.pop(context),
+                  ),
+                ],
+              );
+            },
+          )
         ]);
