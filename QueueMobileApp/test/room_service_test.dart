@@ -101,6 +101,14 @@ void main() async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
+      expect(
+          await (await firestore
+                  .collection('rooms')
+                  .where('name', isEqualTo: 'NachoFest!')
+                  .get())
+              .size,
+          0);
+
       await tester.enterText(
         find.byKey(const Key('create_room_textfield_key')),
         'NachoFest!',
@@ -110,6 +118,14 @@ void main() async {
       await tester.pumpAndSettle();
       if (kDebugMode) print(firestore.dump());
       expect(find.byType(RoomScreen), findsOneWidget);
+      expect(
+          await (await firestore
+                  .collection('rooms')
+                  .where('name', isEqualTo: 'NachoFest!')
+                  .get())
+              .docs[0]
+              .exists,
+          true);
     });
   });
 }
