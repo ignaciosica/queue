@@ -16,10 +16,7 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  FirebaseUIAuth.configureProviders([
-    EmailAuthProvider(),
-    GoogleProvider(clientId: dotenv.env['GOOGLE_CLIENT_ID'] ?? ''),
-  ]);
+  await fa.FirebaseAuth.instance.signInAnonymously();
 
   setupServiceLocator(FirebaseFirestore.instance, fa.FirebaseAuth.instance);
 

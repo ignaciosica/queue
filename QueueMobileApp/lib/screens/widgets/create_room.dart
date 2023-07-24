@@ -28,8 +28,9 @@ class _CreateRoomState extends State<CreateRoom> {
     return Column(
       children: [
         TextField(
-            key: const Key('create_room_textfield_key'),
-            controller: textEditingController),
+          key: const Key('create_room_textfield_key'),
+          controller: textEditingController,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -40,11 +41,14 @@ class _CreateRoomState extends State<CreateRoom> {
                     .createRoom(textEditingController.text)
                     .then((value) {
                   if (value != null) {
-                    if (kDebugMode)
+                    if (kDebugMode) {
                       print('pushing to /room with extra: $value');
+                    }
                     context.push('/room', extra: value);
                   } else {
-                    if (kDebugMode) print('creation failed, no navigation');
+                    if (kDebugMode) {
+                      print('creation failed, no navigation');
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('creation failed')));
                   }
@@ -52,12 +56,6 @@ class _CreateRoomState extends State<CreateRoom> {
               },
               child: const Text('Create Room'),
             ),
-            if (FirebaseAuth.instance.currentUser?.isAnonymous ?? true) ...[
-              const SizedBox(width: 16),
-              ElevatedButton(
-                  onPressed: () => context.push('/sign-in'),
-                  child: const Text('Sign in'))
-            ]
           ],
         ),
       ],

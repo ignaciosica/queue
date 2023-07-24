@@ -50,6 +50,15 @@ class RoomService implements IRoomService {
         .where('id', isEqualTo: roomId)
         .get();
 
+    if (query.size != 1) return null;
+
+    var updated = await _firestore
+        .collection(_collectionName)
+        .doc(query.docs[0].id)
+        .update({
+      'participants': FieldValue.arrayUnion([_auth.currentUser!.uid])
+    });
+
     return query.size == 1 ? query.docs[0].data() : null;
   }
 }
