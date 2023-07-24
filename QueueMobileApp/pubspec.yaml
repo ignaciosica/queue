@@ -27,6 +27,7 @@ dependencies:
   google_sign_in_mocks: ^0.3.0
   firebase_ui_auth: ^1.6.1
   firebase_ui_oauth_google: ^1.2.6
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

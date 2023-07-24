@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class IRoomService {
   Future<dynamic> joinRoom(String roomName);
@@ -22,7 +23,11 @@ class RoomService implements IRoomService {
       assert(authorId != null, 'authorId must not be null');
       if (authorId == null) throw Exception('authorId is null');
 
-      final reference = await _firestore.collection(_collectionName).add(
+      var roomId = const Uuid().v4().substring(0, 5).toLowerCase();
+
+      var reference = _firestore.collection(_collectionName).doc(roomId);
+
+      await reference.set(
         {
           'name': roomName,
           'participants': [authorId],
@@ -31,9 +36,6 @@ class RoomService implements IRoomService {
           'skip': [],
         },
       );
-
-      await reference
-          .update({'id': reference.id.substring(0, 5).toLowerCase()});
 
       final doc = await reference.get();
 
@@ -45,20 +47,17 @@ class RoomService implements IRoomService {
 
   @override
   Future joinRoom(String roomId) async {
-    var query = await _firestore
-        .collection(_collectionName)
-        .where('id', isEqualTo: roomId)
-        .get();
+    try {
+      var reference = _firestore.collection(_collectionName).doc(roomId);
 
-    if (query.size != 1) return null;
+      await reference.update({
+        'participants': FieldValue.arrayUnion([_auth.currentUser!.uid])
+      });
 
-    var updated = await _firestore
-        .collection(_collectionName)
-        .doc(query.docs[0].id)
-        .update({
-      'participants': FieldValue.arrayUnion([_auth.currentUser!.uid])
-    });
-
-    return query.size == 1 ? query.docs[0].data() : null;
+      return (await reference.get()).data();
+    } on Exception catch (e) {
+      if (kDebugMode) print(e.toString());
+      return null;
+    }
   }
 }

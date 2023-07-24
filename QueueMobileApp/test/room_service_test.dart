@@ -1,5 +1,4 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,42 +8,25 @@ import 'package:queue/main.dart';
 import 'package:queue/screens/room/room_screen.dart';
 import 'package:queue/services/room_service.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
+import 'package:uuid/uuid.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() async {
-  final googleSignIn = MockGoogleSignIn();
-  final signinAccount = await googleSignIn.signIn();
-  final googleAuth = await signinAccount?.authentication;
-
-  final AuthCredential credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
-
   final user = MockUser(
-    isAnonymous: false,
-    uid: 'someuid',
-    email: 'bob@somedomain.com',
-    displayName: 'Bob',
+    isAnonymous: true,
+    uid: 'anonymous',
   );
   final auth = MockFirebaseAuth(mockUser: user);
-  final result = await auth.signInWithCredential(credential);
-  if (kDebugMode) print(result.user?.displayName);
+  await auth.signInAnonymously();
 
   final firestore = FakeFirebaseFirestore();
 
-  await firestore.collection('rooms').doc('qwerty1234').set({
-    'id': 'qwerty',
+  await firestore.collection('rooms').doc('qwerty').set({
     'name': 'VichiFest!',
   });
 
-  await firestore
-      .collection('rooms')
-      .doc('qwerty1234')
-      .collection('queue')
-      .add({
+  await firestore.collection('rooms').doc('qwerty').collection('queue').add({
     'id': '1234',
   });
 
@@ -125,6 +107,22 @@ void main() async {
                   .get())
               .size,
           1);
+    });
+    test('test create', () async {
+      var roomId = const Uuid().v4().substring(0, 5).toLowerCase();
+
+      // Generate "locally" a new document in a collection
+      var document = firestore.collection('collectionName').doc();
+
+      // Get the new document Id
+      var documentUuid = document.id;
+
+      // Sets the new document with its uuid as property
+      //var response = await document.set({
+      //  'uuid': documentUuid.substring(0, 5).toLowerCase(),
+      //});
+
+      print(firestore.dump());
     });
   });
 }
