@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GradientAppBar extends AppBar {
-  GradientAppBar({super.key, super.title})
+  GradientAppBar({super.key, super.title, super.leading})
       : super(
           flexibleSpace: Container(
             decoration: const BoxDecoration(

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class IRoomService {
@@ -29,6 +30,7 @@ class RoomService implements IRoomService {
 
       await reference.set(
         {
+          'id': roomId,
           'name': roomName,
           'participants': [authorId],
           'player': authorId,
@@ -38,6 +40,9 @@ class RoomService implements IRoomService {
       );
 
       final doc = await reference.get();
+
+      SharedPreferences.getInstance()
+          .then((prefs) => prefs.setString('roomId', roomId));
 
       return doc.data();
     } on Exception catch (e) {
@@ -54,7 +59,12 @@ class RoomService implements IRoomService {
         'participants': FieldValue.arrayUnion([_auth.currentUser!.uid])
       });
 
-      return (await reference.get()).data();
+      SharedPreferences.getInstance()
+          .then((prefs) => prefs.setString('roomId', roomId));
+
+      final doc = await reference.get();
+
+      return doc.data();
     } on Exception catch (e) {
       if (kDebugMode) print(e.toString());
       return null;

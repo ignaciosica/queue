@@ -3,7 +3,7 @@ import 'package:queue/screens/lobby/lobby_screen.dart';
 
 import '../screens/room/room_screen.dart';
 
-appRouter() => GoRouter(
+GoRouter appRouter() => GoRouter(
         initialLocation: () {
           return '/lobby';
         }.call(),
