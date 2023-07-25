@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/app/widgets/gradient_app_bar.dart';
-import 'package:queue/screens/widgets/lobby_form.dart';
+import 'package:queue/screens/lobby/widgets/lobby_form.dart';
 import 'package:queue/services/room_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
