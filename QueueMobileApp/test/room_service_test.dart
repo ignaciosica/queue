@@ -24,6 +24,7 @@ void main() async {
 
   await firestore.collection('rooms').doc('qwerty').set({
     'name': 'VichiFest!',
+    'participants': ['walter'],
   });
 
   await firestore.collection('rooms').doc('qwerty').collection('queue').add({
@@ -40,13 +41,81 @@ void main() async {
     final IRoomService roomService = getIt<IRoomService>();
 
     test('valid room id', () async {
+      var snap = await firestore.collection('rooms').doc('qwerty').get();
+
+      expect(snap['name'], 'VichiFest!');
+      expect((snap['participants'] as List).contains('anonymous'), false);
+
       var room = await roomService.joinRoom('qwerty');
       expect(room['name'], 'VichiFest!');
+      expect((room['participants'] as List).contains('anonymous'), true);
     });
 
     test('invalid room', () async {
       var room = await roomService.joinRoom('invalid');
       expect(room, null);
+    });
+  });
+
+  group('create room:', () {
+    final IRoomService roomService = getIt<IRoomService>();
+    test('valid room', () async {
+      var room = await roomService.createRoom('new room');
+      expect(room['name'], 'new room');
+      expect(room['player'], 'anonymous');
+      expect((room['participants'] as List).contains('anonymous'), true);
+    });
+  });
+
+  group('leave room:', () {
+    final IRoomService roomService = getIt<IRoomService>();
+    test('only participant', () async {
+      await firestore.collection('rooms').doc('room_1').set({
+        'name': 'leave',
+        'id': 'room_1',
+        'participants': ['anonymous'],
+        'player': 'anonymous',
+      });
+
+      await roomService.leaveRoom('room_1');
+      var snap = await firestore
+          .collection('rooms')
+          .where('id', isEqualTo: 'room_1')
+          .get();
+
+      expect(snap.size, 0);
+    });
+
+    test('player', () async {
+      await firestore.collection('rooms').doc('room_2').set({
+        'name': 'leave',
+        'id': 'room_2',
+        'participants': ['anonymous', 'walter'],
+        'player': 'anonymous',
+      });
+
+      await roomService.leaveRoom('room_2');
+      var snap = await firestore.collection('rooms').doc('room_2').get();
+
+      expect(
+          (snap.data()!['participants'] as List).contains('anonymous'), false);
+      expect(snap.data()!['player'], null);
+    });
+
+    test('playernt', () async {
+      await firestore.collection('rooms').doc('room_2').set({
+        'name': 'leave',
+        'id': 'room_2',
+        'participants': ['anonymous', 'walter'],
+        'player': 'walter',
+      });
+
+      await roomService.leaveRoom('room_2');
+      var snap = await firestore.collection('rooms').doc('room_2').get();
+
+      expect(
+          (snap.data()!['participants'] as List).contains('anonymous'), false);
+      expect(snap.data()!['player'], 'walter');
     });
   });
 
