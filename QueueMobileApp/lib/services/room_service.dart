@@ -77,20 +77,19 @@ class RoomService implements IRoomService {
     try {
       var ref = _firestore.collection(_collectionName).doc(roomId);
 
-      _firestore.runTransaction((transaction) async {
-        transaction.get(ref).then((value) {
+      await _firestore.runTransaction((transaction) async {
+        await transaction.get(ref).then((value) {
           if ((value.data()!['participants'] as List)
               .every((element) => element == _auth.currentUser!.uid)) {
             transaction.delete(ref);
-            return;
-          }
+          } else {
+            transaction.update(ref, {
+              'participants': FieldValue.arrayRemove([_auth.currentUser!.uid])
+            });
 
-          transaction.update(ref, {
-            'participants': FieldValue.arrayRemove([_auth.currentUser!.uid])
-          });
-
-          if (value.data()!['player'] == _auth.currentUser!.uid) {
-            transaction.update(ref, {'player': null, 'player_state': null});
+            if (value.data()!['player'] == _auth.currentUser!.uid) {
+              transaction.update(ref, {'player': null, 'player_state': null});
+            }
           }
         });
       });

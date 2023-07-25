@@ -17,8 +17,10 @@ class RoomScreen extends StatelessWidget {
         title: Text(room['name']),
         leading: IconButton(
           icon: const Icon(Icons.logout_rounded),
-          onPressed: () {
-            roomService.leaveRoom(room['id']).then((_) => context.go('/lobby'));
+          onPressed: () async {
+            await roomService
+                .leaveRoom(room['id'])
+                .then((_) => context.go('/lobby'));
           },
         ),
       ),
