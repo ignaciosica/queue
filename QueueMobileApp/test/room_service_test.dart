@@ -6,8 +6,10 @@ import 'package:mockito/mockito.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/main.dart';
 import 'package:queue/screens/room/room_screen.dart';
+import 'package:queue/screens/room/widgets/now_playing.dart';
 import 'package:queue/services/room_service.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
@@ -21,6 +23,8 @@ void main() async {
   await auth.signInAnonymously();
 
   final firestore = FakeFirebaseFirestore();
+
+  SharedPreferences.setMockInitialValues({});
 
   await firestore.collection('rooms').doc('qwerty').set({
     'name': 'VichiFest!',
@@ -138,12 +142,52 @@ void main() async {
       await tester.pumpAndSettle();
       await tester.enterText(
         find.byKey(const Key('join_room_textfield_key')),
-        'invalid',
+        'invalidsadssd',
       );
 
       await tester.tap(find.byKey(const Key('join_room_button_key')));
       await tester.pumpAndSettle();
       expect(find.byType(RoomScreen), findsNothing);
+    }, variant: ValueVariant({'invalid'}));
+  });
+
+  group('nowPlaying:', () {
+    testWidgets('null', (tester) async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('roomId', 'qwerty');
+
+      await tester.pumpWidget(const MaterialApp(home: NowPlaying()));
+      await tester.pumpAndSettle();
+      expect(find.byType(NowPlayingDummy), findsOneWidget);
+    });
+    testWidgets('valid', (tester) async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('roomId', 'player_state');
+      await firestore.collection('rooms').doc('player_state').set({
+        'name': 'VichiFest!',
+        'participants': ['walter'],
+      });
+
+      await tester.pumpWidget(const MaterialApp(home: NowPlaying()));
+      await tester.pumpAndSettle();
+      expect(find.byType(NowPlayingDummy), findsOneWidget);
+
+      await firestore.collection('rooms').doc('player_state').update({
+        'player_state': {
+          'name': 'Asilo',
+          'artists': ['Jorge Drexler', 'Mon Laferte'],
+        }
+      });
+
+      await tester.pumpAndSettle();
+      expect(find.byType(NowPlayingDummy), findsNothing);
+
+      await firestore.collection('rooms').doc('player_state').update({
+        'player_state': null,
+      });
+
+      await tester.pumpAndSettle();
+      expect(find.byType(NowPlayingDummy), findsOneWidget);
     });
   });
 
@@ -162,7 +206,7 @@ void main() async {
 
       await tester.enterText(
         find.byKey(const Key('create_room_textfield_key')),
-        'NachoFest!',
+        'NachoFest!cra',
       );
 
       await tester.tap(find.byKey(const Key('create_room_button_key')));
@@ -177,6 +221,7 @@ void main() async {
               .size,
           1);
     });
+
     test('test create', () async {
       var roomId = const Uuid().v4().substring(0, 5).toLowerCase();
 

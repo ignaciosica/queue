@@ -54,6 +54,13 @@ class RoomService implements IRoomService {
   @override
   Future joinRoom(String roomId) async {
     try {
+      final query = await _firestore
+          .collection(_collectionName)
+          .where(FieldPath.documentId, isEqualTo: roomId)
+          .get();
+
+      if (query.size == 0) return null;
+
       var reference = _firestore.collection(_collectionName).doc(roomId);
 
       await reference.update({

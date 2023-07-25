@@ -40,12 +40,10 @@ class _LobbyScreenState extends State<LobbyScreen> {
           LobbyForm(
             'Join Room',
             (val) => _roomService.joinRoom(val).then(goToRoom),
-            key: const Key('join_room'),
           ),
           LobbyForm(
             'Create Room',
             (val) => _roomService.createRoom(val).then(goToRoom),
-            key: const Key('create_room'),
           ),
         ],
       ),

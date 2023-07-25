@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/app/widgets/gradient_app_bar.dart';
+import 'package:queue/screens/room/widgets/now_playing.dart';
 import 'package:queue/services/room_service.dart';
 
 class RoomScreen extends StatelessWidget {
@@ -23,6 +24,9 @@ class RoomScreen extends StatelessWidget {
                 .then((_) => context.go('/lobby'));
           },
         ),
+      ),
+      body: const Column(
+        children: [NowPlaying()],
       ),
     );
   }
