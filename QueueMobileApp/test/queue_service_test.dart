@@ -35,7 +35,7 @@ void main() async {
     getIt.reset();
   });
 
-  group('playerState:', () {
+  group('getPlayerState:', () {
     test('valid', () async {
       final playerState = {
         'name': 'Luv(sic)',
@@ -93,7 +93,7 @@ void main() async {
     });
   });
 
-  group('queue:', () {
+  group('getQueue:', () {
     test('stream', () async {
       await prefs.setString('roomId', 'qwerty');
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue');
@@ -101,20 +101,20 @@ void main() async {
       var t1 = {
         'uri': 'spotify:track:1',
         'created_at': '001',
-        'votes': ['anonymous'],
-        'votes_count': 1,
+        'voters': ['anonymous'],
+        'votes': 1,
       };
       var t2 = {
         'uri': 'spotify:track:2',
         'created_at': '002',
-        'votes': ['anonymous'],
-        'votes_count': 1,
+        'voters': ['anonymous'],
+        'votes': 1,
       };
       var t3 = {
         'uri': 'spotify:track:3',
         'created_at': '003',
-        'votes': ['anonymous'],
-        'votes_count': 1,
+        'voters': ['anonymous'],
+        'votes': 1,
       };
 
       expectLater(
@@ -134,6 +134,294 @@ void main() async {
       await prefs.setString('roomId', 'qwerty');
 
       expectLater(await queueService.getQueue().first, []);
+    });
+  });
+
+  group('queue:', () {
+    const t1 = 'spotify:track:1';
+    const t2 = 'spotify:track:2';
+    const t3 = 'spotify:track:3';
+
+    test('valid queue', () async {
+      await prefs.setString('roomId', 'qwerty');
+
+      expectLater(
+          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          emitsInOrder([
+            [],
+            [t1],
+            [t1, t2],
+            [t1, t2, t3],
+          ]));
+
+      await queueService.queue(t1);
+      await queueService.queue(t2);
+      await queueService.queue(t3);
+    });
+
+    test('valid dequeue', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': [],
+        'votes': 0,
+      });
+
+      expectLater(
+          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          emitsInOrder([
+            [t1],
+            []
+          ]));
+
+      await queueService.dequeue(t1);
+    });
+
+    test('invalid queue', () async {
+      await prefs.setString('roomId', 'qwerty');
+
+      expectLater(
+          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          emitsInOrder([
+            [],
+            [t1],
+            [t1, t2],
+          ]));
+
+      await queueService.queue(t1);
+      await queueService.queue(t1);
+      await queueService.queue(t2);
+    });
+
+    test('invalid dequeue', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': [],
+        'votes': 0,
+      });
+
+      expectLater(
+          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          emitsInOrder([
+            [t1],
+            []
+          ]));
+
+      await queueService.dequeue(t2);
+      await queueService.dequeue(t1);
+    });
+  });
+  group('votes:', () {
+    const t1 = 'spotify:track:1';
+    const t2 = 'spotify:track:2';
+    test('vote', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+      expectLater(
+        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        emitsInOrder([
+          [0],
+          [1]
+        ]),
+      );
+
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': [],
+        'votes': 0,
+      });
+
+      await queueService.vote(t1);
+    });
+
+    test('invalid vote', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+      expectLater(
+        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        emitsInOrder([
+          [0]
+        ]),
+      );
+
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': [],
+        'votes': 0,
+      });
+
+      await queueService.vote(t2);
+    });
+
+    test('already voted', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+      expectLater(
+        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        emitsInOrder([
+          [0],
+          [1],
+        ]),
+      );
+
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': [],
+        'votes': 0,
+      });
+
+      await queueService.vote(t1);
+      await queueService.vote(t1);
+    });
+
+    test('unvote', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+      expectLater(
+        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        emitsInOrder([
+          [1],
+          [0]
+        ]),
+      );
+
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': ['anonymous'],
+        'votes': 1,
+      });
+
+      await queueService.unvote(t1);
+    });
+
+    test('invalid unvote', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+      expectLater(
+        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        emitsInOrder([
+          [1],
+        ]),
+      );
+
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': ['anonymous'],
+        'votes': 1,
+      });
+
+      await queueService.unvote(t2);
+    });
+
+    test('already unvoted', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+      expectLater(
+        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        emitsInOrder([
+          [1],
+          [0],
+        ]),
+      );
+
+      await ref.set({
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'voters': ['anonymous'],
+        'votes': 1,
+      });
+
+      await queueService.unvote(t1);
+      await queueService.unvote(t1);
+    });
+
+    group('vote unvote', () {
+      const t1 = 'spotify:track:1';
+      const t2 = 'spotify:track:2';
+
+      test('sequence vuv', () async {
+        await prefs.setString('roomId', 'qwerty');
+        final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
+
+        expectLater(
+          queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+          emitsInOrder([
+            [0],
+            [1],
+            [0],
+            [1],
+          ]),
+        );
+
+        await ref.set({
+          'uri': 'spotify:track:1',
+          'created_at': '001',
+          'voters': [],
+          'votes': 0,
+        });
+
+        await queueService.vote(t1);
+        await queueService.unvote(t1);
+        await queueService.vote(t1);
+        await queueService.unvote(t1);
+      });
+
+      test('sequence vVuvUVu', () async {
+        await prefs.setString('roomId', 'qwerty');
+        final ref = firestore.collection('rooms').doc('qwerty').collection('queue');
+
+        expectLater(
+          queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+          emitsInOrder([
+            [0],
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+            [1, 1],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+          ]),
+        );
+
+        await ref.doc(t1).set({
+          'uri': t1,
+          'created_at': '001',
+          'voters': [],
+          'votes': 0,
+        });
+        await ref.doc(t2).set({
+          'uri': t2,
+          'created_at': '002',
+          'voters': [],
+          'votes': 0,
+        });
+
+        await queueService.vote(t1);
+        await queueService.vote(t2);
+        await queueService.unvote(t1);
+        await queueService.vote(t1);
+        await queueService.unvote(t2);
+        await queueService.vote(t2);
+        await queueService.unvote(t1);
+      });
     });
   });
 }

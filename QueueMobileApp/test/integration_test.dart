@@ -6,7 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/main.dart';
 import 'package:queue/screens/room/room_screen.dart';
-import 'package:queue/screens/room/widgets/now_playing.dart';
+import 'package:queue/screens/room/widgets/now_playing_tile.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
