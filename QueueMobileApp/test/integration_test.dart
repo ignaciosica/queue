@@ -70,7 +70,7 @@ void main() async {
   group('nowPlaying:', () {
     testWidgets('null', (tester) async {
       await firestore.collection('rooms').doc('qwerty').set({
-        'name': 'VichiFest!',
+        'name': 'qwerty',
         'participants': ['walter'],
       });
 
