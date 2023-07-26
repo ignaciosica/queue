@@ -19,9 +19,7 @@ class QueueService implements IQueueService {
     final roomId = prefs.getString('roomId');
     if (roomId != null) {
       final reference = _firestore.collection(_collectionName).doc(roomId);
-      yield* reference
-          .snapshots()
-          .asyncMap((snap) => snap.data()?['player_state'] as Map?);
+      yield* reference.snapshots().asyncMap((snap) => snap.data()?['player_state'] as Map?);
     } else {
       yield null;
     }

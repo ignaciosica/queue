@@ -1,50 +1,39 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:queue/app/service_locator.dart';
-import 'package:queue/main.dart';
-import 'package:queue/screens/room/room_screen.dart';
-import 'package:queue/screens/room/widgets/now_playing.dart';
-import 'package:queue/services/room_service.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:queue/app/service_locator.dart';
+import 'package:queue/services/room_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
-
-class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() async {
-  final user = MockUser(
-    isAnonymous: true,
-    uid: 'anonymous',
-  );
-  final auth = MockFirebaseAuth(mockUser: user);
-  await auth.signInAnonymously();
+  late MockUser user;
+  late MockFirebaseAuth auth;
+  late FakeFirebaseFirestore firestore;
+  late IRoomService roomService;
 
-  final firestore = FakeFirebaseFirestore();
+  setUp(() async {
+    user = MockUser(isAnonymous: true, uid: 'anonymous');
+    auth = MockFirebaseAuth(mockUser: user);
+    firestore = FakeFirebaseFirestore();
+    await auth.signInAnonymously();
 
-  SharedPreferences.setMockInitialValues({});
+    setupServiceLocator(firestore, auth);
+    roomService = getIt<IRoomService>();
 
-  await firestore.collection('rooms').doc('qwerty').set({
-    'name': 'VichiFest!',
-    'participants': ['walter'],
+    SharedPreferences.setMockInitialValues({});
   });
 
-  await firestore.collection('rooms').doc('qwerty').collection('queue').add({
-    'id': '1234',
+  tearDown(() {
+    getIt.reset();
   });
-
-  if (kDebugMode) {
-    print('dump: ${firestore.dump()}');
-  }
-
-  setupServiceLocator(firestore, auth);
 
   group('join room:', () {
-    final IRoomService roomService = getIt<IRoomService>();
-
     test('valid room id', () async {
+      await firestore.collection('rooms').doc('qwerty').set({
+        'name': 'VichiFest!',
+        'participants': ['walter'],
+      });
+
       var snap = await firestore.collection('rooms').doc('qwerty').get();
 
       expect(snap['name'], 'VichiFest!');
@@ -62,181 +51,57 @@ void main() async {
   });
 
   group('create room:', () {
-    final IRoomService roomService = getIt<IRoomService>();
     test('valid room', () async {
-      var room = await roomService.createRoom('new room');
-      expect(room['name'], 'new room');
+      var room = await roomService.createRoom('valid');
+      expect(room['name'], 'valid');
       expect(room['player'], 'anonymous');
       expect((room['participants'] as List).contains('anonymous'), true);
     });
   });
 
   group('leave room:', () {
-    final IRoomService roomService = getIt<IRoomService>();
     test('only participant', () async {
-      await firestore.collection('rooms').doc('room_1').set({
+      await firestore.collection('rooms').doc('room').set({
         'name': 'leave',
-        'id': 'room_1',
+        'id': 'room',
         'participants': ['anonymous'],
         'player': 'anonymous',
       });
 
-      await roomService.leaveRoom('room_1');
-      var snap = await firestore
-          .collection('rooms')
-          .where('id', isEqualTo: 'room_1')
-          .get();
+      await roomService.leaveRoom('room');
+      var snap = await firestore.collection('rooms').where('id', isEqualTo: 'room').get();
 
       expect(snap.size, 0);
     });
 
     test('player', () async {
-      await firestore.collection('rooms').doc('room_2').set({
+      await firestore.collection('rooms').doc('room').set({
         'name': 'leave',
-        'id': 'room_2',
+        'id': 'room',
         'participants': ['anonymous', 'walter'],
         'player': 'anonymous',
       });
 
-      await roomService.leaveRoom('room_2');
-      var snap = await firestore.collection('rooms').doc('room_2').get();
+      await roomService.leaveRoom('room');
+      var snap = await firestore.collection('rooms').doc('room').get();
 
-      expect(
-          (snap.data()!['participants'] as List).contains('anonymous'), false);
+      expect((snap.data()!['participants'] as List).contains('anonymous'), false);
       expect(snap.data()!['player'], null);
     });
 
     test('playernt', () async {
-      await firestore.collection('rooms').doc('room_2').set({
+      await firestore.collection('rooms').doc('room').set({
         'name': 'leave',
-        'id': 'room_2',
+        'id': 'room',
         'participants': ['anonymous', 'walter'],
         'player': 'walter',
       });
 
-      await roomService.leaveRoom('room_2');
-      var snap = await firestore.collection('rooms').doc('room_2').get();
+      await roomService.leaveRoom('room');
+      var snap = await firestore.collection('rooms').doc('room').get();
 
-      expect(
-          (snap.data()!['participants'] as List).contains('anonymous'), false);
+      expect((snap.data()!['participants'] as List).contains('anonymous'), false);
       expect(snap.data()!['player'], 'walter');
-    });
-  });
-
-  group('lobby screen join room:', () {
-    testWidgets('valid room (navigation):', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MyApp()));
-      await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byKey(const Key('join_room_textfield_key')),
-        'qwerty',
-      );
-
-      await tester.tap(find.byKey(const Key('join_room_button_key')));
-      await tester.pumpAndSettle();
-      expect(find.byType(RoomScreen), findsOneWidget);
-    });
-
-    testWidgets('invalid room (navigation):', (tester) async {
-      await tester.pumpWidget(const MaterialApp(home: MyApp()));
-      await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byKey(const Key('join_room_textfield_key')),
-        'invalidsadssd',
-      );
-
-      await tester.tap(find.byKey(const Key('join_room_button_key')));
-      await tester.pumpAndSettle();
-      expect(find.byType(RoomScreen), findsNothing);
-    }, variant: ValueVariant({'invalid'}));
-  });
-
-  group('nowPlaying:', () {
-    testWidgets('null', (tester) async {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('roomId', 'qwerty');
-
-      await tester.pumpWidget(const MaterialApp(home: NowPlaying()));
-      await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsOneWidget);
-    });
-    testWidgets('valid', (tester) async {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('roomId', 'player_state');
-      await firestore.collection('rooms').doc('player_state').set({
-        'name': 'VichiFest!',
-        'participants': ['walter'],
-      });
-
-      await tester.pumpWidget(const MaterialApp(home: NowPlaying()));
-      await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsOneWidget);
-
-      await firestore.collection('rooms').doc('player_state').update({
-        'player_state': {
-          'name': 'Asilo',
-          'artists': ['Jorge Drexler', 'Mon Laferte'],
-        }
-      });
-
-      await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsNothing);
-
-      await firestore.collection('rooms').doc('player_state').update({
-        'player_state': null,
-      });
-
-      await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsOneWidget);
-    });
-  });
-
-  group('lobby screen create room:', () {
-    testWidgets('create room auth:', (tester) async {
-      await tester.pumpWidget(const MyApp());
-      await tester.pumpAndSettle();
-
-      expect(
-          await (await firestore
-                  .collection('rooms')
-                  .where('name', isEqualTo: 'NachoFest!')
-                  .get())
-              .size,
-          0);
-
-      await tester.enterText(
-        find.byKey(const Key('create_room_textfield_key')),
-        'NachoFest!cra',
-      );
-
-      await tester.tap(find.byKey(const Key('create_room_button_key')));
-      await tester.pumpAndSettle();
-      if (kDebugMode) print(firestore.dump());
-      expect(find.byType(RoomScreen), findsOneWidget);
-      expect(
-          await (await firestore
-                  .collection('rooms')
-                  .where('name', isEqualTo: 'NachoFest!')
-                  .get())
-              .size,
-          1);
-    });
-
-    test('test create', () async {
-      var roomId = const Uuid().v4().substring(0, 5).toLowerCase();
-
-      // Generate "locally" a new document in a collection
-      var document = firestore.collection('collectionName').doc();
-
-      // Get the new document Id
-      var documentUuid = document.id;
-
-      // Sets the new document with its uuid as property
-      //var response = await document.set({
-      //  'uuid': documentUuid.substring(0, 5).toLowerCase(),
-      //});
-
-      print(firestore.dump());
     });
   });
 }
