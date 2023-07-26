@@ -92,4 +92,48 @@ void main() async {
       }
     });
   });
+
+  group('queue:', () {
+    test('stream', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty').collection('queue');
+
+      var t1 = {
+        'uri': 'spotify:track:1',
+        'created_at': '001',
+        'votes': ['anonymous'],
+        'votes_count': 1,
+      };
+      var t2 = {
+        'uri': 'spotify:track:2',
+        'created_at': '002',
+        'votes': ['anonymous'],
+        'votes_count': 1,
+      };
+      var t3 = {
+        'uri': 'spotify:track:3',
+        'created_at': '003',
+        'votes': ['anonymous'],
+        'votes_count': 1,
+      };
+
+      expectLater(
+          queueService.getQueue(),
+          emitsInOrder([
+            [t1],
+            [t1, t2],
+            [t1, t2, t3]
+          ]));
+
+      await ref.add(t1);
+      await ref.add(t2);
+      await ref.add(t3);
+    });
+
+    test('empty', () async {
+      await prefs.setString('roomId', 'qwerty');
+
+      expectLater(await queueService.getQueue().first, []);
+    });
+  });
 }

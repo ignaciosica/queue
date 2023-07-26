@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IQueueService {
   Stream<dynamic> getPlayerState();
+  Stream<dynamic> getQueue();
 }
 
 class QueueService implements IQueueService {
@@ -28,6 +29,23 @@ class QueueService implements IQueueService {
       });
     } else {
       yield null;
+    }
+  }
+
+  @override
+  Stream getQueue() async* {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    if (roomId != null) {
+      final queue = _firestore.collection(_collectionName).doc(roomId).collection('queue');
+
+      yield* queue.snapshots().map((snap) {
+        final songs = snap.docs.map((song) => song.data()).toList();
+
+        return songs;
+      });
+    } else {
+      yield [];
     }
   }
 }
