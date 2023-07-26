@@ -121,7 +121,10 @@ void main() async {
       await tester.pumpAndSettle();
 
       expect(
-          await (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get())
+          await (await firestore
+                  .collection('rooms')
+                  .where('name', isEqualTo: 'NachoFest!')
+                  .get())
               .size,
           0);
 
@@ -135,7 +138,10 @@ void main() async {
       if (kDebugMode) print(firestore.dump());
       expect(find.byType(RoomScreen), findsOneWidget);
       expect(
-          await (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get())
+          await (await firestore
+                  .collection('rooms')
+                  .where('name', isEqualTo: 'NachoFest!')
+                  .get())
               .size,
           1);
     });

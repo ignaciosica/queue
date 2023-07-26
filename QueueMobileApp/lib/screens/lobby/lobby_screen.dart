@@ -24,9 +24,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
       if (prefs.containsKey('roomId')) {
         assert(prefs.getString('roomId') != null);
 
-        _roomService
-            .joinRoom(prefs.getString('roomId') ?? 'invalid')
-            .then(goToRoom);
+        _roomService.joinRoom(prefs.getString('roomId') ?? 'invalid').then(goToRoom);
       }
     });
   }
@@ -56,8 +54,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
       context.pushReplacement('/room', extra: room);
     } else {
       if (kDebugMode) print('invalid room, no navigation');
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Invalid room id')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid room id')));
     }
   }
 }

@@ -42,8 +42,7 @@ class RoomService implements IRoomService {
 
       final doc = await reference.get();
 
-      SharedPreferences.getInstance()
-          .then((prefs) => prefs.setString('roomId', roomId));
+      SharedPreferences.getInstance().then((prefs) => prefs.setString('roomId', roomId));
 
       return doc.data();
     } on Exception catch (e) {
@@ -67,8 +66,7 @@ class RoomService implements IRoomService {
         'participants': FieldValue.arrayUnion([_auth.currentUser!.uid])
       });
 
-      SharedPreferences.getInstance()
-          .then((prefs) => prefs.setString('roomId', roomId));
+      SharedPreferences.getInstance().then((prefs) => prefs.setString('roomId', roomId));
 
       final doc = await reference.get();
 

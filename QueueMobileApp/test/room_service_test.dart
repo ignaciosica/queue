@@ -69,7 +69,10 @@ void main() async {
       });
 
       await roomService.leaveRoom('room');
-      var snap = await firestore.collection('rooms').where('id', isEqualTo: 'room').get();
+      var snap = await firestore
+          .collection('rooms')
+          .where('id', isEqualTo: 'room')
+          .get();
 
       expect(snap.size, 0);
     });
@@ -85,7 +88,8 @@ void main() async {
       await roomService.leaveRoom('room');
       var snap = await firestore.collection('rooms').doc('room').get();
 
-      expect((snap.data()!['participants'] as List).contains('anonymous'), false);
+      expect(
+          (snap.data()!['participants'] as List).contains('anonymous'), false);
       expect(snap.data()!['player'], null);
     });
 
@@ -100,7 +104,8 @@ void main() async {
       await roomService.leaveRoom('room');
       var snap = await firestore.collection('rooms').doc('room').get();
 
-      expect((snap.data()!['participants'] as List).contains('anonymous'), false);
+      expect(
+          (snap.data()!['participants'] as List).contains('anonymous'), false);
       expect(snap.data()!['player'], 'walter');
     });
   });

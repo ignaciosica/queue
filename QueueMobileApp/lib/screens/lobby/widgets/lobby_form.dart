@@ -25,9 +25,7 @@ class _LobbyFormState extends State<LobbyForm> {
 
     return Column(
       children: [
-        TextField(
-            key: Key('${keyText}_textfield_key'),
-            controller: textEditingController),
+        TextField(key: Key('${keyText}_textfield_key'), controller: textEditingController),
         ElevatedButton(
           key: Key('${keyText}_button_key'),
           onPressed: () => widget.onPressed(textEditingController.text),
