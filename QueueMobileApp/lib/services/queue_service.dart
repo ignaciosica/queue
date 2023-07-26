@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IQueueService {
-  Stream<dynamic> getNowPlaying();
+  Stream<dynamic> getPlayerState();
 }
 
 class QueueService implements IQueueService {
@@ -14,12 +14,18 @@ class QueueService implements IQueueService {
   static const String _collectionName = 'rooms';
 
   @override
-  Stream getNowPlaying() async* {
+  Stream getPlayerState() async* {
     final prefs = await SharedPreferences.getInstance();
     final roomId = prefs.getString('roomId');
     if (roomId != null) {
       final reference = _firestore.collection(_collectionName).doc(roomId);
-      yield* reference.snapshots().asyncMap((snap) => snap.data()?['player_state'] as Map?);
+      yield* reference.snapshots().map((snap) {
+        final playerState = snap.data()?['player_state'] as Map?;
+
+        if (playerState == null || playerState.isEmpty) return null;
+
+        return playerState;
+      });
     } else {
       yield null;
     }

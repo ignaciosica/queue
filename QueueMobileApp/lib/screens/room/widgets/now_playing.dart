@@ -10,7 +10,7 @@ class NowPlaying extends StatelessWidget {
     final IQueueService queueService = getIt<IQueueService>();
 
     return StreamBuilder<dynamic>(
-        stream: queueService.getNowPlaying(),
+        stream: queueService.getPlayerState(),
         builder: (context, snapshot) {
           if (snapshot.data == null || snapshot.data.isEmpty) {
             return const NowPlayingDummy();

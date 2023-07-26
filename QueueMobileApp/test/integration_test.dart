@@ -83,7 +83,7 @@ void main() async {
     testWidgets('valid', (tester) async {
       await firestore.collection('rooms').doc('qwerty').set({
         'name': 'VichiFest!',
-        'participants': ['walter'],
+        'participants': ['walter']
       });
 
       await prefs.setString('roomId', 'player_state');
@@ -121,10 +121,7 @@ void main() async {
       await tester.pumpAndSettle();
 
       expect(
-          await (await firestore
-                  .collection('rooms')
-                  .where('name', isEqualTo: 'NachoFest!')
-                  .get())
+          await (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get())
               .size,
           0);
 
@@ -135,13 +132,9 @@ void main() async {
 
       await tester.tap(find.byKey(const Key('create_room_button_key')));
       await tester.pumpAndSettle();
-      if (kDebugMode) print(firestore.dump());
       expect(find.byType(RoomScreen), findsOneWidget);
       expect(
-          await (await firestore
-                  .collection('rooms')
-                  .where('name', isEqualTo: 'NachoFest!')
-                  .get())
+          await (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get())
               .size,
           1);
     });
