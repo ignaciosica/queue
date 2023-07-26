@@ -76,9 +76,9 @@ void main() async {
 
       await prefs.setString('roomId', 'qwerty');
 
-      await tester.pumpWidget(const MaterialApp(home: NowPlaying()));
+      await tester.pumpWidget(const MaterialApp(home: NowPlayingTile()));
       await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsOneWidget);
+      expect(find.byType(NowPlayingTileDummy), findsOneWidget);
     });
     testWidgets('valid', (tester) async {
       await firestore.collection('rooms').doc('qwerty').set({
@@ -92,9 +92,9 @@ void main() async {
         'participants': ['walter'],
       });
 
-      await tester.pumpWidget(const MaterialApp(home: NowPlaying()));
+      await tester.pumpWidget(const MaterialApp(home: NowPlayingTile()));
       await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsOneWidget);
+      expect(find.byType(NowPlayingTileDummy), findsOneWidget);
 
       await firestore.collection('rooms').doc('player_state').update({
         'player_state': {
@@ -104,14 +104,14 @@ void main() async {
       });
 
       await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsNothing);
+      expect(find.byType(NowPlayingTileDummy), findsNothing);
 
       await firestore.collection('rooms').doc('player_state').update({
         'player_state': null,
       });
 
       await tester.pumpAndSettle();
-      expect(find.byType(NowPlayingDummy), findsOneWidget);
+      expect(find.byType(NowPlayingTileDummy), findsOneWidget);
     });
   });
 

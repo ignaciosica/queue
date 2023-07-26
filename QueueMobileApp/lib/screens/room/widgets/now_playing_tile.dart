@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/services/queue_service.dart';
 
-class NowPlaying extends StatelessWidget {
-  const NowPlaying({super.key});
+class NowPlayingTile extends StatelessWidget {
+  const NowPlayingTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class NowPlaying extends StatelessWidget {
         stream: queueService.getPlayerState(),
         builder: (context, snapshot) {
           if (snapshot.data == null || snapshot.data.isEmpty) {
-            return const NowPlayingDummy();
+            return const NowPlayingTileDummy();
           }
 
           return SizedBox(
@@ -33,8 +33,8 @@ class NowPlaying extends StatelessWidget {
   }
 }
 
-class NowPlayingDummy extends StatelessWidget {
-  const NowPlayingDummy({super.key});
+class NowPlayingTileDummy extends StatelessWidget {
+  const NowPlayingTileDummy({super.key});
 
   @override
   Widget build(BuildContext context) {

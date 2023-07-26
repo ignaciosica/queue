@@ -24,7 +24,7 @@ class RoomScreen extends StatelessWidget {
         ),
       ),
       body: const Column(
-        children: [NowPlaying()],
+        children: [NowPlayingTile()],
       ),
     );
   }
