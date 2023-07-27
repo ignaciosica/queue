@@ -19,9 +19,9 @@ class TrackTile extends StatelessWidget {
       subtitle: const Text('Artist Name'),
       trailing: track['votes'] != 0
           ? Text(track['votes'].toString())
-          : IconButton(
+          : IconButton.filledTonal(
               onPressed: () => queueService.dequeue(track['uri']),
-              icon: Icon(Icons.remove_circle_outline_rounded)),
+              icon: const Icon(Icons.remove_circle_outline_rounded)),
       selected: selected,
       onTap: selected
           ? () => queueService.unvote(track['uri'])
