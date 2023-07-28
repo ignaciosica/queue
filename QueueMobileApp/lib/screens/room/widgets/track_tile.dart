@@ -17,9 +17,15 @@ class TrackTile extends StatelessWidget {
     final isInQueue = track['isInQueue'] ?? true;
 
     return ListTile(
-      leading: SizedBox.square(
-          dimension: 60,
-          child: CachedNetworkImage(imageUrl: track['song']['album']['images'][0]['url'])),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          width: 60,
+          height: 60,
+          imageUrl: track['song']['album']['images'][0]['url'],
+          fit: BoxFit.cover,
+        ),
+      ),
       title: Text(track['song']['name']),
       subtitle: Text(track['song']['artists'].map((a) => a['name']).join(', ')),
       trailing: track['votes'] != 0
