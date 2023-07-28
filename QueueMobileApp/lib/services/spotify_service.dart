@@ -5,10 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:queue/app/cache_client.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
 
 abstract class ISpotifyService {
-  Future search(String query);
+  Future<List> search(String query);
 }
 
 class SpotifyService implements ISpotifyService {
@@ -19,7 +18,15 @@ class SpotifyService implements ISpotifyService {
   final Client httpClient = Client();
   final CacheClient cacheClient = CacheClient();
 
-  Future search(String query) async {
+  static const tokenCacheKey = '__spotify_access_token_cache_key__';
+  static const queryCacheKey = '__query_cache_key__';
+
+  @override
+  Future<List> search(String query) async {
+    if (query.isEmpty) return List.empty();
+    var tracks = cacheClient.read<List>(key: query + queryCacheKey);
+    if (tracks != null) return tracks;
+
     const path = '/v1/search';
     final uri = Uri(scheme: baseScheme, host: baseHost, path: path, query: 'q=$query&type=track');
 
@@ -28,23 +35,71 @@ class SpotifyService implements ISpotifyService {
     final json = jsonDecode(response.body);
     final List<dynamic> items = json['tracks']['items'];
 
-    return Future.value(items);
+    cacheClient.write<List>(key: query + queryCacheKey, value: items);
+
+    return items;
   }
 
   Future<Map<String, String>> getAuthHeaders() async {
-    var token = cacheClient.read(key: 'spotify_access_token');
-
-    if (token == null) {
-      token = await SpotifySdk.getAccessToken(
-          clientId: dotenv.env['SPOTIFY_CLIENT_ID']!,
-          redirectUrl: 'https://com.example.queue/callback/');
-
-      cacheClient.write(key: 'spotify_access_token', value: token);
-    }
+    final token = await getAccessToken();
 
     return {
       HttpHeaders.authorizationHeader: 'Bearer $token',
       HttpHeaders.contentTypeHeader: 'application/json'
     };
   }
+
+  Future<String> getAccessToken() async {
+    var accessToken = cacheClient.read<AccessToken>(key: tokenCacheKey) ?? AccessToken.empty;
+    if (accessToken.isEmpty || accessToken.isExpired) {
+      accessToken = await requestAccessToken();
+      cacheClient.write<AccessToken>(key: tokenCacheKey, value: accessToken);
+    }
+
+    return accessToken.accessToken;
+  }
+
+  Future<AccessToken> requestAccessToken() async {
+    final clientId = dotenv.env['SPOTIFY_CLIENT_ID'];
+    final clientSecret = dotenv.env['SPOTIFY_CLIENT_SECRET'];
+
+    String credentials = "$clientId:$clientSecret";
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String encoded = stringToBase64.encode(credentials);
+
+    var headers = {
+      'Authorization': 'Basic $encoded',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    var request = Request('POST', Uri.parse('https://accounts.spotify.com/api/token'));
+    request.bodyFields = {'grant_type': 'client_credentials'};
+    request.headers.addAll(headers);
+
+    StreamedResponse streamedResponse = await request.send();
+
+    final response = await Response.fromStream(streamedResponse);
+    final bodyJson = jsonDecode(response.body);
+
+    return AccessToken(accessToken: bodyJson['access_token'], issuedAt: DateTime.now());
+  }
+}
+
+class AccessToken extends Equatable {
+  const AccessToken({required this.accessToken, required this.issuedAt, this.expiresIn = 3600});
+
+  final String accessToken;
+  final DateTime issuedAt;
+  final int expiresIn;
+
+  static final empty = AccessToken(accessToken: '', issuedAt: DateTime(0));
+
+  bool get isEmpty => accessToken.isEmpty;
+
+  bool get isNotEmpty => accessToken.isNotEmpty;
+
+  bool get isExpired => issuedAt.add(Duration(seconds: expiresIn)).isBefore(DateTime.now());
+
+  @override
+  List<Object?> get props => [accessToken];
 }

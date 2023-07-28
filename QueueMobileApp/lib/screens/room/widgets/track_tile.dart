@@ -12,7 +12,7 @@ class TrackTile extends StatelessWidget {
     final IQueueService queueService = getIt<IQueueService>();
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    final selected = track['voters'].contains(uid);
+    final selected = track['voters']?.contains(uid);
 
     return ListTile(
       title: Text(track['uri']),

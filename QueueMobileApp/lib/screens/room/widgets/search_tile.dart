@@ -15,12 +15,12 @@ class SearchTile extends StatelessWidget {
           MaterialStateProperty.all(Theme.of(context).colorScheme.secondaryContainer),
       suggestionsBuilder: (context, query) {
         return [
-          FutureBuilder(
+          FutureBuilder<List>(
             future: spotifyService.search(query.text),
-            initialData: [],
+            initialData: const [],
             builder: (context, snapshot) {
               return Column(
-                children: [Text(snapshot.data.toString())],
+                children: [...snapshot.data?.map((e) => Text(e['name'])) ?? []],
               );
             },
           )
