@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class IQueueService {
   Stream<dynamic> getPlayerState();
   Stream<List> getQueue();
-  Future queue(String uri);
+  Future queue(String uri, {dynamic song});
   Future dequeue(String uri);
   Future vote(String uri);
   Future unvote(String uri);

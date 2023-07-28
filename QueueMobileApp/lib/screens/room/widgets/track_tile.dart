@@ -13,19 +13,24 @@ class TrackTile extends StatelessWidget {
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final selected = track['voters']?.contains(uid);
+    final isInQueue = track['isInQueue'] ?? true;
 
     return ListTile(
-      title: Text(track['uri']),
-      subtitle: const Text('Artist Name'),
+      title: Text(track['song']['name']),
+      subtitle: Text(track['song']['artists'].map((a) => a['name']).join(', ')),
       trailing: track['votes'] != 0
           ? Text(track['votes'].toString())
-          : IconButton.filledTonal(
-              onPressed: () => queueService.dequeue(track['uri']),
-              icon: const Icon(Icons.remove_circle_outline_rounded)),
+          : isInQueue
+              ? IconButton.filledTonal(
+                  onPressed: () => queueService.dequeue(track['uri']),
+                  icon: const Icon(Icons.remove_circle_outline_rounded))
+              : null,
       selected: selected,
       onTap: selected
           ? () => queueService.unvote(track['uri'])
-          : () => queueService.vote(track['uri']),
+          : () => isInQueue
+              ? queueService.vote(track['uri'])
+              : queueService.queue(track['uri'], song: track['song']),
     );
   }
 }

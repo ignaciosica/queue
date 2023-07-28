@@ -25,12 +25,14 @@ class RoomScreen extends StatelessWidget {
           },
         ),
       ),
-      body: const Column(
-        children: [
-          NowPlayingTile(),
-          SearchTile(),
-          QueueTile(),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            NowPlayingTile(),
+            SearchTile(),
+            QueueTile(),
+          ],
+        ),
       ),
     );
   }
