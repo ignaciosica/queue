@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
@@ -16,6 +17,9 @@ class TrackTile extends StatelessWidget {
     final isInQueue = track['isInQueue'] ?? true;
 
     return ListTile(
+      leading: SizedBox.square(
+          dimension: 60,
+          child: CachedNetworkImage(imageUrl: track['song']['album']['images'][0]['url'])),
       title: Text(track['song']['name']),
       subtitle: Text(track['song']['artists'].map((a) => a['name']).join(', ')),
       trailing: track['votes'] != 0

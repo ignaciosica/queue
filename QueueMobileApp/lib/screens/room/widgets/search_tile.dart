@@ -45,7 +45,7 @@ class SearchTile extends StatelessWidget {
                             'song': {
                               'name': e['name'],
                               'artists': e['artists'],
-                              'images': e['images'],
+                              'album': e['album'],
                             },
                           };
                         }
