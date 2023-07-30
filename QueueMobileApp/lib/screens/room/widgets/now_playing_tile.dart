@@ -24,7 +24,7 @@ class NowPlayingTile extends StatelessWidget {
                 child: ListTile(
                   title: Text(snapshot.data['name']),
                   subtitle: Text((snapshot.data['artists'] as List).join(', ')),
-                  trailing: Icon(Icons.skip_next),
+                  trailing: const Icon(Icons.skip_next),
                 ),
               ),
             ),

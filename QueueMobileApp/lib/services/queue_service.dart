@@ -9,7 +9,12 @@ abstract class IQueueService {
   Future dequeue(String uri);
   Future vote(String uri);
   Future unvote(String uri);
+  Future skip();
+  Future unSkip();
 }
+
+//TODO: refactor to expose one queue stream for entire service
+//TODO: refactor to expose one player state stream for entire service
 
 class QueueService implements IQueueService {
   QueueService(this._firestore, this._auth);
@@ -35,6 +40,8 @@ class QueueService implements IQueueService {
       yield null;
     }
   }
+
+  Stream get playerStateStream => getPlayerState().asBroadcastStream();
 
   @override
   Stream<List> getQueue() async* {
@@ -153,5 +160,37 @@ class QueueService implements IQueueService {
         });
       }
     }
+  }
+
+  @override
+  Future skip() async {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    final ref = _firestore.collection(_collection).doc(roomId);
+
+    final uid = _auth.currentUser?.uid;
+    assert(uid != null, 'User must be signed in to queue a song');
+
+    if (roomId == null) return;
+
+    await ref.update({
+      'skip': FieldValue.arrayUnion([uid])
+    });
+  }
+
+  @override
+  Future unSkip() async {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    final ref = _firestore.collection(_collection).doc(roomId);
+
+    final uid = _auth.currentUser?.uid;
+    assert(uid != null, 'User must be signed in to queue a song');
+
+    if (roomId == null) return;
+
+    await ref.update({
+      'skip': FieldValue.arrayRemove([uid])
+    });
   }
 }

@@ -16,10 +16,11 @@ class QueueTile extends StatelessWidget {
         return SizedBox(
           width: double.infinity,
           child: Card(
+            shadowColor: Colors.transparent,
             child: Column(
               children: [
                 const Text('Queue'),
-                ...snapshot.data!.map((e) => TrackTile(e)),
+                ...snapshot.data! /*.sortedBy<num>((e) => -e['votes'])*/ .map((e) => TrackTile(e)),
               ],
             ),
           ),

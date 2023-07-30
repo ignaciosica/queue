@@ -30,7 +30,6 @@ class SearchTile extends StatelessWidget {
                     initialData: const [],
                     builder: (context, searchSnap) {
                       if (queueSnap.data == null || searchSnap.data == null) return Container();
-
                       final tracks = searchSnap.data!.map((e) {
                         var trackInQueue =
                             queueSnap.data!.firstWhereOrNull((t) => t['uri'] == e['uri']);

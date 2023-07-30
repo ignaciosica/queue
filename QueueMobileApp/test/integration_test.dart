@@ -1,5 +1,4 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -121,8 +120,7 @@ void main() async {
       await tester.pumpAndSettle();
 
       expect(
-          await (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get())
-              .size,
+          (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get()).size,
           0);
 
       await tester.enterText(
@@ -134,8 +132,7 @@ void main() async {
       await tester.pumpAndSettle();
       expect(find.byType(RoomScreen), findsOneWidget);
       expect(
-          await (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get())
-              .size,
+          (await firestore.collection('rooms').where('name', isEqualTo: 'NachoFest!').get()).size,
           1);
     });
   });
