@@ -10,7 +10,7 @@ class QueueTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final IQueueService queueService = getIt<IQueueService>();
     return StreamBuilder<List>(
-      stream: queueService.getQueue(),
+      stream: queueService.onQueue,
       initialData: const [],
       builder: (context, snapshot) {
         return SizedBox(

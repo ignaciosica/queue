@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as fa;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -15,9 +15,9 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await fa.FirebaseAuth.instance.signInAnonymously();
+  await FirebaseAuth.instance.signInAnonymously();
 
-  setupServiceLocator(FirebaseFirestore.instance, fa.FirebaseAuth.instance);
+  setupServiceLocator(FirebaseFirestore.instance, FirebaseAuth.instance);
 
   runApp(const MyApp());
 }

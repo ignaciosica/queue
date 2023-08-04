@@ -22,7 +22,7 @@ class SearchTile extends StatelessWidget {
           suggestionsBuilder: (context, query) {
             return [
               StreamBuilder(
-                stream: queueService.getQueue(),
+                stream: queueService.onQueue,
                 initialData: const [],
                 builder: (context, queueSnap) {
                   return FutureBuilder<List>(

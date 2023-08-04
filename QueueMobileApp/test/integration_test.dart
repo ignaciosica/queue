@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +18,10 @@ void main() async {
   late MockFirebaseAuth auth;
   late FakeFirebaseFirestore firestore;
   late SharedPreferences prefs;
+
+  setUpAll(() {
+    HttpOverrides.global = null;
+  });
 
   setUp(() async {
     user = MockUser(isAnonymous: true, uid: 'anonymous');

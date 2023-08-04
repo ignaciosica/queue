@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class IQueueService {
   Stream get onPlayerState;
   Stream get onRoom;
-  Stream<List> getQueue();
+  Stream<List> get onQueue;
   Future queue(String uri, {dynamic song});
   Future dequeue(String uri);
   Future vote(String uri);
@@ -58,7 +58,6 @@ class QueueService implements IQueueService {
   @override
   Stream get onRoom => getRoom().asBroadcastStream();
 
-  @override
   Stream<List> getQueue() async* {
     final prefs = await SharedPreferences.getInstance();
     final roomId = prefs.getString('roomId');
@@ -75,6 +74,9 @@ class QueueService implements IQueueService {
       yield [];
     }
   }
+
+  @override
+  Stream<List> get onQueue => getQueue().asBroadcastStream();
 
   @override
   Future queue(String uri, {dynamic song}) async {

@@ -116,7 +116,7 @@ void main() async {
       };
 
       expectLater(
-          queueService.getQueue(),
+          queueService.onQueue,
           emitsInOrder([
             [t1],
             [t1, t2],
@@ -131,7 +131,7 @@ void main() async {
     test('empty', () async {
       await prefs.setString('roomId', 'qwerty');
 
-      expectLater(await queueService.getQueue().first, []);
+      expectLater(await queueService.onQueue.first, []);
     });
   });
 
@@ -144,7 +144,7 @@ void main() async {
       await prefs.setString('roomId', 'qwerty');
 
       expectLater(
-          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          queueService.onQueue.map((event) => event.map((e) => e['uri'])),
           emitsInOrder([
             [],
             [t1],
@@ -168,7 +168,7 @@ void main() async {
       });
 
       expectLater(
-          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          queueService.onQueue.map((event) => event.map((e) => e['uri'])),
           emitsInOrder([
             [t1],
             []
@@ -181,7 +181,7 @@ void main() async {
       await prefs.setString('roomId', 'qwerty');
 
       expectLater(
-          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          queueService.onQueue.map((event) => event.map((e) => e['uri'])),
           emitsInOrder([
             [],
             [t1],
@@ -204,7 +204,7 @@ void main() async {
       });
 
       expectLater(
-          queueService.getQueue().map((event) => event.map((e) => e['uri'])),
+          queueService.onQueue.map((event) => event.map((e) => e['uri'])),
           emitsInOrder([
             [t1],
             []
@@ -222,7 +222,7 @@ void main() async {
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
       expectLater(
-        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
         emitsInOrder([
           [0],
           [1]
@@ -244,7 +244,7 @@ void main() async {
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
       expectLater(
-        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
         emitsInOrder([
           [0]
         ]),
@@ -265,7 +265,7 @@ void main() async {
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
       expectLater(
-        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
         emitsInOrder([
           [0],
           [1],
@@ -288,7 +288,7 @@ void main() async {
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
       expectLater(
-        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
         emitsInOrder([
           [1],
           [0]
@@ -310,7 +310,7 @@ void main() async {
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
       expectLater(
-        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
         emitsInOrder([
           [1],
         ]),
@@ -331,7 +331,7 @@ void main() async {
       final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
       expectLater(
-        queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+        queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
         emitsInOrder([
           [1],
           [0],
@@ -358,7 +358,7 @@ void main() async {
         final ref = firestore.collection('rooms').doc('qwerty').collection('queue').doc(t1);
 
         expectLater(
-          queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+          queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
           emitsInOrder([
             [0],
             [1],
@@ -385,7 +385,7 @@ void main() async {
         final ref = firestore.collection('rooms').doc('qwerty').collection('queue');
 
         expectLater(
-          queueService.getQueue().map((snap) => snap.map((e) => e['votes'])),
+          queueService.onQueue.map((snap) => snap.map((e) => e['votes'])),
           emitsInOrder([
             [0],
             [0, 0],
