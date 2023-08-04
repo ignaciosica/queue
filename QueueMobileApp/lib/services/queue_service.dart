@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IQueueService {
   Stream<dynamic> getPlayerState();
+  Stream get onPlayerState;
   Stream<List> getQueue();
   Future queue(String uri, {dynamic song});
   Future dequeue(String uri);
@@ -41,7 +42,8 @@ class QueueService implements IQueueService {
     }
   }
 
-  Stream get playerStateStream => getPlayerState().asBroadcastStream();
+  @override
+  Stream get onPlayerState => getPlayerState().asBroadcastStream();
 
   @override
   Stream<List> getQueue() async* {

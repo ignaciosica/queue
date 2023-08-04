@@ -33,7 +33,7 @@ void main() async {
     getIt.reset();
   });
 
-  group('getPlayerState:', () {
+  group('onPlayerState:', () {
     test('valid', () async {
       final playerState = {
         'name': 'Luv(sic)',
@@ -42,7 +42,7 @@ void main() async {
 
       await prefs.setString('roomId', 'qwerty');
       await firestore.collection('rooms').doc('qwerty').set({'player_state': playerState});
-      final snap = await queueService.getPlayerState().first;
+      final snap = await queueService.onPlayerState.first;
 
       expect(snap, playerState);
     });
@@ -52,7 +52,7 @@ void main() async {
 
       await prefs.setString('roomId', 'qwerty');
       await firestore.collection('rooms').doc('qwerty').set({'player_state': playerState});
-      final snap = await queueService.getPlayerState().first;
+      final snap = await queueService.onPlayerState.first;
 
       expect(snap, playerState);
     });
@@ -62,7 +62,7 @@ void main() async {
 
       await prefs.setString('roomId', 'qwerty');
       await firestore.collection('rooms').doc('qwerty').set({'player_state': playerState});
-      final snap = await queueService.getPlayerState().first;
+      final snap = await queueService.onPlayerState.first;
 
       expect(snap, null);
     });
@@ -83,7 +83,7 @@ void main() async {
         null,
       ];
 
-      expectLater(queueService.getPlayerState(), emitsInOrder([vals[0], ...vals]));
+      expectLater(queueService.onPlayerState, emitsInOrder([vals[0], ...vals]));
 
       for (var state in vals) {
         await firestore.collection('rooms').doc('qwerty').set({'player_state': state});
