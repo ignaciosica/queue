@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IQueueService {
-  Stream<dynamic> getPlayerState();
   Stream get onPlayerState;
+  Stream get onRoom;
   Stream<List> getQueue();
   Future queue(String uri, {dynamic song});
   Future dequeue(String uri);
@@ -24,7 +24,6 @@ class QueueService implements IQueueService {
   final FirebaseAuth _auth;
   static const String _collection = 'rooms';
 
-  @override
   Stream getPlayerState() async* {
     final prefs = await SharedPreferences.getInstance();
     final roomId = prefs.getString('roomId');
@@ -44,6 +43,20 @@ class QueueService implements IQueueService {
 
   @override
   Stream get onPlayerState => getPlayerState().asBroadcastStream();
+
+  Stream getRoom() async* {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    if (roomId != null) {
+      final reference = _firestore.collection(_collection).doc(roomId);
+      yield* reference.snapshots().map((snap) => snap.data());
+    } else {
+      yield null;
+    }
+  }
+
+  @override
+  Stream get onRoom => getRoom().asBroadcastStream();
 
   @override
   Stream<List> getQueue() async* {

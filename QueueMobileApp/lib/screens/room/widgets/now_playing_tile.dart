@@ -10,7 +10,7 @@ class NowPlayingTile extends StatelessWidget {
     final IQueueService queueService = getIt<IQueueService>();
 
     return StreamBuilder<dynamic>(
-        stream: queueService.getPlayerState(),
+        stream: queueService.onPlayerState,
         builder: (context, snapshot) {
           if (snapshot.data == null || snapshot.data.isEmpty) {
             return const NowPlayingTileDummy();
