@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
+import 'package:queue/app/widgets/expanded_section.dart';
 import 'package:queue/services/queue_service.dart';
 
 class NowPlayingTile extends StatelessWidget {
@@ -10,9 +12,13 @@ class NowPlayingTile extends StatelessWidget {
     final IQueueService queueService = getIt<IQueueService>();
 
     return StreamBuilder<dynamic>(
-        stream: queueService.onPlayerState,
+        stream: queueService.onRoom,
         builder: (context, snapshot) {
-          if (snapshot.data == null || snapshot.data.isEmpty) {
+          final room = snapshot.data as Map?;
+          final playerState = room?['player_state'] as Map?;
+          final uid = FirebaseAuth.instance.currentUser!.uid;
+
+          if (room == null || room.isEmpty || playerState == null) {
             return const NowPlayingTileDummy();
           }
 
@@ -21,10 +27,31 @@ class NowPlayingTile extends StatelessWidget {
             child: Card(
               shadowColor: Colors.transparent,
               child: Center(
-                child: ListTile(
-                  title: Text(snapshot.data['name']),
-                  subtitle: Text((snapshot.data['artists'] as List).join(', ')),
-                  trailing: const Icon(Icons.skip_next),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        title: Text(playerState['name']),
+                        subtitle: Text((playerState['artists'] as List).join(', ')),
+                      ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              room['skip'].contains(uid)
+                                  ? queueService.unSkip()
+                                  : queueService.skip();
+                            },
+                            icon: const Icon(Icons.skip_next_rounded)),
+                        ExpandedSection(
+                          expand: room['skip'].contains(uid),
+                          child: Text(room['skip'].length.toString()),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
