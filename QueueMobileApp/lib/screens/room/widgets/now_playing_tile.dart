@@ -37,7 +37,7 @@ class NowPlayingTile extends StatelessWidget {
                       ),
                     ),
                     Column(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SelectPlayerDrowpdown(),
                         IconButton(
