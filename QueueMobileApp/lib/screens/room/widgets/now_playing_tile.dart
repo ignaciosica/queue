@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/app/widgets/expanded_section.dart';
+import 'package:queue/screens/room/widgets/select_player_dropdown.dart';
 import 'package:queue/services/queue_service.dart';
 
 class NowPlayingTile extends StatelessWidget {
@@ -38,6 +39,7 @@ class NowPlayingTile extends StatelessWidget {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        const SelectPlayerDrowpdown(),
                         IconButton(
                             onPressed: () {
                               room['skip'].contains(uid)

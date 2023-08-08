@@ -24,13 +24,6 @@ class RoomScreen extends StatelessWidget {
             await roomService.leaveRoom(room['id']).then((_) => context.go('/lobby'));
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.speaker_rounded),
-            onPressed: () => context.push('/speaker'),
-          ),
-          //profile button
-        ],
       ),
       body: const SingleChildScrollView(
         physics: BouncingScrollPhysics(),

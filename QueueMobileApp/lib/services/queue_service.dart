@@ -12,6 +12,7 @@ abstract class IQueueService {
   Future unvote(String uri);
   Future skip();
   Future unSkip();
+  Future setPlayer(String uid);
 }
 
 //TODO: refactor to expose one queue stream for entire service
@@ -208,6 +209,19 @@ class QueueService implements IQueueService {
 
     await ref.update({
       'skip': FieldValue.arrayRemove([uid])
+    });
+  }
+
+  @override
+  Future setPlayer(String uid) async {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    final ref = _firestore.collection(_collection).doc(roomId);
+
+    if (roomId == null) return;
+
+    await ref.update({
+      'player': uid,
     });
   }
 }
