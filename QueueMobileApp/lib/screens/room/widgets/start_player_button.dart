@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/services/queue_service.dart';
 
-class PlayerActionButton extends StatelessWidget {
-  const PlayerActionButton({super.key});
+class StartPlayerButton extends StatelessWidget {
+  const StartPlayerButton({super.key});
+
+  //TODO: start background task
+  //TODO: only show button to selected player
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +21,10 @@ class PlayerActionButton extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return Row(
-          children: [
-            ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.speaker_rounded),
-              label: const Text('Connect with spotify'),
-            ),
-          ],
+        return ElevatedButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.speaker_rounded),
+          label: const Text('Connect with spotify'),
         );
       },
     );

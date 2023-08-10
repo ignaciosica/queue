@@ -19,7 +19,7 @@ class NowPlayingTile extends StatelessWidget {
           final playerState = room?['player_state'] as Map?;
           final uid = FirebaseAuth.instance.currentUser!.uid;
 
-          if (room == null || room.isEmpty || playerState == null) {
+          if (room == null || room.isEmpty || playerState == null || playerState.isEmpty) {
             return const NowPlayingTileDummy();
           }
 
