@@ -50,7 +50,8 @@ class _RoomViewState extends State<RoomView> {
                   .collection('rooms')
                   .doc(BlocProvider.of<RoomCubit>(context).state.roomId)
                   .update({
-                'users': FieldValue.arrayRemove([RepositoryProvider.of<AuthRepository>(context).currentUser!.id]),
+                'users': FieldValue.arrayRemove(
+                    [RepositoryProvider.of<AuthRepository>(context).currentUser!.id]),
                 'player': '',
               });
 
@@ -80,7 +81,9 @@ class _RoomViewState extends State<RoomView> {
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.hasData) {
                   final room = Room.fromJson(snapshot.data!.data()!);
-                  if (room.player.isEmpty || RepositoryProvider.of<AuthRepository>(context).currentUser.id == room.player) {
+                  if (room.player.isEmpty ||
+                      RepositoryProvider.of<AuthRepository>(context).currentUser.id ==
+                          room.player) {
                     Workmanager().registerPeriodicTask(
                       '1',
                       'background_task',
@@ -91,7 +94,8 @@ class _RoomViewState extends State<RoomView> {
                       },
                     );
                     return IconButton(
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ParticipantsPage())),
+                      onPressed: () => Navigator.push(
+                          context, MaterialPageRoute(builder: (_) => const ParticipantsPage())),
                       icon: const Icon(Icons.speaker_group_rounded),
                     );
                   } else {
@@ -131,7 +135,8 @@ class _RoomViewState extends State<RoomView> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SearchPage())),
+          onPressed: () =>
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const SearchPage())),
           tooltip: 'Search',
           child: const Icon(Icons.search_rounded),
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/app/widgets/expanded_section.dart';
 import 'package:queue/screens/room/widgets/select_player_dropdown.dart';
+import 'package:queue/screens/room/widgets/start_player_button.dart';
 import 'package:queue/services/queue_service.dart';
 
 class NowPlayingTile extends StatelessWidget {
@@ -71,13 +72,7 @@ class NowPlayingTileDummy extends StatelessWidget {
       height: 180,
       child: Card(
         shadowColor: Colors.transparent,
-        child: Center(
-          child: ListTile(
-            title: Text('Nothing playing right now'),
-            subtitle: Text('Queue up some songs!'),
-            trailing: Icon(Icons.skip_next),
-          ),
-        ),
+        child: Center(child: StartPlayerButton()),
       ),
     );
   }
