@@ -20,9 +20,9 @@ class NowPlayingTile extends StatelessWidget {
           final playerState = room?['player_state'] as Map?;
           final uid = FirebaseAuth.instance.currentUser!.uid;
 
-          if (room == null || room.isEmpty || playerState == null || playerState.isEmpty) {
-            return const NowPlayingTileDummy();
-          }
+          // if (room == null || room.isEmpty || playerState == null || playerState.isEmpty) {
+          //   return const NowPlayingTileDummy();
+          // }
 
           return SizedBox(
             height: 180,
@@ -32,9 +32,15 @@ class NowPlayingTile extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: ListTile(
-                        title: Text(playerState['name']),
-                        subtitle: Text((playerState['artists'] as List).join(', ')),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ListTile(
+                            title: Text(playerState?['name'] ?? 'No song playing'),
+                            subtitle: Text(((playerState?['artists'] ?? []) as List).join(', ')),
+                          ),
+                          StartPlayerButton(),
+                        ],
                       ),
                     ),
                     Column(
@@ -43,14 +49,14 @@ class NowPlayingTile extends StatelessWidget {
                         const SelectPlayerDrowpdown(),
                         IconButton(
                             onPressed: () {
-                              room['skip'].contains(uid)
+                              room?['skip'].contains(uid)
                                   ? queueService.unSkip()
                                   : queueService.skip();
                             },
                             icon: const Icon(Icons.skip_next_rounded)),
                         ExpandedSection(
-                          expand: room['skip'].contains(uid),
-                          child: Text(room['skip'].length.toString()),
+                          expand: room?['skip'].contains(uid),
+                          child: Text(room?['skip'].length.toString() ?? '0'),
                         ),
                       ],
                     ),
@@ -60,20 +66,5 @@ class NowPlayingTile extends StatelessWidget {
             ),
           );
         });
-  }
-}
-
-class NowPlayingTileDummy extends StatelessWidget {
-  const NowPlayingTileDummy({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 180,
-      child: Card(
-        shadowColor: Colors.transparent,
-        child: Center(child: StartPlayerButton()),
-      ),
-    );
   }
 }

@@ -23,19 +23,17 @@ class StartPlayerButton extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
+        if (kDebugMode) print('roomData:${snapshot.data}');
+
         return ElevatedButton.icon(
           onPressed: () {
-            if (kDebugMode) print('before task:${DateTime.now()}');
-            Workmanager().registerOneOffTask(
-              '1',
-              'background_task',
-              // inputData: {
-              //   //'room': BlocProvider.of<RoomCubit>(context).state.roomId,
-              //   'clientId': dotenv.env['client_id'],
-              //   'redirectUrl': dotenv.env['redirect_url'],
-              // },
-            );
-            if (kDebugMode) print('after task:${DateTime.now()}');
+            Workmanager().registerOneOffTask('1', 'background_task', inputData: {
+              'roomId': snapshot.data['id'],
+            }
+                //   'clientId': dotenv.env['client_id'],
+                //   'redirectUrl': dotenv.env['redirect_url'],
+                // },
+                );
           },
           icon: const Icon(Icons.speaker_rounded),
           label: const Text('Connect with spotify'),
