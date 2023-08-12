@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/services/queue_service.dart';
 import 'package:workmanager/workmanager.dart';
