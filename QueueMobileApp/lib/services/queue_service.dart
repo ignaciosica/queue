@@ -15,9 +15,6 @@ abstract class IQueueService {
   Future setPlayer(String uid);
 }
 
-//TODO: refactor to expose one queue stream for entire service
-//TODO: refactor to expose one player state stream for entire service
-
 class QueueService implements IQueueService {
   QueueService(this._firestore, this._auth);
 

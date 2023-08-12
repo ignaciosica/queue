@@ -421,5 +421,12 @@ void main() async {
         await queueService.unvote(t1);
       });
     });
+
+    group('skip:', () {
+      test('valid skip', () async {});
+      test('invalid skip', () async {});
+
+      test('skip after unskip', () async {});
+    });
   });
 }
