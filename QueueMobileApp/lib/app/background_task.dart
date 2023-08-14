@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,21 +37,28 @@ void callbackDispatcher() {
     final roomStream = roomRef.snapshots();
 
     playerStream.listen((playerState) async {
-      if (playerState.track == null) return;
-
-      await roomRef.update({
-        'player_state.duration': playerState.track!.duration,
-        'player_state.playback_position': playerState.playbackPosition,
-        'player_state.is_paused': playerState.isPaused,
-        'player_state.name': playerState.track!.name,
-        'player_state.uri': playerState.track!.uri,
-        'player_state.image_uri': playerState.track!.imageUri.raw,
-        'player_state.artists': playerState.track!.artists.map((e) => e.name).toList(),
-      });
+      if (playerState.track == null) {
+        await roomRef.update({'player_state': null});
+      } else {
+        await roomRef.update({
+          'player_state.duration': playerState.track!.duration,
+          'player_state.playback_position': playerState.playbackPosition,
+          'player_state.is_paused': playerState.isPaused,
+          'player_state.name': playerState.track!.name,
+          'player_state.uri': playerState.track!.uri,
+          'player_state.image_uri': playerState.track!.imageUri.raw,
+          'player_state.artists': playerState.track!.artists.map((e) => e.name).toList(),
+        });
+      }
     });
-    roomStream.listen((event) {});
 
-    for (int i = 0; i < 15; i++) {
+    roomStream.listen((event) {
+      if (event.data()!['player'] != FirebaseAuth.instance.currentUser!.uid) {
+        Workmanager().cancelAll();
+      }
+    });
+
+    for (int i = 0; i < 100; i++) {
       await Future.delayed(const Duration(seconds: 1));
       if (kDebugMode) print('i:$i');
     }
