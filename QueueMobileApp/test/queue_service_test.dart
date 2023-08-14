@@ -419,9 +419,53 @@ void main() async {
     });
   });
   group('skip:', () {
-    test('valid skip', () async {});
-    test('invalid skip', () async {});
-    test('skip after unskip', () async {});
+    test('valid skip', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({'skip': []});
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['skip']),
+        emitsInOrder([
+          [],
+          ['anonymous'],
+        ]),
+      );
+
+      await queueService.skip();
+    });
+    test('invalid unskip', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({'skip': []});
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['skip']),
+        emitsInOrder([
+          [],
+          [],
+        ]),
+      );
+
+      await queueService.unSkip();
+    });
+    test('unSkip after skip', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({'skip': []});
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['skip']),
+        emitsInOrder([
+          [],
+          ['anonymous'],
+          [],
+        ]),
+      );
+
+      await queueService.skip();
+      await queueService.unSkip();
+    });
   });
 
   group('setPlayer:', () {
