@@ -217,8 +217,10 @@ class QueueService implements IQueueService {
 
     if (roomId == null) return;
 
-    await ref.update({
-      'player': uid,
-    });
+    if (((await onRoom.first)['participants'] as List).contains(uid)) {
+      await ref.update({
+        'player': uid,
+      });
+    }
   }
 }

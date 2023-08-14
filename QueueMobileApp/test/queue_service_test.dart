@@ -469,8 +469,77 @@ void main() async {
   });
 
   group('setPlayer:', () {
-    test('valid setPlayer', () async {});
-    test('invalid setPlayer', () async {});
-    test('leave room after setPlayer', () async {});
+    test('valid setPlayer from null', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({
+        'participants': ['anonymous'],
+        'player': null,
+      });
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['player']),
+        emitsInOrder([
+          null,
+          'anonymous',
+        ]),
+      );
+
+      await queueService.setPlayer('anonymous');
+    });
+
+    test('valid setPlayer', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({
+        'participants': ['anonymous'],
+        'player': 'gustav',
+      });
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['player']),
+        emitsInOrder([
+          'gustav',
+          'anonymous',
+        ]),
+      );
+
+      await queueService.setPlayer('anonymous');
+    });
+    test('invalid setPlayer null', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({
+        'participants': ['anonymous'],
+        'player': null,
+      });
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['player']),
+        emitsInOrder([
+          null,
+        ]),
+      );
+
+      await queueService.setPlayer('gustav');
+    });
+
+    test('invalid setPlayer gustav', () async {
+      await prefs.setString('roomId', 'qwerty');
+      final ref = firestore.collection('rooms').doc('qwerty');
+      await ref.set({
+        'participants': ['anonymous'],
+        'player': 'gustav',
+      });
+
+      expectLater(
+        queueService.onRoom.map((snap) => snap['player']),
+        emitsInOrder([
+          'gustav',
+        ]),
+      );
+
+      await queueService.setPlayer('invalid');
+    });
   });
 }
