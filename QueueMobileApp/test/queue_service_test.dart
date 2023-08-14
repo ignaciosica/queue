@@ -1,13 +1,9 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:queue/services/queue_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() async {
   late MockUser user;
@@ -421,12 +417,16 @@ void main() async {
         await queueService.unvote(t1);
       });
     });
+  });
+  group('skip:', () {
+    test('valid skip', () async {});
+    test('invalid skip', () async {});
+    test('skip after unskip', () async {});
+  });
 
-    group('skip:', () {
-      test('valid skip', () async {});
-      test('invalid skip', () async {});
-
-      test('skip after unskip', () async {});
-    });
+  group('setPlayer:', () {
+    test('valid setPlayer', () async {});
+    test('invalid setPlayer', () async {});
+    test('leave room after setPlayer', () async {});
   });
 }
