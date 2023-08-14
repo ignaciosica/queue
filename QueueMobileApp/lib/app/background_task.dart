@@ -73,6 +73,7 @@ void callbackDispatcher() {
     roomStream.listen((event) async {
       final data = event.data()!;
       if (data['player'] != FirebaseAuth.instance.currentUser!.uid) {
+        SpotifySdk.pause();
         Workmanager().cancelAll();
       }
 
@@ -91,8 +92,9 @@ void callbackDispatcher() {
           await roomRef.update({'task.requested_action': null});
           break;
         case 'kill':
-          Workmanager().cancelAll();
+          SpotifySdk.pause();
           await roomRef.update({'task.requested_action': null});
+          Workmanager().cancelAll();
           break;
         default:
       }
@@ -110,7 +112,7 @@ void callbackDispatcher() {
 
       if (playerState.track!.duration - playerState.playbackPosition < 7 * 1000) {
         await queue.call();
-        await Future.delayed(const Duration(seconds: 7));
+        await Future.delayed(const Duration(seconds: 10));
       }
     }
   });
