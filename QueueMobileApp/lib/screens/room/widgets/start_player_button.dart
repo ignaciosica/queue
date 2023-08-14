@@ -9,7 +9,6 @@ class StartPlayerButton extends StatelessWidget {
   const StartPlayerButton({super.key});
 
   //TODO: start background task
-  //TODO: only show button to selected player
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +25,17 @@ class StartPlayerButton extends StatelessWidget {
         if (kDebugMode) print('roomData:${snapshot.data}');
 
         return ElevatedButton.icon(
-          onPressed: () {
-            Workmanager().registerOneOffTask('1', 'background_task', inputData: {
-              'roomId': snapshot.data['id'],
-            }
-                //   'clientId': dotenv.env['client_id'],
-                //   'redirectUrl': dotenv.env['redirect_url'],
-                // },
-                );
+          onPressed: () async {
+            Workmanager().registerOneOffTask(
+              '1',
+              'background_task',
+              inputData: {
+                'roomId': snapshot.data['id'],
+              },
+              //   'clientId': dotenv.env['client_id'],
+              //   'redirectUrl': dotenv.env['redirect_url'],
+              // },
+            );
           },
           icon: const Icon(Icons.speaker_rounded),
           label: const Text('Connect with spotify'),

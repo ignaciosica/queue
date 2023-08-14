@@ -7,9 +7,7 @@ import 'package:queue/firebase_options.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:workmanager/workmanager.dart';
 
-//TODO: listen playerState stream and update firestore
 //TODO: listen room stream and check for skip and queue
-//TODO: kill background task if player changes
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -52,17 +50,68 @@ void callbackDispatcher() {
       }
     });
 
-    roomStream.listen((event) {
-      if (event.data()!['player'] != FirebaseAuth.instance.currentUser!.uid) {
+    queue() async {
+      final query = roomRef
+          .collection('queue')
+          .orderBy('votes', descending: true)
+          .orderBy('created_at', descending: false)
+          .limit(1);
+
+      final snapshot = (await query.get());
+
+      roomRef.update({'skip': []});
+
+      if (snapshot.docs.isEmpty) return;
+
+      final track = snapshot.docs[0];
+
+      await roomRef.collection('history').doc(track.id).set(track.data());
+      SpotifySdk.queue(spotifyUri: track.id);
+      await roomRef.collection('queue').doc(track.id).delete();
+    }
+
+    roomStream.listen((event) async {
+      final data = event.data()!;
+      if (data['player'] != FirebaseAuth.instance.currentUser!.uid) {
         Workmanager().cancelAll();
+      }
+
+      if (data['skip'].length >= (data['participants'].length / 2)) {
+        await queue.call();
+        SpotifySdk.skipNext();
+      }
+
+      switch (data['task']['requested_action']) {
+        case 'pause':
+          SpotifySdk.pause();
+          await roomRef.update({'task.requested_action': null});
+          break;
+        case 'play':
+          SpotifySdk.resume();
+          await roomRef.update({'task.requested_action': null});
+          break;
+        case 'kill':
+          Workmanager().cancelAll();
+          await roomRef.update({'task.requested_action': null});
+          break;
+        default:
       }
     });
 
-    for (int i = 0; i < 100; i++) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (kDebugMode) print('i:$i');
-    }
+    int a = 0;
 
-    return Future.value(true);
+    while (true) {
+      await Future.delayed(const Duration(seconds: 3));
+      if (kDebugMode) print('a:${a++}');
+
+      final playerState = await SpotifySdk.getPlayerState();
+
+      if (playerState == null || playerState.track == null) continue;
+
+      if (playerState.track!.duration - playerState.playbackPosition < 7 * 1000) {
+        await queue.call();
+        await Future.delayed(const Duration(seconds: 7));
+      }
+    }
   });
 }
