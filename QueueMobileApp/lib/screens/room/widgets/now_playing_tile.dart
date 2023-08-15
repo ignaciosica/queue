@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/app/widgets/expanded_section.dart';
 import 'package:queue/screens/room/widgets/select_player_dropdown.dart';
-import 'package:queue/screens/room/widgets/start_player_button.dart';
 import 'package:queue/services/queue_service.dart';
 
 class NowPlayingTile extends StatelessWidget {
@@ -20,12 +19,8 @@ class NowPlayingTile extends StatelessWidget {
           final playerState = room?['player_state'] as Map?;
           final uid = FirebaseAuth.instance.currentUser!.uid;
 
-          // if (room == null || room.isEmpty || playerState == null || playerState.isEmpty) {
-          //   return const NowPlayingTileDummy();
-          // }
-
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: SizedBox(
               height: 180,
               child: Card(
@@ -41,7 +36,6 @@ class NowPlayingTile extends StatelessWidget {
                               title: Text(playerState?['name'] ?? 'No song playing'),
                               subtitle: Text(((playerState?['artists'] ?? []) as List).join(', ')),
                             ),
-                            StartPlayerButton(),
                           ],
                         ),
                       ),
@@ -49,15 +43,17 @@ class NowPlayingTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SelectPlayerDrowpdown(),
-                          IconButton(
+                          IconButton.filledTonal(
                               onPressed: () {
                                 room?['skip'].contains(uid)
                                     ? queueService.unSkip()
                                     : queueService.skip();
                               },
-                              icon: const Icon(Icons.skip_next_rounded)),
+                              icon: const Icon(
+                                Icons.skip_next_rounded,
+                              )),
                           ExpandedSection(
-                            expand: room?['skip'].contains(uid),
+                            expand: room?['skip'].contains(uid) ?? false,
                             child: Text(room?['skip'].length.toString() ?? '0'),
                           ),
                         ],

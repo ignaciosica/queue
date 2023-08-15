@@ -13,50 +13,59 @@ class SearchTile extends StatelessWidget {
     final IQueueService queueService = getIt<IQueueService>();
     ISpotifyService spotifyService = getIt<ISpotifyService>();
 
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: SearchAnchor.bar(
-          barElevation: MaterialStateProperty.all(0),
-          suggestionsBuilder: (context, query) {
-            return [
-              StreamBuilder(
-                stream: queueService.onQueue,
+    return SearchAnchor(
+      viewBuilder: (c) {
+        return ListView(physics: const BouncingScrollPhysics(), children: [...c]);
+      },
+      builder: (context, controller) {
+        return FloatingActionButton(
+          child: const Icon(Icons.search_rounded),
+          onPressed: () {
+            controller.openView();
+          },
+        );
+      },
+      suggestionsBuilder: (context, controller) {
+        return [
+          StreamBuilder(
+            stream: queueService.onQueue,
+            initialData: const [],
+            builder: (context, queueSnap) {
+              return FutureBuilder<List>(
+                future: spotifyService.search(controller.text),
                 initialData: const [],
-                builder: (context, queueSnap) {
-                  return FutureBuilder<List>(
-                    future: spotifyService.search(query.text),
-                    initialData: const [],
-                    builder: (context, searchSnap) {
-                      if (queueSnap.data == null || searchSnap.data == null) return Container();
-                      final tracks = searchSnap.data!.map((e) {
-                        var trackInQueue =
-                            queueSnap.data!.firstWhereOrNull((t) => t['uri'] == e['uri']);
-                        if (trackInQueue != null) {
-                          return trackInQueue;
-                        } else {
-                          return {
-                            'uri': e['uri'],
-                            'votes': 0,
-                            'voters': [],
-                            'isInQueue': false,
-                            'song': {
-                              'name': e['name'],
-                              'artists': e['artists'],
-                              'album': e['album'],
-                            },
-                          };
-                        }
-                      });
+                builder: (context, searchSnap) {
+                  if (queueSnap.data == null || searchSnap.data == null) return Container();
+                  final tracks = searchSnap.data!.map((e) {
+                    var trackInQueue =
+                        queueSnap.data!.firstWhereOrNull((t) => t['uri'] == e['uri']);
+                    if (trackInQueue != null) {
+                      return trackInQueue;
+                    } else {
+                      return {
+                        'uri': e['uri'],
+                        'votes': 0,
+                        'voters': [],
+                        'isInQueue': false,
+                        'song': {
+                          'name': e['name'],
+                          'artists': e['artists'],
+                          'album': e['album'],
+                        },
+                      };
+                    }
+                  });
 
-                      return Column(
-                        children: [...tracks.map((e) => TrackTile(e))],
-                      );
-                    },
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [...tracks.map((e) => TrackTile(e))],
                   );
                 },
-              )
-            ];
-          },
-        ));
+              );
+            },
+          )
+        ];
+      },
+    );
   }
 }

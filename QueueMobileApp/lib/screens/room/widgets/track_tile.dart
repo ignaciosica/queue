@@ -10,9 +10,12 @@ class TrackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (track is List) return const SizedBox.shrink();
+
     final IQueueService queueService = getIt<IQueueService>();
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
+
     final selected = track['voters']?.contains(uid);
     final isInQueue = track['isInQueue'] ?? true;
 
@@ -21,13 +24,15 @@ class TrackTile extends StatelessWidget {
     return ListTile(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: CachedNetworkImage(
-          width: 60,
-          height: 60,
-          imageUrl: track['song']['album']['images'][1]['url'],
-          fit: BoxFit.cover,
+      leading: SizedBox(
+        width: 60,
+        height: 60,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: CachedNetworkImage(
+            imageUrl: track['song']['album']['images'][1]['url'],
+            fit: BoxFit.cover,
+          ),
         ),
       ),
       title: Text(track['song']['name'], maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -51,11 +56,10 @@ class TrackTile extends StatelessWidget {
                   )),
             )
           : isInQueue
-              ? IconButton.outlined(
+              ? IconButton.filledTonal(
                   onPressed: () => queueService.dequeue(track['uri']),
                   icon: const Icon(Icons.remove_circle_outline_rounded))
               : null,
-      //selected: selected,
       onTap: selected
           ? () => queueService.unvote(track['uri'])
           : () => isInQueue

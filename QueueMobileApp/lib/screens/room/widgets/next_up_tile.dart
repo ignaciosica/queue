@@ -3,20 +3,21 @@ import 'package:queue/app/service_locator.dart';
 import 'package:queue/screens/room/widgets/track_tile.dart';
 import 'package:queue/services/queue_service.dart';
 
-class QueueTile extends StatelessWidget {
-  const QueueTile({super.key});
+class NextUpTile extends StatelessWidget {
+  const NextUpTile({super.key});
 
   @override
   Widget build(BuildContext context) {
     final IQueueService queueService = getIt<IQueueService>();
-    return StreamBuilder<List>(
-      stream: queueService.onQueue,
+    return StreamBuilder(
+      stream: queueService.onHead,
       initialData: const [],
       builder: (context, snapshot) {
+        if (snapshot.data == null) return const SizedBox.shrink();
         return SizedBox(
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: Card(
               shadowColor: Colors.transparent,
               color: Colors.black,
@@ -26,12 +27,12 @@ class QueueTile extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 4),
-                    child: Text('Queue',
+                    child: Text('Next up',
                         style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                               fontWeight: FontWeight.bold,
                             )),
                   ),
-                  ...snapshot.data!.map((e) => TrackTile(e)),
+                  TrackTile(snapshot.data),
                 ],
               ),
             ),

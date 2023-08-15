@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/app/widgets/gradient_app_bar.dart';
+import 'package:queue/screens/room/widgets/next_up_tile.dart';
 import 'package:queue/screens/room/widgets/now_playing_tile.dart';
 import 'package:queue/screens/room/widgets/queue_tile.dart';
 import 'package:queue/screens/room/widgets/search_tile.dart';
+import 'package:queue/screens/room/widgets/start_player_button.dart';
 import 'package:queue/services/room_service.dart';
 
 class RoomScreen extends StatelessWidget {
@@ -25,14 +27,15 @@ class RoomScreen extends StatelessWidget {
           },
         ),
       ),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
-            NowPlayingTile(),
-            SearchTile(),
-            QueueTile(),
-          ],
-        ),
+      floatingActionButton: const SearchTile(),
+      body: ListView(
+        physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+        children: const [
+          NowPlayingTile(),
+          StartPlayerButton(),
+          NextUpTile(),
+          QueueTile(),
+        ],
       ),
     );
   }

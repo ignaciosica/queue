@@ -6,6 +6,8 @@ abstract class IQueueService {
   Stream get onPlayerState;
   Stream get onRoom;
   Stream<List> get onQueue;
+  Stream get onHead;
+
   Future queue(String uri, {dynamic song});
   Future dequeue(String uri);
   Future vote(String uri);
@@ -75,6 +77,32 @@ class QueueService implements IQueueService {
 
   @override
   Stream<List> get onQueue => getQueue().asBroadcastStream();
+
+  Stream getHead() async* {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+
+    if (roomId != null) {
+      final query = _firestore
+          .collection(_collection)
+          .doc(roomId)
+          .collection('queue')
+          .orderBy('votes', descending: true)
+          .orderBy('created_at', descending: false)
+          .limit(1)
+          .snapshots();
+
+      yield* query.map((snap) {
+        if (snap.docs.isEmpty) return null;
+        return snap.docs[0].data();
+      });
+    } else {
+      yield [];
+    }
+  }
+
+  @override
+  Stream get onHead => getHead().asBroadcastStream();
 
   @override
   Future queue(String uri, {dynamic song}) async {

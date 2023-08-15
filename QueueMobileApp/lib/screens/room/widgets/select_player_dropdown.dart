@@ -19,7 +19,7 @@ class SelectPlayerDrowpdown extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return IconButton(
+        return IconButton.filledTonal(
             onPressed: () {
               showModalBottomSheet<void>(
                 context: context,
