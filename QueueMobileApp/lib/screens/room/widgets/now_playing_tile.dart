@@ -24,43 +24,46 @@ class NowPlayingTile extends StatelessWidget {
           //   return const NowPlayingTileDummy();
           // }
 
-          return SizedBox(
-            height: 180,
-            child: Card(
-              shadowColor: Colors.transparent,
-              child: Center(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 180,
+              child: Card(
+                shadowColor: Colors.transparent,
+                child: Center(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ListTile(
+                              title: Text(playerState?['name'] ?? 'No song playing'),
+                              subtitle: Text(((playerState?['artists'] ?? []) as List).join(', ')),
+                            ),
+                            StartPlayerButton(),
+                          ],
+                        ),
+                      ),
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ListTile(
-                            title: Text(playerState?['name'] ?? 'No song playing'),
-                            subtitle: Text(((playerState?['artists'] ?? []) as List).join(', ')),
+                          const SelectPlayerDrowpdown(),
+                          IconButton(
+                              onPressed: () {
+                                room?['skip'].contains(uid)
+                                    ? queueService.unSkip()
+                                    : queueService.skip();
+                              },
+                              icon: const Icon(Icons.skip_next_rounded)),
+                          ExpandedSection(
+                            expand: room?['skip'].contains(uid),
+                            child: Text(room?['skip'].length.toString() ?? '0'),
                           ),
-                          StartPlayerButton(),
                         ],
                       ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SelectPlayerDrowpdown(),
-                        IconButton(
-                            onPressed: () {
-                              room?['skip'].contains(uid)
-                                  ? queueService.unSkip()
-                                  : queueService.skip();
-                            },
-                            icon: const Icon(Icons.skip_next_rounded)),
-                        ExpandedSection(
-                          expand: room?['skip'].contains(uid),
-                          child: Text(room?['skip'].length.toString() ?? '0'),
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

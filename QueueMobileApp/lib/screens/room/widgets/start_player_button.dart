@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/services/queue_service.dart';
@@ -7,8 +6,6 @@ import 'package:workmanager/workmanager.dart';
 
 class StartPlayerButton extends StatelessWidget {
   const StartPlayerButton({super.key});
-
-  //TODO: start background task
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +19,9 @@ class StartPlayerButton extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        if (kDebugMode) print('roomData:${snapshot.data}');
-
         return ElevatedButton.icon(
           onPressed: () async {
-            Workmanager().registerOneOffTask(
-              '1',
-              'background_task',
-              inputData: {
-                'roomId': snapshot.data['id'],
-              },
-              //   'clientId': dotenv.env['client_id'],
-              //   'redirectUrl': dotenv.env['redirect_url'],
-              // },
-            );
+            Workmanager().registerOneOffTask('1', 'bk', inputData: {'roomId': snapshot.data['id']});
           },
           icon: const Icon(Icons.speaker_rounded),
           label: const Text('Connect with spotify'),

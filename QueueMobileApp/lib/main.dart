@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,11 @@ class _MyAppState extends State<MyApp> {
           centerTitle: true,
           titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.lightGreen,
+          brightness: Brightness.dark,
+          background: const ColorScheme.dark().background,
+        ),
         useMaterial3: true,
       ),
       routerConfig: _router,

@@ -92,13 +92,13 @@ Map? playerStateToJson(playerState) {
   return playerState.track == null
       ? null
       : {
-          'player_state.duration': playerState.track!.duration,
-          'player_state.playback_position': playerState.playbackPosition,
-          'player_state.is_paused': playerState.isPaused,
-          'player_state.name': playerState.track!.name,
-          'player_state.uri': playerState.track!.uri,
-          'player_state.image_uri': playerState.track!.imageUri.raw,
-          'player_state.artists': playerState.track!.artists.map((e) => e.name).toList(),
+          'duration': playerState.track!.duration,
+          'playback_position': playerState.playbackPosition,
+          'is_paused': playerState.isPaused,
+          'name': playerState.track!.name,
+          'uri': playerState.track!.uri,
+          'image_uri': playerState.track!.imageUri.raw,
+          'artists': playerState.track!.artists.map((e) => e.name).toList(),
         };
 }
 

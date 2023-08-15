@@ -14,11 +14,9 @@ class SearchTile extends StatelessWidget {
     ISpotifyService spotifyService = getIt<ISpotifyService>();
 
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: SearchAnchor.bar(
           barElevation: MaterialStateProperty.all(0),
-          barBackgroundColor:
-              MaterialStateProperty.all(Theme.of(context).colorScheme.secondaryContainer),
           suggestionsBuilder: (context, query) {
             return [
               StreamBuilder(

@@ -26,7 +26,6 @@ class RoomScreen extends StatelessWidget {
         ),
       ),
       body: const SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             NowPlayingTile(),
