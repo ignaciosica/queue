@@ -33,6 +33,7 @@ dependencies:
   equatable: ^2.0.5
   collection: ^1.17.1
   cached_network_image: ^3.2.3
+  palette_generator: ^0.3.3+2
 
 dev_dependencies:
   flutter_test:
