@@ -19,47 +19,46 @@ class NowPlayingTile extends StatelessWidget {
           final playerState = room?['player_state'] as Map?;
           final uid = FirebaseAuth.instance.currentUser!.uid;
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: SizedBox(
-              height: 180,
-              child: Card(
-                shadowColor: Colors.transparent,
-                child: Center(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ListTile(
-                              title: Text(playerState?['name'] ?? 'No song playing'),
-                              subtitle: Text(((playerState?['artists'] ?? []) as List).join(', ')),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
+          return SizedBox(
+            height: 180,
+            child: Card(
+              margin: EdgeInsets.zero,
+              shadowColor: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SelectPlayerDrowpdown(),
-                          IconButton.filledTonal(
-                              onPressed: () {
-                                room?['skip'].contains(uid)
-                                    ? queueService.unSkip()
-                                    : queueService.skip();
-                              },
-                              icon: const Icon(
-                                Icons.skip_next_rounded,
-                              )),
-                          ExpandedSection(
-                            expand: room?['skip'].contains(uid) ?? false,
-                            child: Text(room?['skip'].length.toString() ?? '0'),
+                          ListTile(
+                            title: Text(playerState?['name'] ?? 'No song playing'),
+                            subtitle: Text(((playerState?['artists'] ?? []) as List).join(', ')),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SelectPlayerDrowpdown(),
+                        IconButton.filledTonal(
+                            onPressed: () {
+                              room?['skip'].contains(uid)
+                                  ? queueService.unSkip()
+                                  : queueService.skip();
+                            },
+                            icon: const Icon(
+                              Icons.skip_next_rounded,
+                            )),
+                        ExpandedSection(
+                          expand: room?['skip'].contains(uid) ?? false,
+                          child: Text(room?['skip'].length.toString() ?? '0'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

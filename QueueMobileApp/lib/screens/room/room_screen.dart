@@ -28,14 +28,22 @@ class RoomScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: const SearchTile(),
-      body: ListView(
-        physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-        children: const [
-          NowPlayingTile(),
-          StartPlayerButton(),
-          NextUpTile(),
-          QueueTile(),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+          children: const [
+            SizedBox(height: 8),
+            NowPlayingTile(),
+            SizedBox(height: 4),
+            StartPlayerButton(),
+            SizedBox(height: 4),
+            NextUpTile(),
+            SizedBox(height: 8),
+            QueueTile(),
+            SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }

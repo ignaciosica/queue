@@ -16,25 +16,23 @@ class NextUpTile extends StatelessWidget {
         if (snapshot.data == null) return const SizedBox.shrink();
         return SizedBox(
           width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: Card(
-              shadowColor: Colors.transparent,
-              color: Colors.black,
-              surfaceTintColor: Colors.transparent,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top: 4),
-                    child: Text('Next up',
-                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            )),
-                  ),
-                  TrackTile(snapshot.data),
-                ],
-              ),
+          child: Card(
+            margin: EdgeInsets.zero,
+            shadowColor: Colors.transparent,
+            color: Colors.black,
+            surfaceTintColor: Colors.transparent,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 4),
+                  child: Text('Next up',
+                      style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          )),
+                ),
+                TrackTile(snapshot.data),
+              ],
             ),
           ),
         );

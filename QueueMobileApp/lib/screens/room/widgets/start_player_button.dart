@@ -19,12 +19,12 @@ class StartPlayerButton extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return ElevatedButton.icon(
+        return FilledButton.tonalIcon(
           onPressed: () async {
             Workmanager().registerOneOffTask('1', 'bk', inputData: {'roomId': snapshot.data['id']});
           },
           icon: const Icon(Icons.speaker_rounded),
-          label: const Text('Connect with spotify'),
+          label: const Text('Connect with Spotify'),
         );
       },
     );
