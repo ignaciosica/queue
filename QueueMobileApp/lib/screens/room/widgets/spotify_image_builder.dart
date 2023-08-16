@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
@@ -21,14 +22,11 @@ class _SpotifyImageBuilderState extends State<SpotifyImageBuilder> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: SpotifySdk.getImage(
-        imageUri: widget.imageUri,
-        dimension: ImageDimension.large,
-      ),
+      future: SpotifySdk.getImage(imageUri: widget.imageUri, dimension: ImageDimension.large),
       builder: (BuildContext context, AsyncSnapshot<Uint8List?> snapshot) {
+        if (kDebugMode) print('snapshot:$snapshot');
         if (snapshot.hasData) {
           final provider = MemoryImage(snapshot.data!);
-
           return FutureBuilder<PaletteGenerator>(
               future: PaletteGenerator.fromImageProvider(provider),
               builder: (context, snapshot) {

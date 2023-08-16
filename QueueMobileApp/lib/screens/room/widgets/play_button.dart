@@ -11,19 +11,26 @@ class PlayPauseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final IQueueService queueService = getIt<IQueueService>();
     return StreamBuilder(
-        stream: queueService.onRoom,
-        builder: (context, snapshot) {
-          final room = snapshot.data as Map?;
-          final isPaused = room?['player_state']?['is_paused'] ?? true;
+      stream: queueService.onRoom,
+      builder: (context, snapshot) {
+        final room = snapshot.data as Map?;
+        final isPaused = room?['player_state']?['is_paused'] ?? true;
 
-          return IconButton.filledTonal(
-            onPressed: () {},
-            icon: CustomAnimatedIcon(
-              iconB: const Icon(Icons.play_arrow_rounded, key: ValueKey('play')),
-              iconA: const Icon(Icons.pause_rounded, key: ValueKey('pause')),
-              showA: isPaused,
-            ),
-          );
-        });
+        return IconButton.filledTonal(
+          onPressed: () {
+            if (isPaused) {
+              queueService.play();
+            } else {
+              queueService.pause();
+            }
+          },
+          icon: CustomAnimatedIcon(
+            iconA: const Icon(Icons.play_arrow_rounded, key: ValueKey('play')),
+            iconB: const Icon(Icons.pause_rounded, key: ValueKey('pause')),
+            showA: isPaused,
+          ),
+        );
+      },
+    );
   }
 }

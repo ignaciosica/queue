@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
 import 'package:queue/screens/room/widgets/play_button.dart';
@@ -20,6 +21,8 @@ class NowPlayingTile extends StatelessWidget {
           final room = snapshot.data as Map?;
           final playerState = room?['player_state'] as Map?;
           final uid = FirebaseAuth.instance.currentUser!.uid;
+
+          if (kDebugMode) print('image_uri: ${playerState?['image_uri']}');
 
           return SizedBox(
             height: 180,

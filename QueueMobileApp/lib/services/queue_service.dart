@@ -15,6 +15,9 @@ abstract class IQueueService {
   Future skip();
   Future unSkip();
   Future setPlayer(String uid);
+
+  Future pause();
+  Future play();
 }
 
 class QueueService implements IQueueService {
@@ -250,5 +253,31 @@ class QueueService implements IQueueService {
         'player': uid,
       });
     }
+  }
+
+  @override
+  Future pause() async {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    final ref = _firestore.collection(_collection).doc(roomId);
+
+    if (roomId == null) return;
+
+    await ref.update({
+      'task.requested_action': 'pause',
+    });
+  }
+
+  @override
+  Future play() async {
+    final prefs = await SharedPreferences.getInstance();
+    final roomId = prefs.getString('roomId');
+    final ref = _firestore.collection(_collection).doc(roomId);
+
+    if (roomId == null) return;
+
+    await ref.update({
+      'task.requested_action': 'play',
+    });
   }
 }
