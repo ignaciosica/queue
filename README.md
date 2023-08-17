@@ -46,8 +46,6 @@ The absence of an official Spotify SDK for Flutter emerged as a significant obst
 
 While working on the project, these challenges presented notable obstacles. Finding solutions or workarounds for these limitations became imperative to ensure the app's performance and reliability. The lack of access to task state and result, coupled with battery optimization concerns, prompted me to explore alternative approaches to address these issues effectively.
 
-Please note that addressing these challenges might involve diving into the latest developments within Flutter's ecosystem or looking for third-party packages that provide better background task management. Additionally, testing on a range of devices and scenarios to evaluate the app's behavior under various conditions could be beneficial in enhancing its overall performance.
-
 ## Alternative
 To deal with the underwhelming performance of the background task and the limitations of the third-party Spotify SDK, I came up with a different plan. Instead of sticking to on-device background tasks to watch over the queue and player status, I decided to take things to the cloud. I set up cloud functions that kick in whenever there's a change in player state or the queue. When a user wants to press play, they hook up with Spotify, and their authorization token gets sent over to the functions. These functions then step in and use Spotify's web API to handle the playing. 
 
