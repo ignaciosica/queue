@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queue/app/service_locator.dart';
+import 'package:queue/screens/room/widgets/skip_count_chip.dart';
 import 'package:queue/screens/room/widgets/track_tile.dart';
 import 'package:queue/services/queue_service.dart';
 
@@ -26,10 +27,18 @@ class NextUpTile extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, top: 4),
-                  child: Text('Next up',
-                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          )),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text('Next up',
+                            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                )),
+                      ),
+                      const SizedBox(height: 40),
+                      const SkipCountChip(),
+                    ],
+                  ),
                 ),
                 TrackTile(snapshot.data),
               ],
