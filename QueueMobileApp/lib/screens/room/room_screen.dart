@@ -19,7 +19,7 @@ class RoomScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: GradientAppBar(
-        title: Text(room['name']),
+        title: const Text('Queue'),
         leading: IconButton(
           icon: const Icon(Icons.logout_rounded),
           onPressed: () async {

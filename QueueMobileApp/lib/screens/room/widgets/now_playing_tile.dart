@@ -6,7 +6,6 @@ import 'package:queue/screens/room/widgets/play_button.dart';
 import 'package:queue/screens/room/widgets/select_player_dropdown.dart';
 import 'package:queue/screens/room/widgets/spotify_image_builder.dart';
 import 'package:queue/services/queue_service.dart';
-import 'package:spotify_sdk/models/image_uri.dart';
 
 class NowPlayingTile extends StatelessWidget {
   const NowPlayingTile({super.key});
@@ -27,11 +26,12 @@ class NowPlayingTile extends StatelessWidget {
           return SizedBox(
             height: 180,
             child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
               margin: EdgeInsets.zero,
               shadowColor: Colors.transparent,
               child: Stack(
                 children: [
-                  SpotifyImageBuilder(imageUri: ImageUri(playerState?['image_uri'])),
+                  if (playerState?['uri'] != null) SpotifyImageBuilder(uri: playerState?['uri']),
                   Padding(
                     padding: const EdgeInsets.only(right: 8, left: 16),
                     child: Row(

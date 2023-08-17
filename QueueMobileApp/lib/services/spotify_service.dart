@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:queue/app/cache_client.dart';
 
 abstract class ISpotifyService {
   Future<List> search(String query);
+  Future<dynamic> getTrack(String id);
 }
 
 class SpotifyService implements ISpotifyService {
@@ -82,6 +84,24 @@ class SpotifyService implements ISpotifyService {
     final bodyJson = jsonDecode(response.body);
 
     return AccessToken(accessToken: bodyJson['access_token'], issuedAt: DateTime.now());
+  }
+
+  @override
+  Future<dynamic> getTrack(String id) async {
+    if (id.isEmpty) return null;
+    var track = cacheClient.read<Map>(key: id + queryCacheKey);
+    if (track != null) return track;
+
+    final path = '/v1/tracks/${id.substring(id.lastIndexOf(":") + 1)}';
+    final uri = Uri(scheme: baseScheme, host: baseHost, path: path);
+
+    final response = await httpClient.get(uri, headers: await getAuthHeaders());
+
+    final json = jsonDecode(response.body);
+
+    cacheClient.write<Map>(key: id + queryCacheKey, value: json);
+
+    return json;
   }
 }
 
